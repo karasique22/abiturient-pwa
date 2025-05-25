@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  MODERATOR
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+
+enum ApplicationStatus {
+  pending
+  approved
+  rejected
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  role         Role
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+
+  // Relations
+  applications     Application[] @relation("StudentApplications")
+  reviewedApps     Application[] @relation("ReviewedApplications")
+  createdPrograms  Program[]     @relation("CreatedPrograms")
+}
+
+model Program {
+  id            String    @id @default(uuid())
+  title         String
+  description   String
+  category      String
+  startDate     DateTime
+  durationWeeks Int
+  createdAt     DateTime  @default(now())
+  isPublished   Boolean   @default(false)
+
+  // FK
+  createdById   String
+  createdBy     User      @relation("CreatedPrograms", fields: [createdById], references: [id])
+
+  // Relations
+  applications  Application[]
+}
+
+model Application {
+  id           String              @id @default(uuid())
+  submittedAt  DateTime            @default(now())
+  status       ApplicationStatus   @default(pending)
+  comment      String?             
+  reviewedAt   DateTime?           
+
+  // FK: student who submitted
+  studentId    String
+  student      User     @relation("StudentApplications", fields: [studentId], references: [id])
+
+  // FK: moderator who reviewed
+  reviewedById String?  
+  reviewedBy   User?    @relation("ReviewedApplications", fields: [reviewedById], references: [id])
+
+  // FK: program
+  programId    String
+  program      Program  @relation(fields: [programId], references: [id])
+}

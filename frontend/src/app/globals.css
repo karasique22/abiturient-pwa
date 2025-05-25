@@ -1,0 +1,111 @@
+:root {
+  --background: #ffffff;
+  --foreground: #25242c;
+
+  --content-accent-color: #ca3b4c;
+  --content-main-color: #25242c;
+  --content-add-color: #929195;
+
+  --home-grey-color: #f2f3f5;
+  --home-white-color: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-acrom: var(--font-acrom);
+}
+
+@media (prefers-color-scheme: white) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-acrom);
+  padding: 32px 16px 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.content-accent {
+  color: var(--content-accent-color);
+}
+.content-main {
+  color: var(--content-main-color);
+}
+.content-add {
+  color: var(--content-add-color);
+}
+.home-grey {
+  background: var(--home-grey-color);
+}
+.home-white {
+  background: var(--home-white-color);
+}
+
+.font-body-small {
+  font-family: Acrom;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-medium {
+  font-family: Acrom;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-medium-bold {
+  font-family: Acrom;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-normal {
+  font-family: Acrom;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-normal-bold {
+  font-family: Acrom;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-header-medium {
+  font-family: Acrom;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-header-large {
+  font-family: Acrom;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}

@@ -1,0 +1,12 @@
+.logo {
+  width: 39px;
+  height: 24px;
+}
+
+.mobileFooter {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--home-white-color);
+}
