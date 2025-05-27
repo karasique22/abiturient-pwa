@@ -7,73 +7,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  STUDENT
-  MODERATOR
-}
-
-enum Status {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-
-enum ApplicationStatus {
-  pending
-  approved
-  rejected
+model Role {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  users User[]  @relation("UserRoles")
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
-  passwordHash String
-  fullName     String
-  role         Role
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  fullName  String?
+  roles     Role[]   @relation("UserRoles")
+  applications Application[]
+  notifications Notification[]
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  // Relations
-  applications     Application[] @relation("StudentApplications")
-  reviewedApps     Application[] @relation("ReviewedApplications")
-  createdPrograms  Program[]     @relation("CreatedPrograms")
+model ProgramCategory {
+  id        String    @id @default(uuid())
+  name      String
+  programs  Program[]
 }
 
 model Program {
-  id            String    @id @default(uuid())
-  title         String
-  description   String
-  category      String
-  startDate     DateTime
-  durationWeeks Int
-  createdAt     DateTime  @default(now())
-  isPublished   Boolean   @default(false)
-
-  // FK
-  createdById   String
-  createdBy     User      @relation("CreatedPrograms", fields: [createdById], references: [id])
-
-  // Relations
-  applications  Application[]
+  id          String           @id @default(uuid())
+  title       String
+  description String
+  durationWeeks Int?
+  startDate   DateTime?
+  priceRub    Decimal? @db.Decimal(10,2)
+  categoryId  String?
+  category    ProgramCategory? @relation(fields: [categoryId], references: [id])
+  applications Application[]
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Application {
-  id           String              @id @default(uuid())
-  submittedAt  DateTime            @default(now())
-  status       ApplicationStatus   @default(pending)
-  comment      String?             
-  reviewedAt   DateTime?           
+  id        String   @id @default(uuid())
+  programId String
+  userId    String
+  status    String
+  comment   String?
+  program   Program   @relation(fields: [programId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  documents Document[]
+  isActive  Boolean  @default(true)
+  submittedAt DateTime @default(now())
 
-  // FK: student who submitted
-  studentId    String
-  student      User     @relation("StudentApplications", fields: [studentId], references: [id])
+  @@index([programId])
+}
 
-  // FK: moderator who reviewed
-  reviewedById String?  
-  reviewedBy   User?    @relation("ReviewedApplications", fields: [reviewedById], references: [id])
+model Document {
+  id            String   @id @default(uuid())
+  applicationId String
+  filePath      String
+  fileType      String
+  uploadedAt    DateTime @default(now())
+  application   Application @relation(fields: [applicationId], references: [id])
+}
 
-  // FK: program
-  programId    String
-  program      Program  @relation(fields: [programId], references: [id])
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+}
+
+model Log {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
 }
