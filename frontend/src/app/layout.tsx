@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './normalize.css';
 import localfont from 'next/font/local';
 import styles from './layout.module.css';
 
-import Navbar from '@/components/ui/Navbar/Navbar';
+import Navbar from '@/components/layout/Navbar/Navbar';
 
 const acrom = localfont({
   src: '../fonts/Acrom.ttf',
@@ -21,9 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ru'>
+    <html lang='ru' className={acrom.variable}>
       <body>
-        <header>
+        <header className={`${styles.header} container`}>
           <img className={styles.logo} src='logo.svg' alt='' />
         </header>
 

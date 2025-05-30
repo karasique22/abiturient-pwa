@@ -1,6 +1,6 @@
-import HomeIcon from './icons/HomeIcon';
-import ProgramsIcon from './icons/ProgramsIcon';
-import AccountIcon from './icons/AccountIcon';
+import HomeIcon from '../../icons/footer/HomeIcon';
+import ProgramsIcon from '../../icons/footer/ProgramsIcon';
+import AccountIcon from '../../icons/footer/AccountIcon';
 
 export type UserRole = 'student' | 'moderator' | 'admin' | null;
 

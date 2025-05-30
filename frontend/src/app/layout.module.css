@@ -3,10 +3,14 @@
   height: 24px;
 }
 
+.header {
+  padding-bottom: 22px;
+}
+
 .mobileFooter {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--home-white-color);
+  background-color: var(--color-home-white);
 }

@@ -1,0 +1,10 @@
+.eventsContainer {
+  padding: 18px 16px;
+  background-color: var(--color-home-grey);
+  height: 100vh;
+}
+
+.eventsHeader {
+  display: flex;
+  justify-content: space-between;
+}

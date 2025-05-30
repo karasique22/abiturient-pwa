@@ -2,12 +2,14 @@
   --background: #ffffff;
   --foreground: #25242c;
 
-  --content-accent-color: #ca3b4c;
-  --content-main-color: #25242c;
-  --content-add-color: #929195;
+  --color-content-accent: #ca3b4c;
+  --color-content-main: #25242c;
+  --color-content-add: #929195;
 
-  --home-grey-color: #f2f3f5;
-  --home-white-color: #ffffff;
+  --color-home-grey: #f2f3f5;
+  --color-home-white: #ffffff;
+
+  --radius-medium: 20px;
 }
 
 @theme inline {
@@ -31,27 +33,35 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-acrom);
-  padding: 32px 16px 0;
+  padding: 32px 0;
+}
+
+.container {
+  padding: 0 16px;
 }
 
 a {
   text-decoration: none;
 }
 
+h2 {
+  font-size: 16px;
+}
+
 .content-accent {
-  color: var(--content-accent-color);
+  color: var(--color-content-accent);
 }
 .content-main {
   color: var(--content-main-color);
 }
 .content-add {
-  color: var(--content-add-color);
+  color: var(--color-content-add);
 }
 .home-grey {
-  background: var(--home-grey-color);
+  background: var(--color-home-grey);
 }
 .home-white {
-  background: var(--home-white-color);
+  background: var(--color-home-white);
 }
 
 .font-body-small {
