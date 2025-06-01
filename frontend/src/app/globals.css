@@ -9,6 +9,7 @@
   --color-home-grey: #f2f3f5;
   --color-home-white: #ffffff;
 
+  --radius-small: 8px;
   --radius-medium: 20px;
 }
 
@@ -16,6 +17,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-acrom: var(--font-acrom);
+  --font-acrom-medium: var(--font-acrom-medium);
+  --font-acrom-bold: var(--font-acrom-bold);
 }
 
 @media (prefers-color-scheme: white) {
@@ -25,8 +28,10 @@
   }
 }
 
-html {
+html,
+body {
   height: 100%;
+  box-sizing: border-box;
 }
 
 body {
@@ -42,6 +47,15 @@ body {
 
 a {
   text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 h2 {
@@ -113,8 +127,8 @@ h2 {
 }
 
 .font-header-large {
-  font-family: Acrom;
-  font-weight: 700;
+  font-family: var(--font-acrom-bold);
+  font-weight: unset;
   font-size: 20px;
   line-height: 100%;
   letter-spacing: 0%;

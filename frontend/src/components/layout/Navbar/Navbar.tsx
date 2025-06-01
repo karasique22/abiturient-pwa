@@ -3,21 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
+import { useAuth } from '@/contexts/AuthContext';
 
-import { getNavItems, UserRole } from './navItems';
+import { getNavItems } from './navItems';
 
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const [role, setRole] = useState<UserRole>(null);
-
-  useEffect(() => {
-    // Получаем роль из localStorage (фейк)
-    const savedRole = localStorage.getItem('role') as UserRole | null;
-    setRole(savedRole);
-  }, []);
-
-  // Генерируем навигацию под роль пользователя
+  const { role } = useAuth();
   const navItems = getNavItems(role);
 
   return (

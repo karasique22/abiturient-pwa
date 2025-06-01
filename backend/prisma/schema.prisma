@@ -8,9 +8,9 @@ datasource db {
 }
 
 model Role {
-  id    String  @id @default(uuid())
-  name  String  @unique
-  users User[]  @relation("UserRoles")
+  id    String @id @default(uuid())
+  name  String @unique
+  users User[] @relation("UserRoles")
 }
 
 model User {
@@ -19,55 +19,72 @@ model User {
   password  String
   fullName  String?
   roles     Role[]   @relation("UserRoles")
-  applications Application[]
+  applications  Application[]
   notifications Notification[]
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  sessions  Session[]
 }
 
+model Session {
+  id          String   @id @default(uuid())
+  userId      String
+  refreshHash String   @unique
+  userAgent   String?
+  ip          String?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+
 model ProgramCategory {
-  id        String    @id @default(uuid())
-  name      String
-  programs  Program[]
+  id       String    @id @default(uuid())
+  name     String    @unique
+  programs Program[]
 }
 
 model Program {
-  id          String           @id @default(uuid())
-  title       String
-  description String
+  id            String           @id @default(uuid())
+  title         String           @unique
+  description   String
   durationWeeks Int?
-  startDate   DateTime?
-  priceRub    Decimal? @db.Decimal(10,2)
-  categoryId  String?
-  category    ProgramCategory? @relation(fields: [categoryId], references: [id])
-  applications Application[]
-  isActive    Boolean @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  startDate     DateTime?
+  priceRub      Decimal?         @db.Decimal(10, 2)
+  categoryId    String?
+  category      ProgramCategory? @relation(fields: [categoryId], references: [id])
+  applications  Application[]
+  isActive      Boolean          @default(true)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model Application {
-  id        String   @id @default(uuid())
-  programId String
-  userId    String
-  status    String
-  comment   String?
-  program   Program   @relation(fields: [programId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
-  documents Document[]
-  isActive  Boolean  @default(true)
-  submittedAt DateTime @default(now())
+  id          String     @id @default(uuid())
+  programId   String
+  userId      String
+  status      String
+  comment     String?
+  program     Program    @relation(fields: [programId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  documents   Document[]
+  isActive    Boolean    @default(true)
+  submittedAt DateTime   @default(now())
 
   @@index([programId])
 }
 
 model Document {
-  id            String   @id @default(uuid())
+  id            String      @id @default(uuid())
   applicationId String
   filePath      String
   fileType      String
-  uploadedAt    DateTime @default(now())
+  uploadedAt    DateTime    @default(now())
   application   Application @relation(fields: [applicationId], references: [id])
 }
 

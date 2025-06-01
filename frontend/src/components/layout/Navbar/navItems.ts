@@ -18,6 +18,6 @@ export const getNavItems = (role: UserRole) => [
         ? '/moderator'
         : role === 'admin'
         ? '/admin'
-        : '/login',
+        : '/auth',
   },
 ];
