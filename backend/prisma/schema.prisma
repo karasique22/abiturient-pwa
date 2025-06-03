@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/**
+ * ───────────── ENUM ─────────────
+ */
+
+enum EventCategory {
+  MASTER_CLASS // мастер-класс
+  TRIAL // пробное занятие
+  LESSON // онлайн-урок
+}
+
+/**
+ * ──────────── ОБЩИЕ МОДЕЛИ ───────────
+ */
+
 model Role {
   id    String @id @default(uuid())
   name  String @unique
@@ -14,18 +28,17 @@ model Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  fullName  String?
-  roles     Role[]   @relation("UserRoles")
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  fullName      String?
+  roles         Role[]         @relation("UserRoles")
   applications  Application[]
   notifications Notification[]
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  sessions  Session[]
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Session       Session[]
 }
 
 model Session {
@@ -36,70 +49,97 @@ model Session {
   ip          String?
   expiresAt   DateTime
   createdAt   DateTime @default(now())
-
   user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-
-model ProgramCategory {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  programs Program[]
-}
+/**
+ * ───────────── PROGRAM ─────────────
+ */
 
 model Program {
-  id            String           @id @default(uuid())
-  title         String           @unique
-  images      ProgramImage[]
+  id            String         @id @default(uuid())
+  title         String         @unique
   description   String
   durationWeeks Int?
   startDate     DateTime?
-  priceRub      Decimal?         @db.Decimal(10, 2)
-  categoryId    String?
-  category      ProgramCategory? @relation(fields: [categoryId], references: [id])
+  priceRub      Decimal?       @db.Decimal(10, 2)
   applications  Application[]
-  isActive      Boolean          @default(true)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  images        ProgramImage[]
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model ProgramImage {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   programId String
   url       String
   alt       String?
-  order     Int      @default(0)
+  order     Int     @default(0)
 
-  program   Program  @relation(fields: [programId], references: [id])
+  program Program @relation(fields: [programId], references: [id])
 
   @@index([programId])
 }
 
+/**
+ * ───────────── EVENT ─────────────
+ */
+
+model Event {
+  id           String        @id @default(uuid())
+  title        String        @unique
+  description  String
+  dateTime     DateTime
+  address      String
+  category     EventCategory
+  curatorName  String
+  curatorInfo  String?
+  applications Application[]
+  images       EventImage[]
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model EventImage {
+  id      String  @id @default(uuid())
+  eventId String
+  url     String
+  alt     String?
+  order   Int     @default(0)
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+}
+
+/**
+ * ──────────── APPLICATION ───────────
+ */
+
 model Application {
-  id          String     @id @default(uuid())
-  programId   String
+  id          String   @id @default(uuid())
+  programId   String? // заявки могут относиться либо к программе,
+  eventId     String? // либо к событию (одно из полей не-null)
   userId      String
   status      String
   comment     String?
-  program     Program    @relation(fields: [programId], references: [id])
-  user        User       @relation(fields: [userId], references: [id])
-  documents   Document[]
-  isActive    Boolean    @default(true)
-  submittedAt DateTime   @default(now())
+  program     Program? @relation(fields: [programId], references: [id])
+  event       Event?   @relation(fields: [eventId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  isActive    Boolean  @default(true)
+  submittedAt DateTime @default(now())
 
   @@index([programId])
+  @@index([eventId])
 }
 
-model Document {
-  id            String      @id @default(uuid())
-  applicationId String
-  filePath      String
-  fileType      String
-  uploadedAt    DateTime    @default(now())
-  application   Application @relation(fields: [applicationId], references: [id])
-}
+/**
+ * ──────────── NOTIFICATION / LOG ───────────
+ */
 
 model Notification {
   id        String   @id @default(uuid())

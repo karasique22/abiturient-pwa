@@ -1,110 +1,92 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+/* prisma/seed.ts */
+import { PrismaClient, Prisma, EventCategory } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
+import { faker } from '@faker-js/faker/locale/ru';
 
 const prisma = new PrismaClient();
+const D = Prisma.Decimal; // короче писать
 
 async function main() {
-  /* 1. роли */
-  const [studentRole, moderatorRole, adminRole] = await Promise.all(
+  /* ── роли + админ ───────────────────────────────────────── */
+  const salt = genSaltSync(10);
+  const pwd = hashSync('admin123', salt);
+
+  const [student, moderator, admin] = await Promise.all(
     ['student', 'moderator', 'admin'].map((name) =>
-      prisma.role.upsert({
-        where: { name },
-        update: {},
-        create: { name },
-      }),
+      prisma.role.upsert({ where: { name }, update: {}, create: { name } }),
     ),
   );
 
-  /* 2. пользователи */
-  const salt = genSaltSync(10);
-  const hash = (p: string) => hashSync(p, salt);
-
-  const [admin, moderator, student] = await Promise.all([
-    prisma.user.upsert({
-      where: { email: 'admin@example.com' },
-      update: {},
-      create: {
-        email: 'admin@example.com',
-        password: hash('admin123'),
-        fullName: 'Администратор',
-        roles: { connect: { id: adminRole.id } },
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: 'moderator@example.com' },
-      update: {},
-      create: {
-        email: 'moderator@example.com',
-        password: hash('moderator123'),
-        fullName: 'Модератор',
-        roles: { connect: { id: moderatorRole.id } },
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: 'student@example.com' },
-      update: {},
-      create: {
-        email: 'student@example.com',
-        password: hash('student123'),
-        fullName: 'Иван Студент',
-        roles: { connect: { id: studentRole.id } },
-      },
-    }),
-  ]);
-
-  /* 3. категории */
-  const [designCat, itCat] = await Promise.all([
-    prisma.programCategory.upsert({
-      where: { name: 'Дизайн' },
-      update: {},
-      create: { name: 'Дизайн' },
-    }),
-    prisma.programCategory.upsert({
-      where: { name: 'IT' },
-      update: {},
-      create: { name: 'IT' },
-    }),
-  ]);
-
-  /* 4. программы */
-  const [paintingProgram] = await Promise.all([
-    prisma.program.upsert({
-      where: { title: 'Мастер-класс по живописи' },
-      update: {},
-      create: {
-        title: 'Мастер-класс по живописи',
-        description: 'Базовые техники рисунка за 4 недели',
-        durationWeeks: 4,
-        startDate: new Date('2025-11-14'),
-        priceRub: new Prisma.Decimal('15000.00'),
-        categoryId: designCat.id,
-      },
-    }),
-    prisma.program.upsert({
-      where: { title: 'Основы веб-разработки' },
-      update: {},
-      create: {
-        title: 'Основы веб-разработки',
-        description: 'HTML + CSS + JS с нуля',
-        durationWeeks: 6,
-        startDate: new Date('2025-12-01'),
-        priceRub: new Prisma.Decimal('20000.00'),
-        categoryId: itCat.id,
-      },
-    }),
-  ]);
-
-  /* 5. заявка студента */
-  await prisma.application.create({
-    data: {
-      userId: student.id,
-      programId: paintingProgram.id,
-      status: 'new',
-      comment: 'Хочу научиться рисовать маслом',
+  await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: {},
+    create: {
+      email: 'admin@example.com',
+      password: pwd,
+      fullName: 'Администратор',
+      roles: { connect: { id: admin.id } },
     },
   });
 
-  console.log('Seed завершён.');
+  /* ── 10 программ ────────────────────────────────────────── */
+  const programPromises = Array.from({ length: 10 }).map(() =>
+    prisma.program.create({
+      data: {
+        title: faker.company.catchPhrase(),
+        description: faker.lorem.paragraphs(2),
+        durationWeeks: faker.number.int({ min: 4, max: 24 }),
+        startDate: faker.date.soon({ days: 45 }),
+        priceRub: new D(
+          faker.finance.amount({ min: 20000, max: 90000, dec: 2 }),
+        ),
+        images: {
+          create: {
+            url: faker.image.urlLoremFlickr({
+              category: 'education',
+              width: 640,
+              height: 480,
+            }),
+            alt: 'Обложка программы',
+            order: 0,
+          },
+        },
+      },
+    }),
+  );
+  await Promise.all(programPromises);
+
+  /* ── 10 событий ─────────────────────────────────────────── */
+  const eventPromises = Array.from({ length: 10 }).map(() =>
+    prisma.event.create({
+      data: {
+        title: faker.company.name(),
+        description: faker.lorem.paragraph(),
+        dateTime: faker.date.soon({ days: 60 }),
+        address: `${faker.location.city()}, ${faker.location.streetAddress()}`,
+        category: faker.helpers.arrayElement([
+          EventCategory.MASTER_CLASS,
+          EventCategory.TRIAL,
+          EventCategory.LESSON,
+        ]),
+        curatorName: faker.person.fullName(),
+        curatorInfo: faker.person.jobTitle(),
+        images: {
+          create: {
+            url: faker.image.urlLoremFlickr({
+              category: 'people',
+              width: 640,
+              height: 480,
+            }),
+            alt: 'Фото мероприятия',
+            order: 0,
+          },
+        },
+      },
+    }),
+  );
+  await Promise.all(eventPromises);
+
+  console.log('🌱  Сид-данные успешно добавлены');
 }
 
 main()

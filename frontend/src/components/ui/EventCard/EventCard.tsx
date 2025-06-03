@@ -2,15 +2,15 @@
 
 import React from 'react';
 import Image from 'next/image';
-import type { Program } from '@prisma/client';
-import styles from './ProgramCard.module.css';
+import type { Event } from '@prisma/client';
+import styles from './EventCard.module.css';
 
 interface Props {
-  program: Program;
+  event: Event;
   viewMode: 'grid' | 'list';
 }
 
-export default function ProgramCard({ program, viewMode }: Props) {
+export default function EventCard({ event, viewMode }: Props) {
   return (
     <article
       className={`${styles.card} ${
@@ -26,10 +26,12 @@ export default function ProgramCard({ program, viewMode }: Props) {
       />
       <div className={styles.content}>
         <div className={styles.contentMain}>
-          <h3 className='font-body-normal-bold'>{program.title}</h3>
-          {program.startDate && (
+          <h3 className={`${styles.title} font-body-normal-bold`}>
+            {event.title}
+          </h3>
+          {event.dateTime && (
             <p className='font-body-normal'>
-              Старт: {new Date(program.startDate).toLocaleDateString('ru-RU')}
+              Старт: {new Date(event.dateTime).toLocaleDateString('ru-RU')}
             </p>
           )}
         </div>

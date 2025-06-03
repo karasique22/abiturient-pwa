@@ -5,9 +5,9 @@ import { useState } from 'react';
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
 import FilterChips from '@/components/ui/FilterChips/FilterChips';
-import ProgramsGrid from '@/components/ui/ProgramsGrid/ProgramsGrid';
-import { usePrograms } from '../../hooks/UsePrograms';
-import type { Program } from '@prisma/client';
+import EventsGrid from '@/components/ui/EventsGrid/EventsGrid';
+import { useEvents } from '../../hooks/UseEvents';
+import type { Event } from '@prisma/client';
 
 import styles from './app.module.css';
 
@@ -15,7 +15,7 @@ const page = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
-  const { programs, loading, error } = usePrograms();
+  const { events, loading, error } = useEvents();
 
   return (
     <>
@@ -29,19 +29,17 @@ const page = () => {
         </div>
         {/* TODO: прокинуть фильтрацию */}
         <FilterChips />
-        <div>
-          {/* TODO: loader */}
-          {loading && <p>Загрузка...</p>}
-          {/* TODO: вывести ошибку */}
-          {!loading && !error && (
-            <ProgramsGrid
-              programs={programs as Program[]}
-              viewMode={viewMode}
-              // searchQuery={searchQuery}
-              // onSearchChange={setSearchQuery}
-            />
-          )}
-        </div>
+        {/* TODO: loader */}
+        {loading && <p>Загрузка...</p>}
+        {/* TODO: вывести ошибку */}
+        {!loading && !error && (
+          <EventsGrid
+            events={events as Event[]}
+            viewMode={viewMode}
+            // searchQuery={searchQuery}
+            // onSearchChange={setSearchQuery}
+          />
+        )}
       </div>
     </>
   );
