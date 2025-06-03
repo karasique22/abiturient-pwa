@@ -14,6 +14,11 @@ module.exports = withPWA({
         hostname: 'placehold.co',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+        port: '',
+      },
     ],
   },
 });

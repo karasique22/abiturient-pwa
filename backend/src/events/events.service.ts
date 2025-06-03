@@ -11,11 +11,27 @@ export class EventsService {
   }
 
   findAll() {
-    return this.prisma.event.findMany({ where: { isActive: true } });
+    return this.prisma.event.findMany({
+      where: { isActive: true },
+      include: {
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1,
+        },
+      },
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.event.findUnique({ where: { id } });
+    return this.prisma.event.findUnique({
+      where: { id },
+      include: {
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1,
+        },
+      },
+    });
   }
 
   update(id: string, data: Prisma.EventUpdateInput) {

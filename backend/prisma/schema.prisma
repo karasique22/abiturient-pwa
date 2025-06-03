@@ -99,6 +99,7 @@ model Event {
   curatorInfo  String?
   applications Application[]
   images       EventImage[]
+  coverUrl   String?
   isActive     Boolean       @default(true)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import Image from 'next/image';
-import type { Event } from '@prisma/client';
 import styles from './EventCard.module.css';
+import type { EventApi } from '@/types';
 
 interface Props {
-  event: Event;
+  event: EventApi;
   viewMode: 'grid' | 'list';
 }
 
@@ -19,7 +19,7 @@ export default function EventCard({ event, viewMode }: Props) {
     >
       <Image
         className={styles.image}
-        src={'https://placehold.co/600x400'}
+        src={`${event.coverUrl} ?? 'https://placehold.co/600x400'`}
         width={600}
         height={400}
         alt='placeholder'

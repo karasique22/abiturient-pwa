@@ -1,0 +1,30 @@
+// src/events/dto/event.dto.ts
+import { Expose, Transform } from 'class-transformer';
+import { Event, EventImage } from '@prisma/client';
+
+export class EventDto implements Event {
+  /* базовые поля из модели Event */
+  id!: string;
+  title!: string;
+  description!: string;
+  dateTime!: Date;
+  address!: string;
+  category!: any; // enum EventCategory
+  curatorName!: string;
+  curatorInfo!: string | null;
+  isActive!: boolean;
+  createdAt!: Date;
+  updatedAt!: Date;
+
+  /* связь, полученная через include */
+  images!: EventImage[];
+
+  constructor(partial: Partial<EventDto>) {
+    Object.assign(this, partial);
+  }
+
+  /* вычисляемое поле — обложка */
+  @Transform(({ obj }) => obj.images?.[0]?.url ?? null)
+  @Expose()
+  coverUrl!: string | null;
+}
