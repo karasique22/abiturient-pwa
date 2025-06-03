@@ -1,4 +1,4 @@
-.inputForm {
+.form {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -45,10 +45,10 @@
 
 .authButton {
   width: 180px;
-  background-color: var(--color-content-accent);
-  color: white;
-  border: none;
-  border-radius: var(--radius-medium);
-  cursor: pointer;
-  padding: 12px 0;
+  text-align: center;
+}
+
+/* FIXME: пофиксить сдвиг формы при выходе ошибки */
+.error {
+  margin: 0;
 }

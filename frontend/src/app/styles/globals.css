@@ -10,7 +10,8 @@
   --color-home-white: #ffffff;
 
   --radius-small: 8px;
-  --radius-medium: 20px;
+  --radius-medium: 12px;
+  --radius-large: 20px;
 }
 
 @theme inline {
@@ -49,6 +50,10 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  font-size: 20px;
+}
+
 h1,
 h2,
 h3,
@@ -60,6 +65,10 @@ h6 {
 
 h2 {
   font-size: 16px;
+}
+
+p {
+  margin: 0;
 }
 
 .content-accent {
@@ -128,8 +137,40 @@ h2 {
 
 .font-header-large {
   font-family: var(--font-acrom-bold);
-  font-weight: unset;
+  font-weight: 700;
   font-size: 20px;
   line-height: 100%;
   letter-spacing: 0%;
+}
+
+.button-large {
+  font-family: var(--font-acrom-medium);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  text-align: center;
+  background-color: var(--color-content-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+  padding: 12px 0;
+}
+
+.button-small {
+  font-family: var(--font-acrom-large);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  text-align: center;
+  background-color: var(--color-content-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-large);
+  cursor: pointer;
+  padding: 12px 0;
 }

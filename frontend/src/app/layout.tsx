@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
+import localfont from 'next/font/local';
 import Image from 'next/image';
 
-import './normalize.css';
-import './globals.css';
-import localfont from 'next/font/local';
+// TODO: алиасы
+import './styles/normalize.css';
+import './styles/globals.css';
 import styles from './layout.module.css';
 
 import Navbar from '@/components/layout/Navbar/Navbar';

@@ -4,6 +4,8 @@
   overflow-x: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  margin: 20px 0 24px;
+  padding: 4px;
 }
 
 .filterChips::-webkit-scrollbar {
@@ -15,7 +17,9 @@
   white-space: nowrap;
   padding: 8px 10px;
   color: var(--color-content-add);
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
+  background-color: var(--color-home-white);
+  box-shadow: 0px 0px 5px 0px #0000001f;
 }
 
 .active {

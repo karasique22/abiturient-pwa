@@ -6,6 +6,7 @@ type Role = 'student' | 'moderator' | 'admin' | null;
 interface AuthCtx {
   role: Role;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -51,6 +52,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const register = async (email: string, password: string) => {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) throw new Error('Неверные данные');
+
+    const me = await fetch('/api/users/me', { credentials: 'include' });
+    if (me.ok) {
+      const { role } = await me.json();
+      setRole(role);
+    }
+  };
+
   /* 3. logout: бек удаляет куки, затем сбрасываем роль */
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
@@ -58,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ role, login, logout }}>
+    <AuthContext.Provider value={{ role, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

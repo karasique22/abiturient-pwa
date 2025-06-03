@@ -1,25 +1,30 @@
 import Link from 'next/link';
 import styles from './auth.module.css';
 
-// FIXME: Объединить файлы в один
-
-export default function AuthPage() {
+export default function AuthLanding() {
   return (
-    <div className={styles.authContainer}>
+    <main className={styles.authContainer}>
       <h1 className={`${styles.authTitle} font-header-large`}>
         <span>Добро пожаловать</span>
         <span>в мир знаний</span>
       </h1>
-      <div className={styles.authWelcome}>
-        <div className={`${styles.authButtons} font-body-normal-bold`}>
-          <Link href='/auth/login'>
-            <button className={styles.authButton}>Войти</button>
-          </Link>
-          <Link href='/auth/register'>
-            <button className={styles.authButton}>Зарегистрироваться</button>
-          </Link>
-        </div>
+
+      <div className={styles.authButtons}>
+        <Link
+          href='/auth/login'
+          scroll={false}
+          className={`${styles.authButton} button-large`}
+        >
+          Войти
+        </Link>
+        <Link
+          href='/auth/register'
+          scroll={false}
+          className={`${styles.authButton} button-large`}
+        >
+          Зарегистрироваться
+        </Link>
       </div>
-    </div>
+    </main>
   );
 }

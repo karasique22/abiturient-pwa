@@ -1,0 +1,16 @@
+{
+  "name": "abiturient-monorepo",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "prisma": "^6.8.2",
+    "@prisma/client": "^6.8.2",
+    "typescript": "^5"
+  },
+  "scripts": {
+    "postinstall": "prisma generate --schema backend/prisma/schema.prisma"
+  }
+}

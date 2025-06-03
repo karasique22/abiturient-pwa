@@ -1,0 +1,15 @@
+.programs {
+  max-width: 100%;
+}
+
+.programsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.programsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

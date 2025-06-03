@@ -5,8 +5,10 @@ import styles from './FilterChips.module.css';
 const filters = [
   { label: 'Мастер-класс', value: 'master-class' },
   { label: 'Пробное занятие', value: 'trial' },
-  { label: 'Онлайн-курсы', value: 'courses' },
+  { label: 'Онлайн-урок', value: 'lesson' },
 ];
+
+// TODO: декомпозировать
 
 export default function FilterChips() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
