@@ -1,37 +1,42 @@
-import { useState } from 'react';
+'use client';
 
+import { EventCategory } from '@/shared/event-categories';
 import styles from './FilterChips.module.css';
-
-const filters = [
-  { label: 'Мастер-класс', value: 'master-class' },
-  { label: 'Пробное занятие', value: 'trial' },
-  { label: 'Онлайн-урок', value: 'lesson' },
-];
 
 // TODO: декомпозировать
 
-export default function FilterChips() {
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+/* подписи, которые показываем пользователю */
+const labels: Record<EventCategory, string> = {
+  [EventCategory.MASTER_CLASS]: 'Мастер-класс',
+  [EventCategory.TRIAL]: 'Пробное занятие',
+  [EventCategory.LESSON]: 'Онлайн-урок',
+};
 
-  const toggleFilter = (filter: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter)
-        ? prev.filter((f) => f !== filter)
-        : [...prev, filter]
+interface Props {
+  selected: EventCategory[];
+  onChange: (next: EventCategory[]) => void;
+}
+
+export default function FilterChips({ selected, onChange }: Props) {
+  const toggle = (cat: EventCategory) => {
+    onChange(
+      selected.includes(cat)
+        ? selected.filter((c) => c !== cat)
+        : [...selected, cat]
     );
   };
 
   return (
     <div className={styles.filterChips}>
-      {filters.map((filter) => (
+      {Object.values(EventCategory).map((cat) => (
         <button
-          key={filter.value}
+          key={cat}
           className={`${styles.filterChip} ${
-            selectedFilters.includes(filter.value) ? `${styles.active}` : ''
+            selected.includes(cat) ? styles.active : ''
           }`}
-          onClick={() => toggleFilter(filter.value)}
+          onClick={() => toggle(cat)}
         >
-          {filter.label}
+          {labels[cat]}
         </button>
       ))}
     </div>
