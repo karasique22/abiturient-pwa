@@ -40,11 +40,13 @@ async function main() {
   /* ── 10 программ ────────────────────────────────────────── */
   await prisma.programImage.deleteMany({});
   await prisma.program.deleteMany({});
-  const programPromises = Array.from({ length: 10 }).map(() =>
-    prisma.program.create({
+  const programPromises = Array.from({ length: 10 }).map(() => {
+    const title = faker.company.catchPhrase();
+
+    return prisma.program.create({
       data: {
-        title: faker.company.catchPhrase(),
-        slug: slugify(faker.company.catchPhrase()),
+        title,
+        slug: slugify(title),
         description: faker.lorem.paragraphs(2),
         durationWeeks: faker.number.int({ min: 4, max: 24 }),
         startDate: faker.date.soon({ days: 45 }),
@@ -63,18 +65,21 @@ async function main() {
           },
         },
       },
-    }),
-  );
+    });
+  });
+
   await Promise.all(programPromises);
 
   /* ── 10 событий ─────────────────────────────────────────── */
   await prisma.eventImage.deleteMany({});
   await prisma.event.deleteMany({});
-  const eventPromises = Array.from({ length: 10 }).map(() =>
-    prisma.event.create({
+  const eventPromises = Array.from({ length: 10 }).map(() => {
+    const title = faker.company.catchPhrase();
+
+    return prisma.event.create({
       data: {
-        title: faker.company.catchPhrase(),
-        slug: slugify(faker.company.catchPhrase()),
+        title,
+        slug: slugify(title),
         description: faker.lorem.paragraph(),
         dateTime: faker.date.soon({ days: 60 }),
         address: `${faker.location.city()}, ${faker.location.streetAddress()}`,
@@ -93,8 +98,9 @@ async function main() {
           },
         },
       },
-    }),
-  );
+    });
+  });
+
   await Promise.all(eventPromises);
 
   console.log('🌱  Сид-данные успешно добавлены');
