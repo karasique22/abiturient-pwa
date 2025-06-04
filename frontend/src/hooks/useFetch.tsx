@@ -7,7 +7,6 @@ export function useFetch<T, R = T[]>(url: string) {
   const [data, setData] = useState<R | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
-  console.log('useFetch', url);
 
   const load = async () => {
     setLoading(true);
