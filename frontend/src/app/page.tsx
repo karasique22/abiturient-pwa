@@ -2,7 +2,7 @@
 // FIXME: клиентский
 
 import { useState, useMemo } from 'react';
-import { useEvents } from '../../hooks/UseEvents';
+import { useFetch } from '@/hooks/useFetch';
 
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
@@ -18,8 +18,11 @@ export default function EventsPage() {
   const [search, setSearch] = useState('');
   const [view, setView] = useState<'list' | 'grid'>('list');
   const [categories, setCategories] = useState<EventCategory[]>([]);
-  const { events, loading, error } = useEvents();
+  const { data, loading, error } = useFetch<Event>('/events');
 
+  const events = data || [];
+
+  // TODO: вынести в хук фильтр
   const filtered = useMemo(() => {
     let list = events;
 

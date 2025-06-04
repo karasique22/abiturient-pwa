@@ -1,4 +1,5 @@
 'use client';
+// FIXME: клиентский
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';

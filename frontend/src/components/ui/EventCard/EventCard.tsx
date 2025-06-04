@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './EventCard.module.css';
 import type { EventApi } from '@/types';
 
@@ -36,8 +37,9 @@ export default function EventCard({ event, viewMode }: Props) {
           )}
         </div>
 
-        {/* TODO: функционал кнопки */}
-        <button className='button-small'>Записаться</button>
+        <Link className='button-small' href={`/details/${event.slug}`}>
+          Записаться
+        </Link>
       </div>
     </article>
   );

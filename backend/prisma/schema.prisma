@@ -60,6 +60,7 @@ model Session {
 
 model Program {
   id            String         @id @default(uuid())
+  slug          String         @unique
   title         String         @unique
   description   String
   durationWeeks Int?
@@ -90,6 +91,7 @@ model ProgramImage {
 
 model Event {
   id           String        @id @default(uuid())
+  slug         String        @unique
   title        String        @unique
   description  String
   dateTime     DateTime

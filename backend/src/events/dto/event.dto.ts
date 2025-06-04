@@ -5,6 +5,7 @@ import { Event, EventImage } from '@prisma/client';
 export class EventDto implements Event {
   /* базовые поля из модели Event */
   id!: string;
+  slug!: string;
   title!: string;
   description!: string;
   dateTime!: Date;

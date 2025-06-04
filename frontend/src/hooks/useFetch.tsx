@@ -1,21 +1,20 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
-import type { EventApi } from '@/types';
-import type { Event } from '@prisma/client';
 
-// TODO: объединить с usePrograms
-
-export const useEvents = () => {
-  const [events, setEvents] = useState<EventApi[]>([]);
+export function useFetch<T, R = T[]>(url: string) {
+  const [data, setData] = useState<R | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
+  console.log('useFetch', url);
 
   const load = async () => {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.get<EventApi[]>('/events');
-      setEvents(data);
+      const response = await api.get<R>(url);
+      setData(response.data);
     } catch (e) {
       setError(e);
     } finally {
@@ -25,7 +24,7 @@ export const useEvents = () => {
 
   useEffect(() => {
     load();
-  }, []);
+  }, [url]);
 
-  return { events, loading, error, refetch: load };
-};
+  return { data, loading, error, refetch: load };
+}

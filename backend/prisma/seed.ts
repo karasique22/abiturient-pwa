@@ -2,6 +2,7 @@
 import { PrismaClient, Prisma, EventCategory } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
+import { title } from 'process';
 
 const prisma = new PrismaClient();
 const D = Prisma.Decimal; // короче писать
@@ -10,6 +11,14 @@ async function main() {
   /* ── роли + админ ───────────────────────────────────────── */
   const salt = genSaltSync(10);
   const pwd = hashSync('admin123', salt);
+
+  function slugify(input: string) {
+    return input
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
+  }
 
   const [student, moderator, admin] = await Promise.all(
     ['student', 'moderator', 'admin'].map((name) =>
@@ -35,6 +44,7 @@ async function main() {
     prisma.program.create({
       data: {
         title: faker.company.catchPhrase(),
+        slug: slugify(faker.company.catchPhrase()),
         description: faker.lorem.paragraphs(2),
         durationWeeks: faker.number.int({ min: 4, max: 24 }),
         startDate: faker.date.soon({ days: 45 }),
@@ -64,6 +74,7 @@ async function main() {
     prisma.event.create({
       data: {
         title: faker.company.catchPhrase(),
+        slug: slugify(faker.company.catchPhrase()),
         description: faker.lorem.paragraph(),
         dateTime: faker.date.soon({ days: 60 }),
         address: `${faker.location.city()}, ${faker.location.streetAddress()}`,

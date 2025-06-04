@@ -7,7 +7,16 @@ export class EventsService {
   constructor(private prisma: PrismaService) {}
 
   create(data: Prisma.EventCreateInput) {
-    return this.prisma.event.create({ data });
+    const slug = data.title
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
+    return this.prisma.event.create({
+      data: {
+        ...data,
+        slug,
+      },
+    });
   }
 
   findAll() {
@@ -22,9 +31,9 @@ export class EventsService {
     });
   }
 
-  findOne(id: string) {
+  findOne(slug: string) {
     return this.prisma.event.findUnique({
-      where: { id },
+      where: { slug },
       include: {
         images: {
           orderBy: { order: 'asc' },

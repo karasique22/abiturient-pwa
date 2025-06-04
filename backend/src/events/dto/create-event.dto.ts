@@ -8,6 +8,10 @@ export class CreateEventDto {
 
   @IsString()
   @IsNotEmpty()
+  slug: string;
+
+  @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsDateString()
