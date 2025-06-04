@@ -29,6 +29,8 @@ async function main() {
   });
 
   /* ── 10 программ ────────────────────────────────────────── */
+  await prisma.programImage.deleteMany({});
+  await prisma.program.deleteMany({});
   const programPromises = Array.from({ length: 10 }).map(() =>
     prisma.program.create({
       data: {
@@ -56,10 +58,12 @@ async function main() {
   await Promise.all(programPromises);
 
   /* ── 10 событий ─────────────────────────────────────────── */
+  await prisma.eventImage.deleteMany({});
+  await prisma.event.deleteMany({});
   const eventPromises = Array.from({ length: 10 }).map(() =>
     prisma.event.create({
       data: {
-        title: faker.company.name(),
+        title: faker.company.catchPhrase(),
         description: faker.lorem.paragraph(),
         dateTime: faker.date.soon({ days: 60 }),
         address: `${faker.location.city()}, ${faker.location.streetAddress()}`,
@@ -72,11 +76,7 @@ async function main() {
         curatorInfo: faker.person.jobTitle(),
         images: {
           create: {
-            url: faker.image.urlLoremFlickr({
-              category: 'people',
-              width: 640,
-              height: 480,
-            }),
+            url: faker.image.urlPicsumPhotos(),
             alt: 'Фото мероприятия',
             order: 0,
           },
