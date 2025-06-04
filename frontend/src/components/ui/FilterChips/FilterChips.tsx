@@ -5,7 +5,6 @@ import styles from './FilterChips.module.css';
 
 // TODO: декомпозировать
 
-/* подписи, которые показываем пользователю */
 const labels: Record<EventCategory, string> = {
   [EventCategory.MASTER_CLASS]: 'Мастер-класс',
   [EventCategory.TRIAL]: 'Пробное занятие',
@@ -18,7 +17,7 @@ interface Props {
 }
 
 export default function FilterChips({ selected, onChange }: Props) {
-  const toggle = (cat: EventCategory) => {
+  const handleClick = (cat: EventCategory) => {
     onChange(
       selected.includes(cat)
         ? selected.filter((c) => c !== cat)
@@ -34,7 +33,7 @@ export default function FilterChips({ selected, onChange }: Props) {
           className={`${styles.filterChip} ${
             selected.includes(cat) ? styles.active : ''
           }`}
-          onClick={() => toggle(cat)}
+          onClick={() => handleClick(cat)}
         >
           {labels[cat]}
         </button>

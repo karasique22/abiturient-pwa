@@ -45,8 +45,7 @@ export default function EventsPage() {
   return (
     <>
       <div className='container'>
-        {/* <SearchInput value={search} onChange={setSearch} /> */}
-        <SearchInput />
+        <SearchInput value={search} onChange={setSearch} />
       </div>
 
       <div className={styles.eventsContainer}>
