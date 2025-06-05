@@ -60,7 +60,7 @@ export default function RootLayout({
             />
           </header>
 
-          <main>{children}</main>
+          <main className={styles.appContainer}>{children}</main>
 
           {/* ФУТЕР — только на мобилке */}
           <footer className={styles.mobileFooter}>
