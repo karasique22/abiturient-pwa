@@ -3,6 +3,7 @@
 import { useFetch } from '@/hooks/useFetch';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import type { Event } from '@prisma/client';
 
@@ -26,6 +27,13 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
         <h2 className={styles.headerTitle}>{data.title}</h2>
       </div>
       <div className={styles.detailsContainer}>
+        <Image
+          className={styles.coverImage}
+          src={data.coverUrl || '/placeholder-event-image.jpg'}
+          alt={data.title}
+          width={600}
+          height={400}
+        />
         <h1>Подробности о событии</h1>
         <p>Описание: {data.description}</p>
         <p>Дата: {new Date(data.dateTime).toLocaleString()}</p>
