@@ -3,7 +3,7 @@ import styles from './auth.module.css';
 
 export default function AuthLanding() {
   return (
-    <main className={styles.authContainer}>
+    <div className={styles.authContainer}>
       <h1 className={`${styles.authTitle} font-header-large`}>
         <span>Добро пожаловать</span>
         <span>в мир знаний</span>
@@ -25,6 +25,6 @@ export default function AuthLanding() {
           Зарегистрироваться
         </Link>
       </div>
-    </main>
+    </div>
   );
 }
