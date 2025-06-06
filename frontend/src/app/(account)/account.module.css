@@ -1,0 +1,12 @@
+.menuButtonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.menuButton {
+  padding: 26px 10px;
+  text-align: left;
+  border-radius: var(--radius-small);
+  background-color: var(--color-home-grey);
+}

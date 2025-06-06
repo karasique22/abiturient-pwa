@@ -25,6 +25,26 @@ const acromBold = localfont({
   variable: '--font-acrom-bold',
 });
 
+const acromRegular = localfont({
+  src: '../fonts/Acrom-Regular.ttf',
+  variable: '--font-acrom-regular',
+});
+
+const acromExtraBold = localfont({
+  src: '../fonts/Acrom-ExtraBold.ttf',
+  variable: '--font-acrom-extra-bold',
+});
+
+const acromLight = localfont({
+  src: '../fonts/Acrom-Light.ttf',
+  variable: '--font-acrom-light',
+});
+
+const acromThin = localfont({
+  src: '../fonts/Acrom-Thin.ttf',
+  variable: '--font-acrom-thin',
+});
+
 export const metadata: Metadata = {
   title: 'Абитуриент',
   description: 'Портал для абитуриентов ДО Косыгина',
@@ -38,15 +58,7 @@ export default function RootLayout({
   return (
     <html
       lang='ru'
-      className={
-        acrom.variable +
-        ' ' +
-        acromMedium.variable +
-        ' ' +
-        acromBold.variable +
-        ' ' +
-        'antialised'
-      }
+      className={`${acrom.variable} ${acromMedium.variable} ${acromBold.variable} ${acromMedium.variable} ${acromExtraBold.variable} ${acromLight.variable} ${acromThin.variable} ${acromRegular.variable} antialised`}
     >
       <body>
         <Providers>

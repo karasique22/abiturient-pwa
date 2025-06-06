@@ -2,7 +2,6 @@
 import { PrismaClient, Prisma, EventCategory } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
-import { title } from 'process';
 
 const prisma = new PrismaClient();
 const D = Prisma.Decimal; // короче писать
@@ -10,7 +9,9 @@ const D = Prisma.Decimal; // короче писать
 async function main() {
   /* ── роли + админ ───────────────────────────────────────── */
   const salt = genSaltSync(10);
-  const pwd = hashSync('admin123', salt);
+  const adminPassword = hashSync('admin123', salt);
+  const moderatorPassword = hashSync('moderator', salt);
+  const studentPassword = hashSync('student123', salt);
 
   function slugify(input: string) {
     return input
@@ -26,17 +27,41 @@ async function main() {
     ),
   );
 
+  await prisma.session.deleteMany({});
+  await prisma.user.deleteMany({});
+
   await prisma.user.upsert({
     where: { email: 'admin@example.com' },
     update: {},
     create: {
       email: 'admin@example.com',
-      password: pwd,
-      fullName: 'Администратор',
+      password: adminPassword,
+      fullName: 'Администратор Администраторович',
       roles: { connect: { id: admin.id } },
     },
   });
 
+  await prisma.user.upsert({
+    where: { email: 'moderator@example.com' },
+    update: {},
+    create: {
+      email: 'moderator@example.com',
+      password: moderatorPassword,
+      fullName: 'Модератор Модераторович',
+      roles: { connect: { id: moderator.id } },
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'student@example.com' },
+    update: {},
+    create: {
+      email: 'student@example.com',
+      password: studentPassword,
+      fullName: 'Студент Студентович',
+      roles: { connect: { id: student.id } },
+    },
+  });
   /* ── 10 программ ────────────────────────────────────────── */
   await prisma.programImage.deleteMany({});
   await prisma.program.deleteMany({});
