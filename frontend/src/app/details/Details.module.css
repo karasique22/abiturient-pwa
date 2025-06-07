@@ -1,7 +1,9 @@
 .detailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   padding: 18px 16px;
   background-color: var(--color-home-grey);
-  min-height: 100vh;
   margin-top: 14px;
 }
 
@@ -21,7 +23,23 @@
 
 .coverImage {
   width: 100%;
-  height: 288px;
+  height: 160px;
   object-fit: cover;
   border-radius: var(--radius-medium);
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.infoSpan {
+  color: var(--color-content-add);
 }

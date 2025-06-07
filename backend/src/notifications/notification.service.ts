@@ -6,7 +6,9 @@ export class NotificationService {
   constructor(private prisma: PrismaService) {}
 
   async notifyEmail(userId: string, title: string, message: string) {
-    // TODO: отправка email
-    return this.prisma.notification.create({ data: { userId, title, message, type: 'email' } });
+    // TODO: отправка push
+    return this.prisma.notification.create({
+      data: { userId, title, message, type: 'email' },
+    });
   }
 }

@@ -1,13 +1,14 @@
 'use client';
 // FIXME: клиентский
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
 import FilterChips from '@/components/ui/FilterChips/FilterChips';
 import EventsGrid from '@/components/ui/EventsGrid/EventsGrid';
+import { useFilter } from '@/hooks/useFilter';
 
 import type { Event } from '@prisma/client';
 import { EventCategory } from '@/shared/event-categories';
@@ -21,29 +22,7 @@ export default function EventsPage() {
   const { data, loading, error } = useFetch<Event>('/events');
 
   const events = data || [];
-
-  // TODO: вынести в хук фильтр
-  const filtered = useMemo(() => {
-    let list = events;
-
-    // Фильтрация по категориям
-    if (categories.length) {
-      list = list.filter((e) =>
-        categories.includes(e.category as EventCategory)
-      );
-    }
-
-    // Фильтрация по поиску
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (e) =>
-          e.title.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q)
-      );
-    }
-    return list;
-  }, [events, categories, search]);
+  const filtered = useFilter(events, categories, search);
 
   return (
     <>

@@ -153,9 +153,9 @@ p {
   background-color: var(--color-content-accent);
   color: white;
   border: none;
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
   cursor: pointer;
-  padding: 12px 0;
+  padding: 13px 0;
 }
 
 .button-small {
@@ -171,5 +171,5 @@ p {
   border: none;
   border-radius: var(--radius-large);
   cursor: pointer;
-  padding: 12px 0;
+  padding: 13px 0;
 }

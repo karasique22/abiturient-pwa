@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import localfont from 'next/font/local';
 import Image from 'next/image';
 
-// TODO: алиасы
 import './styles/normalize.css';
 import './styles/globals.css';
 import styles from './layout.module.css';

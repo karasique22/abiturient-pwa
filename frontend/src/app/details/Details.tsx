@@ -34,11 +34,36 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
           width={600}
           height={400}
         />
-        <h1>Подробности о событии</h1>
-        <p>Описание: {data.description}</p>
-        <p>Дата: {new Date(data.dateTime).toLocaleString()}</p>
-        <p>Место: {data.address}</p>
-        <p>Куратор: {data.curatorName}</p>
+        <div className={styles.infoContainer}>
+          <div className={styles.infoBlock}>
+            <span className={`${styles.infoSpan} font-body-medium-bold`}>
+              Описание
+            </span>
+            <div className='font-body-normal'>{data.description}</div>
+          </div>
+          <div className={styles.infoBlock}>
+            <span className={`${styles.infoSpan} font-body-medium-bold`}>
+              Дата и время проведения
+            </span>
+            <div className='font-body-normal'>
+              {new Date(data.dateTime).toLocaleString()}
+            </div>
+          </div>
+          <div className={styles.infoBlock}>
+            <span className={`${styles.infoSpan} font-body-medium-bold`}>
+              Адрес
+            </span>
+            <div className='font-body-normal'>{data.address}</div>
+          </div>
+          <div className={styles.infoBlock}>
+            <span className={`${styles.infoSpan} font-body-medium-bold`}>
+              Куратор
+            </span>
+            <div className='font-body-normal'>{data.curatorName}</div>
+            <div className='font-body-normal'>{data.curatorInfo}</div>
+          </div>
+        </div>
+        <button className='button-large'>Записаться</button>
       </div>
     </>
   );

@@ -7,9 +7,9 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--color-home-white);
+  background-color: transparent;
 }
 
 .appContainer {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
