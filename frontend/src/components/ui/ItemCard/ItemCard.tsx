@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from '../EventCard/EventCard.module.css';
+import styles from './ItemCard.module.css';
 import type { ItemApi } from '@/types';
 
 interface Props {
@@ -27,7 +27,9 @@ export default function ItemCard({ item, viewMode }: Props) {
       />
       <div className={styles.content}>
         <div className={styles.contentMain}>
-          <h3 className={`${styles.title} font-body-normal-bold`}>{item.title}</h3>
+          <h3 className={`${styles.title} font-body-normal-bold`}>
+            {item.title}
+          </h3>
           {item.startDate && (
             <p className='font-body-normal'>
               Старт: {new Date(item.startDate).toLocaleDateString('ru-RU')}
@@ -35,7 +37,10 @@ export default function ItemCard({ item, viewMode }: Props) {
           )}
         </div>
 
-        <Link className='button-small' href={`/details/${item.slug}?type=${item.type}`}>
+        <Link
+          className='button-small'
+          href={`/details/${item.slug}?type=${item.type}`}
+        >
           Записаться
         </Link>
       </div>

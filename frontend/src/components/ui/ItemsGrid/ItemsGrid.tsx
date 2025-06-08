@@ -1,7 +1,7 @@
 'use client';
 
 import ItemCard from '@/components/ui/ItemCard/ItemCard';
-import styles from '../EventsGrid/EventsGrid.module.css';
+import styles from './ItemsGrid.module.css';
 import type { ItemApi } from '@/types';
 
 interface Props {
@@ -19,7 +19,11 @@ export default function ItemsGrid({ items, viewMode }: Props) {
       }`}
     >
       {items.map((item) => (
-        <ItemCard key={`${item.type}-${item.id}`} item={item} viewMode={viewMode} />
+        <ItemCard
+          key={`${item.type}-${item.id}`}
+          item={item}
+          viewMode={viewMode}
+        />
       ))}
     </div>
   );

@@ -117,8 +117,12 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
               <span className={`${styles.infoSpan} font-body-medium-bold`}>
                 Куратор
               </span>
-              <div className='font-body-normal'>{(data as any).curatorName}</div>
-              <div className='font-body-normal'>{(data as any).curatorInfo}</div>
+              <div className='font-body-normal'>
+                {(data as any).curatorName}
+              </div>
+              <div className='font-body-normal'>
+                {(data as any).curatorInfo}
+              </div>
             </div>
           )}
         </div>
