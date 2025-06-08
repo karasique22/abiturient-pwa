@@ -7,7 +7,7 @@ import { useFetch } from '@/hooks/useFetch';
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
 import FilterChips from '@/components/ui/FilterChips/FilterChips';
-import EventsGrid from '@/components/ui/EventsGrid/EventsGrid';
+import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 import { useFilter } from '@/hooks/useFilter';
 
 import type { Event } from '@prisma/client';
@@ -43,7 +43,7 @@ export default function EventsPage() {
         {/* {error && <p>Ошибка загрузки</p>} */}
 
         {!loading && !error && (
-          <EventsGrid events={filtered as Event[]} viewMode={view} />
+          <ItemsGrid items={filtered as Event[]} type='event' viewMode={view} />
         )}
       </div>
     </>
