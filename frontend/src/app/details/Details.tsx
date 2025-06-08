@@ -47,9 +47,7 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
           </div>
           {type === 'program' && (
             <details className={styles.infoBlock} open>
-              <summary
-                className={`${styles.infoSpan} font-body-medium-bold`}
-              >
+              <summary className={`${styles.infoSpan} font-body-medium-bold`}>
                 Сведения
               </summary>
               <ul className='font-body-normal'>
@@ -58,7 +56,8 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
                 )}
                 {(data as ProgramApi).durationWeeks && (
                   <li>
-                    Продолжительность: {(data as ProgramApi).durationWeeks} недель
+                    Продолжительность: {(data as ProgramApi).durationWeeks}{' '}
+                    недель
                   </li>
                 )}
                 {(data as ProgramApi).format && (
@@ -70,9 +69,9 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
                 {(data as ProgramApi).startDate && (
                   <li>
                     Старт:{' '}
-                    {new Date((data as ProgramApi).startDate as string).toLocaleDateString(
-                      'ru-RU',
-                    )}
+                    {new Date(
+                      (data as ProgramApi).startDate as string
+                    ).toLocaleDateString('ru-RU')}
                   </li>
                 )}
               </ul>
@@ -80,9 +79,7 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
           )}
           {type === 'program' && (data as ProgramApi).modules && (
             <details className={styles.infoBlock}>
-              <summary
-                className={`${styles.infoSpan} font-body-medium-bold`}
-              >
+              <summary className={`${styles.infoSpan} font-body-medium-bold`}>
                 Содержание программы
               </summary>
               <ul className='font-body-normal'>

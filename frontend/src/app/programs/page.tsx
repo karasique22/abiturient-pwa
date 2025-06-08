@@ -38,13 +38,10 @@ export default function ProgramsPage() {
       <div className={styles.eventsContainer}>
         <header className={styles.eventsHeader}>
           <h2>Список программ</h2>
-          <ViewSwitcher viewMode={view} onViewChange={setView} />
         </header>
 
         {loading && <p>Загрузка…</p>}
-        {!loading && !error && (
-          <ItemsGrid items={items} viewMode={view} />
-        )}
+        {!loading && !error && <ItemsGrid items={items} viewMode={view} />}
       </div>
     </>
   );
