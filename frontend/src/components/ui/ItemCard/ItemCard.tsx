@@ -16,25 +16,42 @@ interface Props {
 
 export default function ItemCard({ item, type, viewMode }: Props) {
   const cover = (item as any).coverUrl || 'https://placehold.co/600x400';
-  const linkHref = `/details/${item.slug}`;
+  const linkHref =
+    type === 'event' ? `/details/${item.slug}` : `/programs/${item.slug}`;
   const buttonLabel = type === 'event' ? 'Записаться' : 'Подробнее';
 
   return (
     <article
-      className={`${styles.card} ${viewMode === 'grid' ? styles.cardGrid : styles.cardList}`}
+      className={`${styles.card} ${
+        viewMode === 'grid' ? styles.cardGrid : styles.cardList
+      }`}
     >
-      <Image className={styles.image} src={cover} width={600} height={400} alt='' />
+      <Image
+        className={styles.image}
+        src={cover}
+        width={600}
+        height={400}
+        alt=''
+      />
       <div className={styles.content}>
         <div className={styles.contentMain}>
-          <h3 className={`${styles.title} font-body-normal-bold`}>{item.title}</h3>
+          <h3 className={`${styles.title} font-body-normal-bold`}>
+            {item.title}
+          </h3>
           {type === 'event' && (item as EventApi).dateTime && (
             <p className='font-body-normal'>
-              Старт: {new Date((item as EventApi).dateTime).toLocaleDateString('ru-RU')}
+              Старт:{' '}
+              {new Date((item as EventApi).dateTime).toLocaleDateString(
+                'ru-RU'
+              )}
             </p>
           )}
           {type === 'program' && (item as ProgramApi).startDate && (
             <p className='font-body-normal'>
-              Старт: {new Date((item as ProgramApi).startDate as any).toLocaleDateString('ru-RU')}
+              Старт:{' '}
+              {new Date(
+                (item as ProgramApi).startDate as any
+              ).toLocaleDateString('ru-RU')}
             </p>
           )}
           {type === 'program' && (item as ProgramApi).durationWeeks && (
@@ -43,7 +60,9 @@ export default function ItemCard({ item, type, viewMode }: Props) {
             </p>
           )}
           {type === 'program' && (item as ProgramApi).priceRub && (
-            <p className='font-body-normal'>Цена: {(item as ProgramApi).priceRub.toString()}₽</p>
+            <p className='font-body-normal'>
+              Цена: {(item as ProgramApi).priceRub.toString()}₽
+            </p>
           )}
         </div>
         <Link className='button-small' href={linkHref}>

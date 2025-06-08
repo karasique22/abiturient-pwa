@@ -1,0 +1,37 @@
+.card {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-content-main);
+  max-width: 100%;
+  color: var(--color-home-white);
+  border-radius: var(--radius-medium);
+  gap: 10px;
+}
+
+.image {
+  border-radius: var(--radius-medium);
+  object-fit: cover;
+  height: 90px;
+  max-width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  gap: 18px;
+  flex-grow: 1;
+}
+
+.contentMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.title {
+  word-wrap: break-word;
+}

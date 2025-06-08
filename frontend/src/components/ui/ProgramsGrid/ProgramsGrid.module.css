@@ -1,0 +1,17 @@
+.events {
+  max-width: 100%;
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  column-gap: 16px;
+  row-gap: 12px;
+}
+
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

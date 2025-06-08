@@ -13,35 +13,18 @@ import BackLinkIcon from '@/components/icons/backLinkIcon';
 
 export type DetailsType = 'event' | 'program';
 
-export default function ClientDetails({ slug }: { slug: string }) {
-  const [data, setData] = useState<EventApi | ProgramApi | null>(null);
-  const [type, setType] = useState<DetailsType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
-
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await api.get<EventApi>(`/events/${slug}`);
-        setData(res.data);
-        setType('event');
-      } catch (e1) {
-        try {
-          const res = await api.get<ProgramApi>(`/programs/${slug}`);
-          setData(res.data);
-          setType('program');
-        } catch (e2) {
-          setError(e2);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [slug]);
-
+export default function ClientDetails({
+  slug,
+  type,
+}: {
+  slug: string;
+  type: DetailsType;
+}) {
+  const url = type === 'event' ? `/events/${slug}` : `/programs/${slug}`;
+  const { data, loading, error } = useFetch<
+    EventApi | ProgramApi,
+    EventApi | ProgramApi
+  >(url);
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {String(error)}</p>;
@@ -85,14 +68,20 @@ export default function ClientDetails({ slug }: { slug: string }) {
                 <span className={`${styles.infoSpan} font-body-medium-bold`}>
                   Адрес
                 </span>
-                <div className='font-body-normal'>{(data as EventApi).address}</div>
+                <div className='font-body-normal'>
+                  {(data as EventApi).address}
+                </div>
               </div>
               <div className={styles.infoBlock}>
                 <span className={`${styles.infoSpan} font-body-medium-bold`}>
                   Куратор
                 </span>
-                <div className='font-body-normal'>{(data as EventApi).curatorName}</div>
-                <div className='font-body-normal'>{(data as EventApi).curatorInfo}</div>
+                <div className='font-body-normal'>
+                  {(data as EventApi).curatorName}
+                </div>
+                <div className='font-body-normal'>
+                  {(data as EventApi).curatorInfo}
+                </div>
               </div>
             </>
           )}
@@ -104,7 +93,9 @@ export default function ClientDetails({ slug }: { slug: string }) {
                     Старт
                   </span>
                   <div className='font-body-normal'>
-                    {new Date((data as ProgramApi).startDate as any).toLocaleDateString('ru-RU')}
+                    {new Date(
+                      (data as ProgramApi).startDate as any
+                    ).toLocaleDateString('ru-RU')}
                   </div>
                 </div>
               )}

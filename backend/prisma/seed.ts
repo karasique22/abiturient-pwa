@@ -80,12 +80,8 @@ async function main() {
         ),
         images: {
           create: {
-            url: faker.image.urlLoremFlickr({
-              category: 'education',
-              width: 640,
-              height: 480,
-            }),
-            alt: 'Обложка программы',
+            url: faker.image.urlPicsumPhotos(),
+            alt: 'Фото мероприятия',
             order: 0,
           },
         },

@@ -41,7 +41,11 @@ export default function ProgramsPage() {
 
         {loading && <p>Загрузка…</p>}
         {!loading && !error && (
-          <ItemsGrid items={filtered as ProgramApi[]} type='program' viewMode={view} />
+          <ItemsGrid
+            items={filtered as ProgramApi[]}
+            type='program'
+            viewMode={view}
+          />
         )}
       </div>
     </>
