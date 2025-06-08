@@ -5,7 +5,7 @@ import { useFetch } from '@/hooks/useFetch';
 
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
-import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
+import ProgramsGrid from '@/components/ui/ProgramsGrid/ProgramsGrid';
 
 import type { ProgramApi } from '@/types';
 import styles from '../app.module.css';
@@ -41,7 +41,7 @@ export default function ProgramsPage() {
 
         {loading && <p>Загрузка…</p>}
         {!loading && !error && (
-          <ItemsGrid items={filtered as ProgramApi[]} type='program' viewMode={view} />
+          <ProgramsGrid programs={filtered as ProgramApi[]} viewMode={view} />
         )}
       </div>
     </>
