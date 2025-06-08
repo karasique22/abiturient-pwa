@@ -11,13 +11,13 @@ const page = (props: Props) => {
     <div className='container'>
       <div className={styles.menuButtonContainer}>
         {studentMenu.map((link) => (
-          <button
+          <Link
             key={link.label}
             className={`${styles.menuButton} font-body-normal-bold`}
+            href={link.href}
           >
             <span>{link.label}</span>
-            <Link href={link.href} />
-          </button>
+          </Link>
         ))}
       </div>
     </div>
