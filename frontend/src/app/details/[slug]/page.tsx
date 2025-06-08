@@ -4,5 +4,5 @@ export default async function Page(props: {
   params: Promise<{ slug: string }>;
 }) {
   const params = await props.params;
-  return <Details slug={params.slug} />;
+  return <Details slug={params.slug} type='event' />;
 }
