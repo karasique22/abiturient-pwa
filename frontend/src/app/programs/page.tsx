@@ -1,9 +1,42 @@
-import React from 'react';
+'use client';
 
-type Props = {};
+import { useState } from 'react';
+import { useFetch } from '@/hooks/useFetch';
 
-const page = (props: Props) => {
-  return <div>программы</div>;
-};
+import SearchInput from '@/components/ui/SearchInput/SearchInput';
+import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
+import ProgramsGrid from '@/components/ui/ProgramsGrid/ProgramsGrid';
 
-export default page;
+import type { ProgramApi } from '@/types';
+import styles from '../app.module.css';
+
+export default function ProgramsPage() {
+  const [search, setSearch] = useState('');
+  const [view, setView] = useState<'list' | 'grid'>('list');
+  const { data, loading, error } = useFetch<ProgramApi>('/programs');
+
+  const programs = data || [];
+  const filtered = programs.filter((p) =>
+    p.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <>
+      <div className='container'>
+        <SearchInput value={search} onChange={setSearch} />
+      </div>
+
+      <div className={styles.eventsContainer}>
+        <header className={styles.eventsHeader}>
+          <h2>Список программ</h2>
+          <ViewSwitcher viewMode={view} onViewChange={setView} />
+        </header>
+
+        {loading && <p>Загрузка…</p>}
+        {!loading && !error && (
+          <ProgramsGrid programs={filtered} viewMode={view} />
+        )}
+      </div>
+    </>
+  );
+}
