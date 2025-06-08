@@ -5,9 +5,9 @@ import { useFetch } from '@/hooks/useFetch';
 
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
-import ProgramsGrid from '@/components/ui/ProgramsGrid/ProgramsGrid';
+import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 
-import type { ProgramApi } from '@/types';
+import type { ProgramApi, ItemApi } from '@/types';
 import styles from '../app.module.css';
 
 export default function ProgramsPage() {
@@ -19,6 +19,15 @@ export default function ProgramsPage() {
   const filtered = programs.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const items: ItemApi[] = filtered.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    startDate: p.startDate,
+    coverUrl: p.coverUrl,
+    type: 'program',
+  }));
 
   return (
     <>
@@ -34,7 +43,7 @@ export default function ProgramsPage() {
 
         {loading && <p>Загрузка…</p>}
         {!loading && !error && (
-          <ProgramsGrid programs={filtered} viewMode={view} />
+          <ItemsGrid items={items} viewMode={view} />
         )}
       </div>
     </>

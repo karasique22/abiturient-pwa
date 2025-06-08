@@ -1,17 +1,21 @@
 'use client';
 
 import { useFetch } from '@/hooks/useFetch';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import type { Event } from '@prisma/client';
+import type { EventApi, ProgramApi } from '@/types';
 
 import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/backLinkIcon';
 
 export default function ClientEventDetails({ slug }: { slug: string }) {
-  const { data, loading, error } = useFetch<Event, Event>(`/events/${slug}`);
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type') === 'program' ? 'program' : 'event';
+  const { data, loading, error } = useFetch<EventApi | ProgramApi>(
+    `/${type}s/${slug}`
+  );
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {String(error)}</p>;
@@ -41,27 +45,35 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
             </span>
             <div className='font-body-normal'>{data.description}</div>
           </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Дата и время проведения
-            </span>
-            <div className='font-body-normal'>
-              {new Date(data.dateTime).toLocaleString()}
+          {(data as any).dateTime || (data as any).startDate ? (
+            <div className={styles.infoBlock}>
+              <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                Дата и время проведения
+              </span>
+              <div className='font-body-normal'>
+                {new Date(
+                  ((data as any).dateTime || (data as any).startDate) as string
+                ).toLocaleString('ru-RU')}
+              </div>
             </div>
-          </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Адрес
-            </span>
-            <div className='font-body-normal'>{data.address}</div>
-          </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Куратор
-            </span>
-            <div className='font-body-normal'>{data.curatorName}</div>
-            <div className='font-body-normal'>{data.curatorInfo}</div>
-          </div>
+          ) : null}
+          {(data as any).address && (
+            <div className={styles.infoBlock}>
+              <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                Адрес
+              </span>
+              <div className='font-body-normal'>{(data as any).address}</div>
+            </div>
+          )}
+          {(data as any).curatorName && (
+            <div className={styles.infoBlock}>
+              <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                Куратор
+              </span>
+              <div className='font-body-normal'>{(data as any).curatorName}</div>
+              <div className='font-body-normal'>{(data as any).curatorInfo}</div>
+            </div>
+          )}
         </div>
         <button className='button-large'>Записаться</button>
       </div>

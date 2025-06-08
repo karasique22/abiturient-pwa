@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import type { Event } from '@prisma/client';
+import type { EventApi } from '@/types';
 import { EventCategory } from '@/shared/event-categories';
 
 export function useFilter(
-  events: Event[],
+  events: EventApi[],
   categories: EventCategory[],
   search: string
-): Event[] {
+): EventApi[] {
   return useMemo(() => {
     let list = events;
 
