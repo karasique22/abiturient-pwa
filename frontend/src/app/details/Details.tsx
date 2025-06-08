@@ -45,6 +45,53 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
             </span>
             <div className='font-body-normal'>{data.description}</div>
           </div>
+          {type === 'program' && (
+            <details className={styles.infoBlock} open>
+              <summary
+                className={`${styles.infoSpan} font-body-medium-bold`}
+              >
+                Сведения
+              </summary>
+              <ul className='font-body-normal'>
+                {(data as ProgramApi).level && (
+                  <li>Уровень: {(data as ProgramApi).level}</li>
+                )}
+                {(data as ProgramApi).durationWeeks && (
+                  <li>
+                    Продолжительность: {(data as ProgramApi).durationWeeks} недель
+                  </li>
+                )}
+                {(data as ProgramApi).format && (
+                  <li>Формат: {(data as ProgramApi).format}</li>
+                )}
+                {(data as ProgramApi).document && (
+                  <li>Документ: {(data as ProgramApi).document}</li>
+                )}
+                {(data as ProgramApi).startDate && (
+                  <li>
+                    Старт:{' '}
+                    {new Date((data as ProgramApi).startDate as string).toLocaleDateString(
+                      'ru-RU',
+                    )}
+                  </li>
+                )}
+              </ul>
+            </details>
+          )}
+          {type === 'program' && (data as ProgramApi).modules && (
+            <details className={styles.infoBlock}>
+              <summary
+                className={`${styles.infoSpan} font-body-medium-bold`}
+              >
+                Содержание программы
+              </summary>
+              <ul className='font-body-normal'>
+                {(data as ProgramApi).modules!.map((m, i) => (
+                  <li key={i}>{m}</li>
+                ))}
+              </ul>
+            </details>
+          )}
           {(data as any).dateTime || (data as any).startDate ? (
             <div className={styles.infoBlock}>
               <span className={`${styles.infoSpan} font-body-medium-bold`}>

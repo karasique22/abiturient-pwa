@@ -13,6 +13,12 @@ export interface ProgramApi {
   durationWeeks?: number | null;
   priceRub?: number | null;
   coverUrl: string | null;
+  level?: string | null;
+  format?: string | null;
+  document?: string | null;
+  modules?: string[];
+  curatorName?: string | null;
+  curatorInfo?: string | null;
 }
 
 export interface ItemApi {
