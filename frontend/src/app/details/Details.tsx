@@ -5,13 +5,16 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import type { Event } from '@prisma/client';
+import type { EventApi, ProgramApi } from '@/types';
 
 import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/backLinkIcon';
 
-export default function ClientEventDetails({ slug }: { slug: string }) {
-  const { data, loading, error } = useFetch<Event, Event>(`/events/${slug}`);
+export type DetailsType = 'event' | 'program';
+
+export default function ClientDetails({ slug, type }: { slug: string; type: DetailsType }) {
+  const url = type === 'event' ? `/events/${slug}` : `/programs/${slug}`;
+  const { data, loading, error } = useFetch<EventApi | ProgramApi, EventApi | ProgramApi>(url);
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {String(error)}</p>;
@@ -41,27 +44,65 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
             </span>
             <div className='font-body-normal'>{data.description}</div>
           </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Дата и время проведения
-            </span>
-            <div className='font-body-normal'>
-              {new Date(data.dateTime).toLocaleString()}
-            </div>
-          </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Адрес
-            </span>
-            <div className='font-body-normal'>{data.address}</div>
-          </div>
-          <div className={styles.infoBlock}>
-            <span className={`${styles.infoSpan} font-body-medium-bold`}>
-              Куратор
-            </span>
-            <div className='font-body-normal'>{data.curatorName}</div>
-            <div className='font-body-normal'>{data.curatorInfo}</div>
-          </div>
+          {type === 'event' && (
+            <>
+              <div className={styles.infoBlock}>
+                <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                  Дата и время проведения
+                </span>
+                <div className='font-body-normal'>
+                  {new Date((data as EventApi).dateTime).toLocaleString()}
+                </div>
+              </div>
+              <div className={styles.infoBlock}>
+                <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                  Адрес
+                </span>
+                <div className='font-body-normal'>{(data as EventApi).address}</div>
+              </div>
+              <div className={styles.infoBlock}>
+                <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                  Куратор
+                </span>
+                <div className='font-body-normal'>{(data as EventApi).curatorName}</div>
+                <div className='font-body-normal'>{(data as EventApi).curatorInfo}</div>
+              </div>
+            </>
+          )}
+          {type === 'program' && (
+            <>
+              {(data as ProgramApi).startDate && (
+                <div className={styles.infoBlock}>
+                  <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                    Старт
+                  </span>
+                  <div className='font-body-normal'>
+                    {new Date((data as ProgramApi).startDate as any).toLocaleDateString('ru-RU')}
+                  </div>
+                </div>
+              )}
+              {(data as ProgramApi).durationWeeks && (
+                <div className={styles.infoBlock}>
+                  <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                    Длительность
+                  </span>
+                  <div className='font-body-normal'>
+                    {(data as ProgramApi).durationWeeks} недель
+                  </div>
+                </div>
+              )}
+              {(data as ProgramApi).priceRub && (
+                <div className={styles.infoBlock}>
+                  <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                    Цена
+                  </span>
+                  <div className='font-body-normal'>
+                    {(data as ProgramApi).priceRub.toString()}₽
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
         <button className='button-large'>Записаться</button>
       </div>
