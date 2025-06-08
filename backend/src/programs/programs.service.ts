@@ -7,14 +7,50 @@ export class ProgramsService {
   constructor(private prisma: PrismaService) {}
 
   create(data: Prisma.ProgramCreateInput) {
-    return this.prisma.program.create({ data });
+    const slug = data.title
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
+    return this.prisma.program.create({
+      data: {
+        ...data,
+        slug,
+      },
+    });
   }
 
   findAll() {
-    return this.prisma.program.findMany({ where: { isActive: true } });
+    return this.prisma.program.findMany({
+      where: { isActive: true },
+      include: {
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1,
+        },
+      },
+    });
   }
 
-  findOne(id: string) {
-    return this.prisma.program.findUnique({ where: { id } });
+  findOne(slug: string) {
+    return this.prisma.program.findUnique({
+      where: { slug },
+      include: {
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1,
+        },
+      },
+    });
+  }
+
+  update(id: string, data: Prisma.ProgramUpdateInput) {
+    return this.prisma.program.update({ where: { id }, data });
+  }
+
+  remove(id: string) {
+    return this.prisma.program.update({
+      where: { id },
+      data: { isActive: false },
+    });
   }
 }
