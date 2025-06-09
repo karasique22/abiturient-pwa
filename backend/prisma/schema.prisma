@@ -20,7 +20,23 @@ enum EventCategory {
 enum ProgramCategory {
   PROFESSIONAL_RETRAINING // профессиональная переподготовка
   PROFESSIONAL_DEVELOPMENT // повышение квалификации
+}
 
+enum ProgramLevel {
+  BEGINNER // начальный
+  INTERMEDIATE // средний
+  ADVANCED // продвинутый
+}
+
+enum ProgramDocument {
+  DIPLOMA_PROFESSIONAL_RETRAINING // диплом о профессиональной переподготовке
+  DIPLOMA_PROFESSIONAL_DEVELOPMENT // диплом о повышении квалификации
+  CERTIFICATE_OF_COMPLETION // сертификат об обучении
+}
+
+enum ProgramFormat {
+  OFFLINE
+  ONLINE
 }
 
 /**
@@ -70,7 +86,14 @@ model Program {
   title         String         @unique
   description   String
   durationHours Int?
+  durationYears Int?
   category      ProgramCategory
+  level         ProgramLevel?
+  document      ProgramDocument?
+  format        ProgramFormat
+  content       Json?
+  curatorName  String
+  curatorInfo  String?
   startDate     DateTime?
   priceRub      Decimal?       @db.Decimal(10, 2)
   applications  Application[]

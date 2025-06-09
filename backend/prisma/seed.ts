@@ -4,6 +4,9 @@ import {
   Prisma,
   EventCategory,
   ProgramCategory,
+  ProgramLevel,
+  ProgramDocument,
+  ProgramFormat,
 } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
@@ -83,14 +86,40 @@ async function main() {
           max: 1500,
           multipleOf: 50,
         }),
+        durationYears: faker.number.int({
+          min: 1,
+          max: 5,
+        }),
         category: faker.helpers.arrayElement([
           ProgramCategory.PROFESSIONAL_RETRAINING,
           ProgramCategory.PROFESSIONAL_DEVELOPMENT,
         ]),
+        level: faker.helpers.arrayElement([
+          ProgramLevel.BEGINNER,
+          ProgramLevel.ADVANCED,
+          ProgramLevel.INTERMEDIATE,
+        ]),
+        document: faker.helpers.arrayElement([
+          ProgramDocument.CERTIFICATE_OF_COMPLETION,
+          ProgramDocument.DIPLOMA_PROFESSIONAL_DEVELOPMENT,
+          ProgramDocument.DIPLOMA_PROFESSIONAL_RETRAINING,
+        ]),
+        content: [
+          'Модуль 1. Исходная информация для цифрового моделирования одежды',
+          'Модуль 2. Цифровой манекен, методы оценки качества одежды с применением трехмерных технологий',
+          'Модуль 3. Визуализация образа потребителя в трехмерной среде, принципы работы с эскизами одежды',
+          'Модуль 4. Конструирование и художественное моделирование швейных изделий в цифровой среде',
+        ],
+        curatorName: faker.person.fullName(),
+        curatorInfo: faker.person.bio(),
         startDate: faker.date.soon({ days: 45 }),
         priceRub: new D(
           faker.finance.amount({ min: 20000, max: 90000, dec: 2 }),
         ),
+        format: faker.helpers.arrayElement([
+          ProgramFormat.OFFLINE,
+          ProgramFormat.ONLINE,
+        ]),
         images: {
           create: {
             url: faker.image.urlLoremFlickr({

@@ -1,24 +1,11 @@
-import type { Event as EventDB } from '@prisma/client';
-// FIXME: зачем?
+import type { Event as EventDB, Program as ProgramDB } from '@prisma/client';
+// FIXME: пофиксить
 export interface EventApi extends Omit<EventDB, 'images'> {
   coverUrl: string | null;
 }
 
-export interface ProgramApi {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  startDate?: string | Date | null;
-  durationWeeks?: number | null;
-  priceRub?: number | null;
+export interface ProgramApi extends Omit<ProgramDB, 'images'> {
   coverUrl: string | null;
-  level?: string | null;
-  format?: string | null;
-  document?: string | null;
-  modules?: string[];
-  curatorName?: string | null;
-  curatorInfo?: string | null;
 }
 
 export interface ItemApi {

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import styles from './Details.module.css';
-import BackLinkIcon from '@/components/icons/backLinkIcon';
+import BackLinkIcon from '@/components/icons/BackLinkIcon';
 
 import type { EventApi } from '@/types';
 
@@ -29,7 +29,7 @@ export default function EventDetails({
           width={600}
           height={400}
         />
-        <div className={styles.infoContainer}>
+        <div className={styles.eventContainer}>
           <div className={styles.infoBlock}>
             <span className={`${styles.infoSpan} font-body-medium-bold`}>
               Описание

@@ -1,5 +1,13 @@
 import { Expose, Transform } from 'class-transformer';
-import { Program, ProgramCategory, ProgramImage } from '@prisma/client';
+import {
+  Program,
+  ProgramCategory,
+  ProgramDocument,
+  ProgramFormat,
+  ProgramImage,
+  ProgramLevel,
+} from '@prisma/client';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 export class ProgramDto implements Program {
   id!: string;
@@ -8,6 +16,13 @@ export class ProgramDto implements Program {
   description!: string;
   durationHours!: number | null;
   category!: ProgramCategory;
+  level!: ProgramLevel;
+  format!: ProgramFormat;
+  durationYears!: number;
+  document!: ProgramDocument;
+  content!: JsonValue;
+  curatorName: string;
+  curatorInfo: string;
   startDate!: Date | null;
   priceRub!: any;
   isActive!: boolean;
