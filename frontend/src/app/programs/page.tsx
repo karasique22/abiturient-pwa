@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
-import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
 import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 
 import type { ProgramApi, ItemApi } from '@/types';
@@ -13,7 +12,7 @@ import styles from '../app.module.css';
 export default function ProgramsPage() {
   const [search, setSearch] = useState('');
   const [view, setView] = useState<'list' | 'grid'>('list');
-  const { data, loading, error } = useFetch<ProgramApi>('/programs');
+  const { data, loading, error } = useFetch<ProgramApi[]>('/programs');
 
   const programs = data || [];
   const filtered = programs.filter((p) =>

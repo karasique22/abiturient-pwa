@@ -56,7 +56,7 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
                 )}
                 {(data as ProgramApi).durationWeeks && (
                   <li>
-                    Продолжительность: {(data as ProgramApi).durationWeeks}{' '}
+                    Продолжительность: {(data as ProgramApi).durationWeeks}
                     недель
                   </li>
                 )}
