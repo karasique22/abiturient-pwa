@@ -4,6 +4,7 @@ import { useFetch } from '@/hooks/useFetch';
 import { notFound, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import type { EventApi, ProgramApi } from '@/types';
 
@@ -21,13 +22,15 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
   if (error) return <p>Ошибка: {String(error)}</p>;
   if (!data) return notFound();
 
+  const router = useRouter();
+
   // FIXME: реализовать как модульное окно чтобы можно было переходить назад без фетчинга
   return (
     <>
       <div className={`${styles.header} container`}>
-        <Link href='/' className={styles.backLink}>
+        <button className={styles.backLink} onClick={() => router.back()}>
           <BackLinkIcon />
-        </Link>
+        </button>
         <h2 className={styles.headerTitle}>{data.title}</h2>
       </div>
       <div className={styles.detailsContainer}>
