@@ -2,22 +2,22 @@ import React from 'react';
 import Link from 'next/link';
 
 import { studentMenu } from './studentMenu';
+import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import styles from '../account.module.css';
 
-type Props = {};
-
-const page = (props: Props) => {
+const page = () => {
   return (
     <div className='container'>
       <div className={styles.menuButtonContainer}>
         {studentMenu.map((link) => (
-          <button
-            key={link.label}
+          <Link
             className={`${styles.menuButton} font-body-normal-bold`}
+            key={link.label}
+            href={link.href}
           >
             <span>{link.label}</span>
-            <Link href={link.href} />
-          </button>
+            <LinkIcon direction='forward' />
+          </Link>
         ))}
       </div>
     </div>

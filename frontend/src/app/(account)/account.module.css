@@ -5,8 +5,17 @@
 }
 
 .menuButton {
-  padding: 26px 10px;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px 10px;
   border-radius: var(--radius-small);
   background-color: var(--color-home-grey);
+}
+
+.menuButton:first-child {
+  background-color: var(--color-content-accent);
+  color: var(--color-home-white);
 }

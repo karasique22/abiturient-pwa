@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import styles from './Details.module.css';
-import BackLinkIcon from '@/components/icons/BackLinkIcon';
 
 import type { EventApi } from '@/types';
+import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 
 export default function EventDetails({
   data,
@@ -17,7 +17,7 @@ export default function EventDetails({
     <>
       <div className={`${styles.header} container`}>
         <button className={styles.backLink} onClick={onBack}>
-          <BackLinkIcon />
+          <LinkIcon direction='back' />
         </button>
         <h2 className={styles.headerTitle}>{data.title}</h2>
       </div>

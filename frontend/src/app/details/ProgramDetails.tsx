@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import styles from './Details.module.css';
-import BackLinkIcon from '@/components/icons/BackLinkIcon';
-import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
+import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
 
 import type { ProgramApi } from '@/types';
-import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
+import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
+import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
+import styles from './Details.module.css';
 
 export default function ProgramDetails({
   data,
@@ -39,7 +39,7 @@ export default function ProgramDetails({
     <>
       <div className={`${styles.header} container`}>
         <button className={styles.backLink} onClick={onBack}>
-          <BackLinkIcon />
+          <LinkIcon direction='back' />
         </button>
         <h2 className={styles.headerTitle}>{data.title}</h2>
       </div>
