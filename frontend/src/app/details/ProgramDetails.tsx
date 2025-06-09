@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/BackLinkIcon';
-import ToggleListIcon from '@/components/icons/ToggleListIcon';
+import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 
 import type { ProgramApi } from '@/types';
 import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
@@ -59,14 +59,8 @@ export default function ProgramDetails({
             <div>{data.description}</div>
           </div>
 
-          <details className={styles.listBlock}>
-            <summary className={`${styles.listSpan} font-body-normal-bold`}>
-              <p>Сведения</p>
-              <div className={styles.toggleIcon}>
-                <ToggleListIcon />
-              </div>
-            </summary>
-            <ul className={`${styles.list} font-body-normal`}>
+          <AccordionBlock title='Сведения'>
+            <ul className={styles.list}>
               {data.level && (
                 <li className={styles.listItem}>
                   Уровень: {levelLabels[data.level as ProgramLevel]}
@@ -93,43 +87,31 @@ export default function ProgramDetails({
                 </li>
               )}
             </ul>
-          </details>
+          </AccordionBlock>
 
-          {data.content && (
-            <details className={styles.listBlock}>
-              <summary className={`${styles.listSpan} font-body-normal-bold`}>
-                <p>Содержание программы</p>
-                <div className={styles.toggleIcon}>
-                  <ToggleListIcon />
-                </div>
-              </summary>
-              {Array.isArray(data.content) &&
-                (data.content as unknown[]).every(
-                  (el) => typeof el === 'string'
-                ) && (
-                  <ul className={`${styles.list} font-body-normal`}>
-                    {(data.content as string[]).map((m, i) => (
-                      <li className={styles.listItem} key={i}>
-                        {m}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-            </details>
-          )}
+          {Array.isArray(data.content) &&
+            (data.content as unknown[]).every(
+              (el) => typeof el === 'string'
+            ) && (
+              <AccordionBlock title='Содержание программы'>
+                <ul className={styles.list}>
+                  {(data.content as string[]).map((m, i) => (
+                    <li className={styles.listItem} key={i}>
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </AccordionBlock>
+            )}
 
-          <details className={styles.listBlock}>
-            <summary className={`${styles.listSpan} font-body-normal-bold`}>
-              <p>Куратор программы</p>
-              <div className={styles.toggleIcon}>
-                <ToggleListIcon />
-              </div>
-            </summary>
-            <div className={styles.content}>
-              <div>{data.curatorName}</div>
-              <div className={styles.listItem}>{data.curatorInfo}</div>
-            </div>
-          </details>
+          <AccordionBlock title='Куратор программы'>
+            <ul className={styles.list}>
+              <li className={`${styles.listItem} font-body-normal-bold`}>
+                {data.curatorName}
+              </li>
+              <li className={styles.listItem}>{data.curatorInfo}</li>
+            </ul>
+          </AccordionBlock>
         </div>
         <button className='button-large'>Записаться</button>
       </div>
