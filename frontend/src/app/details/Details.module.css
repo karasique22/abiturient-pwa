@@ -43,3 +43,9 @@
 .infoSpan {
   color: var(--color-content-add);
 }
+
+.listBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

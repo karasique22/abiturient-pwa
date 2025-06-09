@@ -24,7 +24,7 @@ export default function ClientDetails({ slug }: { slug: string }) {
   if (error) return <p>Ошибка: {String(error)}</p>;
   if (!data) return notFound();
 
-  // FIXME: реализовать как модульное окно чтобы можно было переходить назад без фетчинга
+  // FIXME: хз разбить на разные компоненты чтоли
   return (
     <>
       <div className={`${styles.header} container`}>
