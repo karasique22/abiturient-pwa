@@ -13,16 +13,18 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false); // ← new
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsSubmitting(true); // ← disable UI
+    setIsSubmitting(true);
     setError('');
 
     try {
       await (mode === 'login' ? login : register)(form.email, form.password);
-      router.push('/');
+      setIsSuccess(true);
+      setTimeout(() => router.push('/'), 1000);
     } catch (e) {
       setError('Неверный логин или пароль');
     } finally {
@@ -30,7 +32,6 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     }
   }
 
-  // TODO: накинуть маски на форму
   return (
     <div className={styles.authContainer}>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -46,7 +47,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           value={form.email}
           placeholder='электронная почта'
           onChange={(e) => setForm({ ...form, email: e.target.value })}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSuccess}
         />
 
         <input
@@ -57,15 +58,19 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           value={form.password}
           placeholder='пароль'
           onChange={(e) => setForm({ ...form, password: e.target.value })}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSuccess}
         />
 
         <button
           type='submit'
-          className={`${styles.authButton} button-large`}
-          disabled={isSubmitting}
+          className={`${styles.authButton} button-large ${
+            isSuccess ? styles.success : ''
+          }`}
+          disabled={isSubmitting || isSuccess}
         >
-          {isSubmitting
+          {isSuccess
+            ? 'Успешно!'
+            : isSubmitting
             ? mode === 'login'
               ? 'Вход...'
               : 'Регистрация...'
