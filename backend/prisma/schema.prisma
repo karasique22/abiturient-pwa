@@ -17,6 +17,12 @@ enum EventCategory {
   LESSON // онлайн-урок
 }
 
+enum ProgramCategory {
+  PROFESSIONAL_RETRAINING // профессиональная переподготовка
+  PROFESSIONAL_DEVELOPMENT // повышение квалификации
+
+}
+
 /**
  * ──────────── ОБЩИЕ МОДЕЛИ ───────────
  */
@@ -63,7 +69,8 @@ model Program {
   slug          String         @unique
   title         String         @unique
   description   String
-  durationWeeks Int?
+  durationHours Int?
+  category      ProgramCategory
   startDate     DateTime?
   priceRub      Decimal?       @db.Decimal(10, 2)
   applications  Application[]

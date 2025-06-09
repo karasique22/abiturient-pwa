@@ -1,12 +1,13 @@
 import { Expose, Transform } from 'class-transformer';
-import { Program, ProgramImage } from '@prisma/client';
+import { Program, ProgramCategory, ProgramImage } from '@prisma/client';
 
 export class ProgramDto implements Program {
   id!: string;
   slug!: string;
   title!: string;
   description!: string;
-  durationWeeks!: number | null;
+  durationHours!: number | null;
+  category!: ProgramCategory;
   startDate!: Date | null;
   priceRub!: any;
   isActive!: boolean;

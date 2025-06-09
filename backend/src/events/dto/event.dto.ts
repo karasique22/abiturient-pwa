@@ -1,6 +1,6 @@
 // src/events/dto/event.dto.ts
 import { Expose, Transform } from 'class-transformer';
-import { Event, EventImage } from '@prisma/client';
+import { Event, EventCategory, EventImage } from '@prisma/client';
 
 export class EventDto implements Event {
   /* базовые поля из модели Event */
@@ -10,7 +10,7 @@ export class EventDto implements Event {
   description!: string;
   dateTime!: Date;
   address!: string;
-  category!: any; // enum EventCategory
+  category!: EventCategory;
   curatorName!: string;
   curatorInfo!: string | null;
   isActive!: boolean;

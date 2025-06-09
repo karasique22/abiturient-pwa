@@ -1,10 +1,15 @@
 /* prisma/seed.ts */
-import { PrismaClient, Prisma, EventCategory } from '@prisma/client';
+import {
+  PrismaClient,
+  Prisma,
+  EventCategory,
+  ProgramCategory,
+} from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
 
 const prisma = new PrismaClient();
-const D = Prisma.Decimal; // короче писать
+const D = Prisma.Decimal;
 
 async function main() {
   /* ── роли + админ ───────────────────────────────────────── */
@@ -73,7 +78,15 @@ async function main() {
         title,
         slug: slugify(title),
         description: faker.lorem.paragraphs(2),
-        durationWeeks: faker.number.int({ min: 4, max: 24 }),
+        durationHours: faker.number.int({
+          min: 200,
+          max: 1500,
+          multipleOf: 50,
+        }),
+        category: faker.helpers.arrayElement([
+          ProgramCategory.PROFESSIONAL_RETRAINING,
+          ProgramCategory.PROFESSIONAL_DEVELOPMENT,
+        ]),
         startDate: faker.date.soon({ days: 45 }),
         priceRub: new D(
           faker.finance.amount({ min: 20000, max: 90000, dec: 2 }),
