@@ -12,6 +12,8 @@ import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/backLinkIcon';
 
 export default function ClientEventDetails({ slug }: { slug: string }) {
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const type = searchParams.get('type') === 'program' ? 'program' : 'event';
   const { data, loading, error } = useFetch<EventApi | ProgramApi>(
@@ -21,8 +23,6 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {String(error)}</p>;
   if (!data) return notFound();
-
-  const router = useRouter();
 
   // FIXME: реализовать как модульное окно чтобы можно было переходить назад без фетчинга
   return (
