@@ -10,7 +10,8 @@ interface Props {
 }
 
 export default function ItemsGrid({ items, viewMode }: Props) {
-  if (!items.length) return <p>пока что ничего нет</p>;
+  if (!items.length)
+    return <p className={styles.nothingFound}>Ничего не найдено :(</p>;
 
   return (
     <div

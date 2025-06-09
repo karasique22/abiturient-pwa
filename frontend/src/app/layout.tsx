@@ -8,6 +8,7 @@ import styles from './layout.module.css';
 
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { Providers } from './providers';
+import Link from 'next/link';
 
 const acrom = localfont({
   src: '../fonts/Acrom.ttf',
@@ -62,13 +63,15 @@ export default function RootLayout({
       <body>
         <Providers>
           <header className={`${styles.header} container`}>
-            <Image
-              className={styles.logo}
-              src='/logo.svg'
-              alt=''
-              width={39}
-              height={24}
-            />
+            <Link href='/'>
+              <Image
+                className={styles.logo}
+                src='/logo.svg'
+                alt=''
+                width={39}
+                height={24}
+              />
+            </Link>
           </header>
 
           <main className={styles.appContainer}>{children}</main>

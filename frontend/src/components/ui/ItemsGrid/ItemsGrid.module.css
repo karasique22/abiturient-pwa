@@ -16,3 +16,8 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.nothingFound {
+  padding: 80px 0;
+  text-align: center;
+}
