@@ -7,10 +7,10 @@ import { useFetch } from '@/hooks/useFetch';
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ViewSwitcher from '@/components/ui/ViewSwitcher/ViewSwitcher';
 import FilterChips from '@/components/ui/FilterChips/FilterChips';
-import EventsGrid from '@/components/ui/EventsGrid/EventsGrid';
+import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 import { useFilter } from '@/hooks/useFilter';
 
-import type { Event } from '@prisma/client';
+import type { EventApi, ItemApi } from '@/types';
 import { EventCategory } from '@/shared/event-categories';
 
 import styles from './app.module.css';
@@ -19,10 +19,19 @@ export default function EventsPage() {
   const [search, setSearch] = useState('');
   const [view, setView] = useState<'list' | 'grid'>('list');
   const [categories, setCategories] = useState<EventCategory[]>([]);
-  const { data, loading, error } = useFetch<Event>('/events');
+  const { data, loading, error } = useFetch<EventApi[]>('/events');
 
   const events = data || [];
   const filtered = useFilter(events, categories, search);
+
+  const items: ItemApi[] = filtered.map((e) => ({
+    id: e.id,
+    slug: e.slug,
+    title: e.title,
+    startDate: e.dateTime,
+    coverUrl: (e as any).coverUrl || null,
+    type: 'event',
+  }));
 
   return (
     <>
@@ -42,9 +51,7 @@ export default function EventsPage() {
         {/* TODO: */}
         {/* {error && <p>Ошибка загрузки</p>} */}
 
-        {!loading && !error && (
-          <EventsGrid events={filtered as Event[]} viewMode={view} />
-        )}
+        {!loading && !error && <ItemsGrid items={items} viewMode={view} />}
       </div>
     </>
   );

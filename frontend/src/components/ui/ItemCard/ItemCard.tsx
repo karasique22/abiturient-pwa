@@ -3,15 +3,15 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from './EventCard.module.css';
-import type { EventApi } from '@/types';
+import styles from './ItemCard.module.css';
+import type { ItemApi } from '@/types';
 
 interface Props {
-  event: EventApi;
+  item: ItemApi;
   viewMode: 'grid' | 'list';
 }
 
-export default function EventCard({ event, viewMode }: Props) {
+export default function ItemCard({ item, viewMode }: Props) {
   return (
     <article
       className={`${styles.card} ${
@@ -20,7 +20,7 @@ export default function EventCard({ event, viewMode }: Props) {
     >
       <Image
         className={styles.image}
-        src={`${event.coverUrl} ?? 'https://placehold.co/600x400'`}
+        src={item.coverUrl || 'https://placehold.co/600x400'}
         width={600}
         height={400}
         alt='placeholder'
@@ -28,16 +28,19 @@ export default function EventCard({ event, viewMode }: Props) {
       <div className={styles.content}>
         <div className={styles.contentMain}>
           <h3 className={`${styles.title} font-body-normal-bold`}>
-            {event.title}
+            {item.title}
           </h3>
-          {event.dateTime && (
+          {item.startDate && (
             <p className='font-body-normal'>
-              Старт: {new Date(event.dateTime).toLocaleDateString('ru-RU')}
+              Старт: {new Date(item.startDate).toLocaleDateString('ru-RU')}
             </p>
           )}
         </div>
 
-        <Link className='button-small' href={`/details/${event.slug}`}>
+        <Link
+          className='button-small'
+          href={`/details/${item.slug}?type=${item.type}`}
+        >
           Записаться
         </Link>
       </div>

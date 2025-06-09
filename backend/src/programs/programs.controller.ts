@@ -1,22 +1,26 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
+import { ProgramDto } from './dto/program.dto';
 
 @Controller('programs')
 export class ProgramsController {
   constructor(private service: ProgramsService) {}
 
   @Get()
-  list() {
-    return this.service.findAll();
+  async list(): Promise<ProgramDto[]> {
+    const programs = await this.service.findAll();
+    return programs.map((p) => new ProgramDto(p));
   }
 
-  @Get(':id')
-  get(@Param('id') id: string) {
-    return this.service.findOne(id);
+  @Get(':slug')
+  async get(@Param('slug') slug: string): Promise<ProgramDto> {
+    const program = await this.service.findOne(slug);
+    return new ProgramDto(program);
   }
 
   @Post()
-  create(@Body() data: any) {
-    return this.service.create(data);
+  async create(@Body() data: any): Promise<ProgramDto> {
+    const program = await this.service.create(data);
+    return new ProgramDto(program);
   }
 }
