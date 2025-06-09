@@ -14,8 +14,8 @@ export default function ItemsGrid({ items, viewMode }: Props) {
 
   return (
     <div
-      className={`${styles.events} ${
-        viewMode === 'grid' ? styles.eventsGrid : styles.eventsList
+      className={`${styles.items} ${
+        viewMode === 'grid' ? styles.itemsGrid : styles.itemsList
       }`}
     >
       {items.map((item) => (
