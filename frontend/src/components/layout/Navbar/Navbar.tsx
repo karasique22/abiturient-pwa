@@ -19,6 +19,7 @@ const Navbar = (props: Props) => {
         <Link
           key={id}
           href={href}
+          scroll={false}
           className={`${styles.navItem} font-body-small`}
         >
           <Icon />
