@@ -13,19 +13,24 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // ← new
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setIsSubmitting(true); // ← disable UI
+    setError('');
+
     try {
       await (mode === 'login' ? login : register)(form.email, form.password);
       router.push('/');
     } catch (e) {
       setError('Неверный логин или пароль');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   // TODO: накинуть маски на форму
-  // TODO: loader
   return (
     <div className={styles.authContainer}>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -41,6 +46,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           value={form.email}
           placeholder='электронная почта'
           onChange={(e) => setForm({ ...form, email: e.target.value })}
+          disabled={isSubmitting}
         />
 
         <input
@@ -51,10 +57,21 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           value={form.password}
           placeholder='пароль'
           onChange={(e) => setForm({ ...form, password: e.target.value })}
+          disabled={isSubmitting}
         />
 
-        <button type='submit' className={`${styles.authButton} button-large`}>
-          {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+        <button
+          type='submit'
+          className={`${styles.authButton} button-large`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting
+            ? mode === 'login'
+              ? 'Вход...'
+              : 'Регистрация...'
+            : mode === 'login'
+            ? 'Войти'
+            : 'Зарегистрироваться'}
         </button>
 
         {error && <p className={styles.error}>{error}</p>}

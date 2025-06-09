@@ -9,6 +9,7 @@ import type { EventApi, ProgramApi } from '@/types';
 
 import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/backLinkIcon';
+import Loader from '@/components/Loader/Loader';
 
 export default function ClientEventDetails({ slug }: { slug: string }) {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
     `/${type}s/${slug}`
   );
 
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Ошибка: {String(error)}</p>;
   if (!data) return notFound();
 
@@ -70,7 +71,7 @@ export default function ClientEventDetails({ slug }: { slug: string }) {
                 )}
                 {(data as ProgramApi).startDate && (
                   <li>
-                    Старт:{' '}
+                    Старт:
                     {new Date(
                       (data as ProgramApi).startDate as string
                     ).toLocaleDateString('ru-RU')}
