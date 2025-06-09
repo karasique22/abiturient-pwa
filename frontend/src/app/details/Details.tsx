@@ -11,7 +11,7 @@ import styles from './Details.module.css';
 import BackLinkIcon from '@/components/icons/backLinkIcon';
 import Loader from '@/components/Loader/Loader';
 
-export default function ClientEventDetails({ slug }: { slug: string }) {
+export default function ClientDetails({ slug }: { slug: string }) {
   const router = useRouter();
 
   const searchParams = useSearchParams();
