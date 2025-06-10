@@ -1,10 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import styles from './Details.module.css';
 
 import type { EventApi } from '@/types';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
+import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
+import api from '@/lib/api';
 
 export default function EventDetails({
   data,
@@ -13,6 +16,15 @@ export default function EventDetails({
   data: EventApi;
   onBack: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = async () => {
+    try {
+      await api.post('/applications', { eventId: data.id });
+    } finally {
+      setOpen(false);
+    }
+  };
   return (
     <>
       <div className={`${styles.header} container`}>
@@ -67,7 +79,15 @@ export default function EventDetails({
             </div>
           )}
         </div>
-        <button className='button-large'>Записаться</button>
+        <button className='button-large' onClick={() => setOpen(true)}>
+          Записаться
+        </button>
+        <SignUpModal
+          open={open}
+          title={data.title}
+          onConfirm={handleConfirm}
+          onClose={() => setOpen(false)}
+        />
       </div>
     </>
   );

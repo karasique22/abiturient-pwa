@@ -1,36 +1,63 @@
-import axios from 'axios';
+// api.ts
+import axios, { AxiosError } from 'axios';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND,
-  withCredentials: true,
+  withCredentials: true, // браузер будет слать access/refresh куки автоматически
 });
 
-api.interceptors.request.use((cfg) => {
-  cfg.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-  return cfg;
-});
+/**
+ * ─────────────────────────────────────────────
+ *  REQUEST-ИНТЕРСЕПТОР
+ * ─────────────────────────────────────────────
+ *
+ * Если вы храните токен **только** в http-only cookie,
+ * заголовок Authorization добавлять не нужно ─ убираем его совсем.
+ * (Оставьте интерсептор пустым, если нужно логировать запросы,
+ *  или удалите, если не нужен.)
+ */
+api.interceptors.request.use((cfg) => cfg);
 
+/**
+ * ─────────────────────────────────────────────
+ *  RESPONSE-ИНТЕРСЕПТОР (обновление access-token)
+ * ─────────────────────────────────────────────
+ *
+ * Алгоритм:
+ *  • Любой 401 ⇒ пробуем вызвать /auth/refresh
+ *    (refreshToken уйдёт в cookie).
+ *  • Если /auth/refresh вернул 200 и выставил Set-Cookie
+ *    с новым accessToken, повторяем исходный запрос.
+ *  • Если /auth/refresh тоже 401/403 ⇒ оба токена протухли,
+ *    отправляем пользователя на страницу логина.
+ */
 api.interceptors.response.use(
-  (r) => r,
-  async (err) => {
-    if (err.response?.status !== 401) throw err;
+  (response) => response,
+  async (error: AxiosError) => {
+    // не 401 → отдать ошибку дальше
+    if (error.response?.status !== 401) {
+      throw error;
+    }
 
     try {
-      const { data } = await axios.post(
+      // пытаемся обновить accessToken
+      await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND}/auth/refresh`,
-        {
-          refreshToken: localStorage.getItem('refresh'),
-        }
+        {}, // тело не нужно, refreshToken в cookie
+        { withCredentials: true } // чтобы куки ушли и Set-Cookie принялся
       );
-      localStorage.setItem('token', data.accessToken);
-      localStorage.setItem('refresh', data.refreshToken);
-      err.config.headers['Authorization'] = `Bearer ${data.accessToken}`;
-      return api.request(err.config);
-    } catch {
-      localStorage.clear();
-      window.location.href = '/login';
-      throw err;
+
+      // повторяем оригинальный запрос
+      if (error.config) {
+        return api.request(error.config);
+      }
+    } catch (refreshErr) {
+      // refresh не помог → токены недействительны
+      // отправляем на логин (или можете показать модалку)
+      window.location.href = '/auth/login';
     }
+
+    throw error; // пробрасываем исходную ошибку наверх
   }
 );
 

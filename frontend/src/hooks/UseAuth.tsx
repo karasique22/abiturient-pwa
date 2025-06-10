@@ -46,7 +46,7 @@ export function useAuth() {
       /* сервер может вернуть 401 — игнорируем */
     } finally {
       localStorage.clear();
-      router.push('/login'); // редирект на форму входа
+      router.push('/auth/login'); // редирект на форму входа
     }
   }, [router]);
 
