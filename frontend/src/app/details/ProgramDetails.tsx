@@ -1,11 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
 
 import type { ProgramApi } from '@/types';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
+import Modal from '@/components/ui/Modal/Modal';
+import api from '@/lib/api';
 import styles from './Details.module.css';
 
 export default function ProgramDetails({
@@ -34,6 +37,19 @@ export default function ProgramDetails({
     [ProgramFormat.OFFLINE]: 'очный',
     [ProgramFormat.ONLINE]: 'онлайн',
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleConfirm() {
+    setIsSubmitting(true);
+    try {
+      await api.post('/applications', { programId: data.id });
+      setShowModal(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <>
@@ -113,7 +129,22 @@ export default function ProgramDetails({
             </ul>
           </AccordionBlock>
         </div>
-        <button className='button-large'>Записаться</button>
+        <button className='button-large' onClick={() => setShowModal(true)}>
+          Записаться
+        </button>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <p>Вы хотите записаться:</p>
+            <p className='font-body-normal-bold'>{data.title}</p>
+            <button
+              className='button-large'
+              onClick={handleConfirm}
+              disabled={isSubmitting}
+            >
+              Подтвердить запись
+            </button>
+          </Modal>
+        )}
       </div>
     </>
   );

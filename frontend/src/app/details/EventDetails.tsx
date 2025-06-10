@@ -1,10 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import styles from './Details.module.css';
 
 import type { EventApi } from '@/types';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
+import Modal from '@/components/ui/Modal/Modal';
+import api from '@/lib/api';
 
 export default function EventDetails({
   data,
@@ -13,6 +16,18 @@ export default function EventDetails({
   data: EventApi;
   onBack: () => void;
 }) {
+  const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleConfirm() {
+    setIsSubmitting(true);
+    try {
+      await api.post('/applications', { eventId: data.id });
+      setShowModal(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
   return (
     <>
       <div className={`${styles.header} container`}>
@@ -67,7 +82,22 @@ export default function EventDetails({
             </div>
           )}
         </div>
-        <button className='button-large'>Записаться</button>
+        <button className='button-large' onClick={() => setShowModal(true)}>
+          Записаться
+        </button>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <p>Вы хотите записаться:</p>
+            <p className='font-body-normal-bold'>{data.title}</p>
+            <button
+              className='button-large'
+              onClick={handleConfirm}
+              disabled={isSubmitting}
+            >
+              Подтвердить запись
+            </button>
+          </Modal>
+        )}
       </div>
     </>
   );
