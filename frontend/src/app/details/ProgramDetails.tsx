@@ -2,10 +2,13 @@
 
 import Image from 'next/image';
 import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
+import { useState } from 'react';
 
 import type { ProgramApi } from '@/types';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
+import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
+import api from '@/lib/api';
 import styles from './Details.module.css';
 
 export default function ProgramDetails({
@@ -16,6 +19,16 @@ export default function ProgramDetails({
   onBack: () => void;
 }) {
   // FIXME: вынести отсюда чтоле
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = async () => {
+    try {
+      await api.post('/applications', { programId: data.id });
+    } finally {
+      setOpen(false);
+    }
+  };
+
   const levelLabels: Record<ProgramLevel, string> = {
     [ProgramLevel.BEGINNER]: 'Начальный',
     [ProgramLevel.INTERMEDIATE]: 'Средний',
@@ -113,7 +126,15 @@ export default function ProgramDetails({
             </ul>
           </AccordionBlock>
         </div>
-        <button className='button-large'>Записаться</button>
+        <button className='button-large' onClick={() => setOpen(true)}>
+          Записаться
+        </button>
+        <SignUpModal
+          open={open}
+          title={data.title}
+          onConfirm={handleConfirm}
+          onClose={() => setOpen(false)}
+        />
       </div>
     </>
   );
