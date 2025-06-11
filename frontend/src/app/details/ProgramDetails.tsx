@@ -35,7 +35,7 @@ export default function ProgramDetails({
     [ProgramDocument.DIPLOMA_PROFESSIONAL_RETRAINING]:
       'Диплом о профессиональной переподготовке',
     [ProgramDocument.DIPLOMA_PROFESSIONAL_DEVELOPMENT]:
-      'Диплом о повышении квалификации=',
+      'Диплом о повышении квалификации',
     [ProgramDocument.CERTIFICATE_OF_COMPLETION]: 'Сертификат об обучении',
   };
 
