@@ -62,7 +62,7 @@
 
 .toggleIcon {
   display: inline-block;
-  transition: transform 0.3s ease;
+  transition: transform 0.1s linear;
 }
 
 .list {
