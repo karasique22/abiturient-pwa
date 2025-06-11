@@ -81,14 +81,12 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       ? { txt: '…', dis: true }
       : state === 'none'
       ? { txt: 'Записаться', dis: false, click: () => setModal('signup') }
-      : state === 'active'
-      ? {
+      : {
           txt: 'Вы записаны',
-          dis: false,
+          dis: state === 'cancelling',
           cls: 'button-secondary',
-          click: () => setModal('cancel'),
-        }
-      : { txt: 'Отменяем…', dis: true };
+          click: state === 'active' ? () => setModal('cancel') : undefined,
+        };
 
   return (
     <>

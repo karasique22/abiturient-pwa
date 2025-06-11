@@ -23,7 +23,7 @@ export default function CancelModal(props: Props) {
       labels={{
         idle: 'Отменить запись',
         pending: 'Отменяем…',
-        success: 'Отменено',
+        success: 'Запись отменена!',
       }}
       variant='danger'
       onConfirm={props.onConfirm}
