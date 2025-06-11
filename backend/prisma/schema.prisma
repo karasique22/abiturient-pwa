@@ -39,6 +39,11 @@ enum ProgramFormat {
   ONLINE
 }
 
+enum ApplicationStatus {
+  NEW
+  CANCELLED
+}
+
 /**
  * ──────────── ОБЩИЕ МОДЕЛИ ───────────
  */
@@ -158,7 +163,7 @@ model Application {
   programId   String? // заявки могут относиться либо к программе,
   eventId     String? // либо к событию (одно из полей не-null)
   userId      String
-  status      String
+  status      ApplicationStatus @default(NEW)
   comment     String?
   program     Program? @relation(fields: [programId], references: [id])
   event       Event?   @relation(fields: [eventId], references: [id])

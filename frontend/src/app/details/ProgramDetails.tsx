@@ -1,69 +1,105 @@
 'use client';
 
 import Image from 'next/image';
-import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
 import { useEffect, useState } from 'react';
+import { ProgramLevel, ProgramFormat, ProgramDocument } from '@prisma/client';
 
 import type { ProgramApi, ApplicationApi } from '@/types';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
-import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
+import SignUpModal from '@/components/ui/Modals/SignUpModal/SignUpModal';
+import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
 import api from '@/lib/api';
 import styles from './Details.module.css';
 
-export default function ProgramDetails({
-  data,
-  onBack,
-}: {
+/* ─────────────────────────────────────────────────────────── */
+
+type EnrollState =
+  | { state: 'unknown' }
+  | { state: 'none' }
+  | { state: 'active'; appId: string }
+  | { state: 'cancelling' };
+
+interface Props {
   data: ProgramApi;
   onBack: () => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const [enrolled, setEnrolled] = useState<boolean | null>(null);
+}
 
-  const handleConfirm = async () => {
-    await api.post('/applications', { programId: data.id });
-    setEnrolled(true);
-  };
+export default function ProgramDetails({ data, onBack }: Props) {
+  const [enroll, setEnroll] = useState<EnrollState>({ state: 'unknown' });
+  const [modal, setModal] = useState<'signup' | 'cancel' | null>(null);
 
+  /* ── 1. узнаём, записан ли пользователь ───────────────── */
   useEffect(() => {
     (async () => {
       try {
         const { data: apps } = await api.get<ApplicationApi[]>(
           '/applications/my'
         );
-        const already = apps.some((a) => a.programId === data.id);
-        setEnrolled(already);
+        const active = apps.find(
+          (a) => a.programId === data.id && a.status === 'NEW'
+        );
+        if (active) setEnroll({ state: 'active', appId: active.id });
+        else setEnroll({ state: 'none' });
       } catch {
-        setEnrolled(false);
+        setEnroll({ state: 'none' });
       }
     })();
   }, [data.id]);
 
+  /* ── 2. запросы ───────────────────────────────────────── */
+  const createApplication = async () => {
+    const { data: app } = await api.post<ApplicationApi>('/applications', {
+      programId: data.id,
+    });
+    setEnroll({ state: 'active', appId: app.id });
+  };
+
+  const cancelApplication = async () => {
+    if (enroll.state !== 'active') return;
+    setEnroll({ state: 'cancelling' });
+    await api.patch(`/applications/${enroll.appId}/cancel`);
+    setEnroll({ state: 'none' });
+  };
+
+  /* ── 3. кнопка (текст, стиль, disabled, onClick) ──────── */
+  const button =
+    enroll.state === 'unknown'
+      ? { label: '...', disabled: true }
+      : enroll.state === 'none'
+      ? {
+          label: 'Записаться',
+          disabled: false,
+          onClick: () => setModal('signup'),
+        }
+      : enroll.state === 'active'
+      ? {
+          label: 'Вы записаны',
+          disabled: false,
+          onClick: () => setModal('cancel'),
+          className: 'button-secondary',
+        }
+      : { label: 'Отменяем…', disabled: true };
+
+  /* ── 4. справочные лейблы ─────────────────────────────── */
   const levelLabels: Record<ProgramLevel, string> = {
-    [ProgramLevel.BEGINNER]: 'Начальный',
-    [ProgramLevel.INTERMEDIATE]: 'Средний',
-    [ProgramLevel.ADVANCED]: 'Продвинутый',
+    BEGINNER: 'Начальный',
+    INTERMEDIATE: 'Средний',
+    ADVANCED: 'Продвинутый',
   };
 
   const documentLabels: Record<ProgramDocument, string> = {
-    [ProgramDocument.DIPLOMA_PROFESSIONAL_RETRAINING]:
-      'Диплом о профессиональной переподготовке',
-    [ProgramDocument.DIPLOMA_PROFESSIONAL_DEVELOPMENT]:
-      'Диплом о повышении квалификации',
-    [ProgramDocument.CERTIFICATE_OF_COMPLETION]: 'Сертификат об обучении',
+    DIPLOMA_PROFESSIONAL_RETRAINING: 'Диплом о проф. переподготовке',
+    DIPLOMA_PROFESSIONAL_DEVELOPMENT: 'Диплом о повышении квалификации',
+    CERTIFICATE_OF_COMPLETION: 'Сертификат об обучении',
   };
 
   const formatLabels: Record<ProgramFormat, string> = {
-    [ProgramFormat.OFFLINE]: 'очный',
-    [ProgramFormat.ONLINE]: 'онлайн',
+    OFFLINE: 'очный',
+    ONLINE: 'онлайн',
   };
 
-  const buttonLabel =
-    enrolled === null ? '...' : enrolled ? 'Вы уже записались' : 'Записаться';
-
-  const buttonDisabled = enrolled !== false;
-
+  /* ── 5. UI ─────────────────────────────────────────────── */
   return (
     <>
       <div className={`${styles.header} container`}>
@@ -72,6 +108,7 @@ export default function ProgramDetails({
         </button>
         <h2 className={styles.headerTitle}>{data.title}</h2>
       </div>
+
       <div className={`${styles.detailsContainer} font-body-normal`}>
         <Image
           className={styles.coverImage}
@@ -80,6 +117,7 @@ export default function ProgramDetails({
           width={600}
           height={400}
         />
+
         <div className={styles.programContainer}>
           <div className={styles.infoBlock}>
             <span className={`${styles.infoSpan} font-body-medium-bold`}>
@@ -142,21 +180,34 @@ export default function ProgramDetails({
             </ul>
           </AccordionBlock>
         </div>
-        <button
-          className='button-large'
-          disabled={buttonDisabled}
-          onClick={() => setOpen(true)}
-        >
-          {buttonLabel}
-        </button>
 
-        <SignUpModal
-          open={open}
-          title={data.title}
-          onConfirm={handleConfirm}
-          onClose={() => setOpen(false)}
-        />
+        <button
+          className={`button-large ${button.className ?? ''}`}
+          disabled={button.disabled}
+          onClick={button.onClick}
+        >
+          {button.label}
+        </button>
       </div>
+
+      {/* модалки */}
+      {modal === 'signup' && (
+        <SignUpModal
+          open
+          title={data.title}
+          onConfirm={createApplication}
+          onClose={() => setModal(null)}
+        />
+      )}
+
+      {modal === 'cancel' && (
+        <CancelModal
+          open
+          title={data.title}
+          onConfirm={cancelApplication}
+          onClose={() => setModal(null)}
+        />
+      )}
     </>
   );
 }

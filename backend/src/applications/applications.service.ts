@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -22,6 +26,7 @@ export class ApplicationsService {
     const exists = await this.prisma.application.findFirst({
       where: {
         userId,
+        status: 'NEW',
         ...(programId ? { programId } : { eventId }),
       },
     });
@@ -33,5 +38,19 @@ export class ApplicationsService {
 
   findMy(userId: string) {
     return this.prisma.application.findMany({ where: { userId } });
+  }
+
+  async cancel(id: string, userId: string) {
+    const app = await this.prisma.application.findUnique({ where: { id } });
+    if (!app || app.userId !== userId) {
+      throw new NotFoundException();
+    }
+
+    if (!app.isActive) return app; // уже отменена
+
+    return this.prisma.application.update({
+      where: { id },
+      data: { status: 'CANCELLED', isActive: false },
+    });
   }
 }

@@ -159,6 +159,11 @@ p {
   padding: 13px 0;
 }
 
+.button-secondary {
+  background-color: var(--color-home-white);
+  color: black;
+}
+
 .button-small {
   font-family: var(--font-acrom-large);
   font-weight: 500;

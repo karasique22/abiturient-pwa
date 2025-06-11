@@ -1,0 +1,9 @@
+.button-secondary {
+  background: #ddd;
+  color: #222;
+}
+
+.danger-button {
+  background: #d53b4c;
+  color: #fff;
+}

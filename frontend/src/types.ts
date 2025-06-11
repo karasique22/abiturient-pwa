@@ -21,5 +21,5 @@ export type ApplicationApi = {
   id: string;
   programId: string | null;
   eventId: string | null;
-  status: string;
+  status: 'NEW' | 'CANCELLED';
 };
