@@ -13,7 +13,7 @@ import Loader from '@/components/Loader/Loader';
 import type { EventApi, ItemApi } from '@/types';
 import { EventCategory } from '@/shared/event-categories';
 
-import styles from './app.module.css';
+import styles from '../cardPages.module.css';
 
 export default function ClientEvents() {
   const [search, setSearch] = useState('');

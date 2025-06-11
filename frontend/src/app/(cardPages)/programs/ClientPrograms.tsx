@@ -8,7 +8,7 @@ import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 import Loader from '@/components/Loader/Loader';
 
 import type { ProgramApi, ItemApi } from '@/types';
-import styles from '../app.module.css';
+import styles from '../cardPages.module.css';
 
 export default function ClientPrograms() {
   const [search, setSearch] = useState('');

@@ -1,5 +1,5 @@
-import ClientEvents from './ClientEvents';
+import { redirect } from 'next/navigation';
 
-export default function EventsPage() {
-  return <ClientEvents />;
+export default function HomePage() {
+  redirect('/events');
 }
