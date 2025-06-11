@@ -9,7 +9,6 @@ type Role = 'student' | 'moderator' | 'admin';
 export function useAuth() {
   const router = useRouter();
 
-  /* --------- логин --------- */
   const login = useCallback(async (email: string, password: string) => {
     const { data } = await api.post<{
       accessToken: string;
@@ -22,7 +21,6 @@ export function useAuth() {
     localStorage.setItem('role', data.role);
   }, []);
 
-  /* --------- ручной refresh  --------- */
   const refresh = useCallback(async () => {
     const refreshToken = localStorage.getItem('refresh');
     if (!refreshToken) return logout();
@@ -38,15 +36,13 @@ export function useAuth() {
     if (data.role) localStorage.setItem('role', data.role);
   }, []);
 
-  /* --------- logout --------- */
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout'); // на сервере чистим сессию
+      await api.post('/auth/logout');
     } catch {
-      /* сервер может вернуть 401 — игнорируем */
     } finally {
       localStorage.clear();
-      router.push('/auth/login'); // редирект на форму входа
+      router.push('/auth/login');
     }
   }, [router]);
 

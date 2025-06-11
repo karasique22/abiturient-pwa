@@ -39,7 +39,7 @@ export default function ItemCard({ item, viewMode }: Props) {
 
         <Link
           className='button-small'
-          href={`/details/${item.slug}?type=${item.type}`}
+          href={`/details/${item.type}/${item.slug}`}
           scroll={false}
         >
           Записаться

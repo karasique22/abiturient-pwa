@@ -1,5 +1,4 @@
 import type { Event as EventDB, Program as ProgramDB } from '@prisma/client';
-// FIXME: пофиксить
 export interface EventApi extends Omit<EventDB, 'images'> {
   coverUrl: string | null;
 }
