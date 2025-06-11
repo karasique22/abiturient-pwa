@@ -57,19 +57,46 @@ export class AuthController {
   ) {
     const raw = req.cookies.refreshToken;
     if (!raw) {
-      res.status(401).send(); // ← отправили ответ
-      return; // ← НЕ возвращаем ServerResponse
+      res.status(401).send();
+      return;
     }
 
     try {
-      /* … ваша логика … */
+      const { sid } = this.jwt.verify(raw, {
+        secret: this.config.get('JWT_REFRESH_SECRET'),
+      }) as { sid: string };
 
+      const session = await req.app.get('PrismaService').session.findUnique({
+        where: { refreshHash: sid },
+        include: { user: { include: { roles: true } } },
+      });
+      if (!session || session.expiresAt < new Date())
+        throw new Error('session');
+
+      await this.auth.invalidateSession(sid);
+
+      const user = session.user;
+      const accessToken = this.auth['signAccess'](user); // приватный метод
+      const newRaw = randomUUID();
+      const newHash = await bcrypt.hash(newRaw, 10);
+
+      await req.app.get('PrismaService').session.create({
+        data: {
+          userId: user.id,
+          refreshHash: newHash,
+          userAgent: req.headers['user-agent'],
+          ip: req.ip,
+          expiresAt: dayjs().add(7, 'days').toDate(),
+        },
+      });
+
+      const refreshToken = this.auth['signRefresh']({ sid: newHash });
       this.setCookies(res, accessToken, refreshToken);
-      res.json({ role: user.roles[0].name }); // ← отправили JSON
-      return; // ← и точка!
+      res.json({ role: user.roles[0].name });
+      return;
     } catch {
       res.status(401).send();
-      return; // ← тоже без return res…
+      return;
     }
   }
 
