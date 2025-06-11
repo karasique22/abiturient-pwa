@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import { ProgramDocument, ProgramFormat, ProgramLevel } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import type { ProgramApi } from '@/types';
+import type { ProgramApi, ApplicationApi } from '@/types';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
@@ -18,12 +18,27 @@ export default function ProgramDetails({
   data: ProgramApi;
   onBack: () => void;
 }) {
-  // FIXME: вынести отсюда чтоле
   const [open, setOpen] = useState(false);
+  const [enrolled, setEnrolled] = useState<boolean | null>(null);
 
   const handleConfirm = async () => {
     await api.post('/applications', { programId: data.id });
+    setEnrolled(true);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: apps } = await api.get<ApplicationApi[]>(
+          '/applications/my'
+        );
+        const already = apps.some((a) => a.programId === data.id);
+        setEnrolled(already);
+      } catch {
+        setEnrolled(false);
+      }
+    })();
+  }, [data.id]);
 
   const levelLabels: Record<ProgramLevel, string> = {
     [ProgramLevel.BEGINNER]: 'Начальный',
@@ -43,6 +58,11 @@ export default function ProgramDetails({
     [ProgramFormat.OFFLINE]: 'очный',
     [ProgramFormat.ONLINE]: 'онлайн',
   };
+
+  const buttonLabel =
+    enrolled === null ? '...' : enrolled ? 'Вы уже записались' : 'Записаться';
+
+  const buttonDisabled = enrolled !== false;
 
   return (
     <>
@@ -122,9 +142,14 @@ export default function ProgramDetails({
             </ul>
           </AccordionBlock>
         </div>
-        <button className='button-large' onClick={() => setOpen(true)}>
-          Записаться
+        <button
+          className='button-large'
+          disabled={buttonDisabled}
+          onClick={() => setOpen(true)}
+        >
+          {buttonLabel}
         </button>
+
         <SignUpModal
           open={open}
           title={data.title}

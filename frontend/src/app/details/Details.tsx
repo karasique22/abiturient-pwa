@@ -31,19 +31,9 @@ export default function Details({ slug }: { slug: string }) {
 
   if (type === 'program') {
     return (
-      <ProgramDetails
-        {...commonProps}
-        data={data as ProgramApi}
-        onBack={() => router.back()}
-      />
+      <ProgramDetails data={data as ProgramApi} onBack={() => router.back()} />
     );
   }
 
-  return (
-    <EventDetails
-      {...commonProps}
-      data={data as EventApi}
-      onBack={() => router.back()}
-    />
-  );
+  return <EventDetails data={data as EventApi} onBack={() => router.back()} />;
 }

@@ -16,3 +16,10 @@ export interface ItemApi {
   coverUrl: string | null;
   type: 'event' | 'program';
 }
+
+export type ApplicationApi = {
+  id: string;
+  programId: string | null;
+  eventId: string | null;
+  status: string;
+};

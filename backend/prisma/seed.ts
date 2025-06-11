@@ -160,8 +160,12 @@ async function main() {
         curatorInfo: faker.person.jobTitle(),
         images: {
           create: {
-            url: faker.image.urlPicsumPhotos(),
-            alt: 'Фото мероприятия',
+            url: faker.image.urlLoremFlickr({
+              category: 'education',
+              width: 640,
+              height: 480,
+            }),
+            alt: 'Обложка программы',
             order: 0,
           },
         },

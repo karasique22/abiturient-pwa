@@ -30,7 +30,7 @@ export default function SignUpModal({
     try {
       await onConfirm();
       setSuccess(true);
-      setTimeout(onClose, 1000);
+      setTimeout(onClose, 2000);
     } catch {
       setError('Не удалось записаться');
     } finally {

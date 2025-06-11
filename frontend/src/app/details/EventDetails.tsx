@@ -1,27 +1,47 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Details.module.css';
 
-import type { EventApi } from '@/types';
+import type { EventApi, ApplicationApi } from '@/types';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
 import api from '@/lib/api';
 
-interface Props {
+export default function EventDetails({
+  data,
+  onBack,
+}: {
   data: EventApi;
-  loading: boolean;
-  error: unknown;
   onBack: () => void;
-}
-
-export default function EventDetails({ data, loading, error, onBack }: Props) {
+}) {
   const [open, setOpen] = useState(false);
+  const [enrolled, setEnrolled] = useState<boolean | null>(null);
 
   const handleConfirm = async () => {
     await api.post('/applications', { eventId: data.id });
+    setEnrolled(true);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: apps } = await api.get<ApplicationApi[]>(
+          '/applications/my'
+        );
+        const already = apps.some((a) => a.eventId === data.id);
+        setEnrolled(already);
+      } catch {
+        setEnrolled(false);
+      }
+    })();
+  }, [data.id]);
+
+  const buttonLabel =
+    enrolled === null ? '...' : enrolled ? 'Вы уже записались' : 'Записаться';
+
+  const buttonDisabled = enrolled !== false;
 
   return (
     <>
@@ -77,8 +97,12 @@ export default function EventDetails({ data, loading, error, onBack }: Props) {
             </div>
           )}
         </div>
-        <button className='button-large' onClick={() => setOpen(true)}>
-          Записаться
+        <button
+          className='button-large'
+          disabled={buttonDisabled}
+          onClick={() => setOpen(true)}
+        >
+          {buttonLabel}
         </button>
         <SignUpModal
           open={open}
