@@ -19,15 +19,31 @@ export default function Details({ slug }: { slug: string }) {
     `/${type}s/${slug}`
   );
 
+  const commonProps = {
+    loading,
+    error,
+    onBack: () => router.back(),
+  };
+
   if (loading) return <Loader />;
   if (error) return <p>Ошибка: {String(error)}</p>;
   if (!data) return notFound();
 
   if (type === 'program') {
     return (
-      <ProgramDetails data={data as ProgramApi} onBack={() => router.back()} />
+      <ProgramDetails
+        {...commonProps}
+        data={data as ProgramApi}
+        onBack={() => router.back()}
+      />
     );
   }
 
-  return <EventDetails data={data as EventApi} onBack={() => router.back()} />;
+  return (
+    <EventDetails
+      {...commonProps}
+      data={data as EventApi}
+      onBack={() => router.back()}
+    />
+  );
 }

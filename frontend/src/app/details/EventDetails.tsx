@@ -9,22 +9,20 @@ import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import SignUpModal from '@/components/ui/SignUpModal/SignUpModal';
 import api from '@/lib/api';
 
-export default function EventDetails({
-  data,
-  onBack,
-}: {
+interface Props {
   data: EventApi;
+  loading: boolean;
+  error: unknown;
   onBack: () => void;
-}) {
+}
+
+export default function EventDetails({ data, loading, error, onBack }: Props) {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    try {
-      await api.post('/applications', { eventId: data.id });
-    } finally {
-      setOpen(false);
-    }
+    await api.post('/applications', { eventId: data.id });
   };
+
   return (
     <>
       <div className={`${styles.header} container`}>

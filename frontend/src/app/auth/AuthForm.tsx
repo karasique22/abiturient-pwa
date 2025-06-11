@@ -64,7 +64,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <button
           type='submit'
           className={`${styles.authButton} button-large ${
-            isSuccess ? styles.success : ''
+            isSuccess ? 'success-button' : ''
           }`}
           disabled={isSubmitting || isSuccess}
         >

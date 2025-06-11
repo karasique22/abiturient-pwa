@@ -36,6 +36,7 @@ async function main() {
   );
 
   await prisma.session.deleteMany({});
+  await prisma.application.deleteMany({});
   await prisma.user.deleteMany({});
 
   await prisma.user.upsert({

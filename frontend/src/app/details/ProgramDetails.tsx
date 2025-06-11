@@ -22,11 +22,7 @@ export default function ProgramDetails({
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    try {
-      await api.post('/applications', { programId: data.id });
-    } finally {
-      setOpen(false);
-    }
+    await api.post('/applications', { programId: data.id });
   };
 
   const levelLabels: Record<ProgramLevel, string> = {

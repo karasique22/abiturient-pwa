@@ -47,29 +47,6 @@
   text-align: center;
 }
 
-.authButton:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.success {
-  background-color: #3bb54a;
-  color: white;
-  animation: successGlow 1.5s infinite;
-}
-
-@keyframes successGlow {
-  0% {
-    box-shadow: 0 0 5px #3bb54a;
-  }
-  50% {
-    box-shadow: 0 0 20px #3bb54a;
-  }
-  100% {
-    box-shadow: 0 0 5px #3bb54a;
-  }
-}
-
 /* FIXME: пофиксить сдвиг формы при выходе ошибки */
 .error {
   margin: 0;
