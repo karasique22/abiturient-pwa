@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 
 type Status = 'idle' | 'pending' | 'success';
@@ -8,11 +8,7 @@ type Status = 'idle' | 'pending' | 'success';
 interface Props {
   open: boolean;
   message: React.ReactNode;
-  labels: {
-    idle: string;
-    pending: string;
-    success: string;
-  };
+  labels: { idle: string; pending: string; success: string };
   onConfirm: () => Promise<void>;
   onClose: () => void;
   variant?: 'primary' | 'secondary';
@@ -25,13 +21,27 @@ export default function ActionModal({
   labels,
   onConfirm,
   onClose,
-  variant,
+  variant = 'primary',
   successDelay = 2000,
 }: Props) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string>();
+  const [closing, setClosing] = useState(false);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (open) {
+      setStatus('idle');
+      setError(undefined);
+      setClosing(false);
+    }
+  }, [open]);
+
+  if (!open && !closing) return null;
+
+  const handleOverlayClose = () => {
+    setClosing(true);
+    setTimeout(onClose, 250);
+  };
 
   const handle = async () => {
     setStatus('pending');
@@ -39,7 +49,11 @@ export default function ActionModal({
     try {
       await onConfirm();
       setStatus('success');
-      setTimeout(onClose, successDelay);
+      if (successDelay === 0) {
+        handleOverlayClose();
+      } else {
+        setTimeout(handleOverlayClose, successDelay);
+      }
     } catch {
       setError('Произошла ошибка');
       setStatus('idle');
@@ -47,7 +61,10 @@ export default function ActionModal({
   };
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div
+      className={`${styles.overlay} ${closing ? styles.fadeOut : ''}`}
+      onClick={handleOverlayClose}
+    >
       <div
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}
@@ -66,7 +83,7 @@ export default function ActionModal({
           {labels[status]}
         </button>
 
-        {error && <p className='text-red-600 mt-2'>{error}</p>}
+        {error && <p className='text-red-600 mt-2 text-center'>{error}</p>}
       </div>
     </div>
   );
