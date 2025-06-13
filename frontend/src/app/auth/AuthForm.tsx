@@ -4,8 +4,8 @@ import { IMaskInput } from 'react-imask';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-// import EyeIcon from '@/components/icons/EyeIcon';
 import { isFullName, isPhone, isStrongPassword } from '@/lib/validators';
+import EyeIcon from '@/components/icons/EyeIcon';
 
 import styles from './auth.module.css';
 
@@ -160,7 +160,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
             onClick={() => setshowPassword(!showPassword)}
             tabIndex={-1}
           >
-            {/* <EyeIcon open={showPassword} /> */}
+            <EyeIcon open={showPassword} />
           </button>
         </div>
 
@@ -168,7 +168,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           <input
             required
             className={styles.input}
-            type='password'
+            type={showPassword ? 'text' : 'password'}
             placeholder='Подтвердите пароль'
             value={form.confirm}
             onChange={(e) => setForm({ ...form, confirm: e.target.value })}
@@ -178,8 +178,8 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
         {mode === 'register' && (
           <p className={styles.smallNote}>
-            Регистрируясь, вы подтверждаете согласие на&nbsp;обработку
-            персональных данных
+            Регистрируясь, вы подтверждаете согласие на обработку персональных
+            данных
           </p>
         )}
 
