@@ -9,18 +9,24 @@
   align-items: center;
   justify-content: center;
   margin: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form {
   display: flex;
+  position: relative;
   flex-direction: column;
   gap: 14px;
   margin: auto;
+  width: 100%;
   align-items: center;
+  justify-content: center;
 }
 
 .passwordWrap {
   position: relative;
+  width: 100%;
 }
 
 .eyeBtn {

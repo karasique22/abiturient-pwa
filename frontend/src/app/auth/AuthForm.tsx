@@ -37,7 +37,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   );
 
   return (
-    <div className={styles.authContainer}>
+    <div className={`${styles.authContainer} container`}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
