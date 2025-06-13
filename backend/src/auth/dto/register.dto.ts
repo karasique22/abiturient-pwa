@@ -1,4 +1,10 @@
-import { IsEmail, Matches, IsPhoneNumber, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  Matches,
+  IsPhoneNumber,
+  MinLength,
+  minLength,
+} from 'class-validator';
 
 export class RegisterDto {
   @IsEmail()
@@ -16,6 +22,6 @@ export class RegisterDto {
   )
   fullName: string;
 
-  @IsPhoneNumber('RU', { message: 'phone must be a valid RU number' })
+  @MinLength(11)
   phone: string;
 }
