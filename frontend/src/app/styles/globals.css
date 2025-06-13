@@ -162,6 +162,7 @@ p {
 .button-secondary {
   background-color: var(--color-home-white);
   color: black;
+  box-shadow: 0px 0px 10px 0px #0000001f;
 }
 
 .button-small {

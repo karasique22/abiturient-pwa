@@ -25,7 +25,7 @@ export default function CancelModal(props: Props) {
         pending: 'Отменяем…',
         success: 'Запись отменена!',
       }}
-      variant='danger'
+      variant='primary'
       onConfirm={props.onConfirm}
       onClose={props.onClose}
     />

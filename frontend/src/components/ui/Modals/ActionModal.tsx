@@ -6,23 +6,16 @@ import styles from './Modal.module.css';
 type Status = 'idle' | 'pending' | 'success';
 
 interface Props {
-  /*-- открыта ли модалка --*/
   open: boolean;
-  /*-- главный заголовок/текст (можно React-узел) --*/
   message: React.ReactNode;
-  /*-- надпись на кнопке (idle → pending → success) --*/
   labels: {
     idle: string;
     pending: string;
     success: string;
   };
-  /*-- вызвать запрос, вернуть Promise --*/
   onConfirm: () => Promise<void>;
-  /*-- по закрытию (клик вне, success timeout, ✕) --*/
   onClose: () => void;
-  /*-- вид кнопки: primary | danger | secondary … --*/
-  variant?: 'primary' | 'danger';
-  /*-- через сколько мс закрываться после success --*/
+  variant?: 'primary' | 'secondary';
   successDelay?: number;
 }
 
@@ -32,7 +25,7 @@ export default function ActionModal({
   labels,
   onConfirm,
   onClose,
-  variant = 'primary',
+  variant,
   successDelay = 2000,
 }: Props) {
   const [status, setStatus] = useState<Status>('idle');
@@ -64,7 +57,7 @@ export default function ActionModal({
         <p className={styles.text}>{message}</p>
 
         <button
-          className={`button-large ${variant} ${
+          className={`button-large button-${variant} ${
             status === 'success' ? 'success-button' : ''
           }`}
           disabled={status !== 'idle'}

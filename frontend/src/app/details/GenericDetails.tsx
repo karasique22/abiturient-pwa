@@ -15,6 +15,7 @@ import styles from './Details.module.css';
 import { eventConfig } from './event-details.config';
 import { programConfig } from './program-details.config';
 import { apiPublic } from '@/lib/apiPublic';
+import { getMe } from '@/lib/getMe';
 
 type DetailsConfig<T> = {
   cover: (d: T) => string | null | undefined;
@@ -41,6 +42,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
     type === 'event' ? (eventConfig as any) : (programConfig as any);
   const router = useRouter();
 
+  const [guest, setGuest] = useState<boolean | null>(null);
   const [state, setState] = useState<
     'unknown' | 'none' | 'active' | 'cancelling'
   >('unknown');
@@ -49,18 +51,26 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
 
   useEffect(() => {
     (async () => {
-      try {
-        const { data: apps } = await apiPublic.get('/applications/my');
-        const sel = cfg.pickId(data);
-        const active = apps.find(
-          (a: any) =>
-            a.status === 'NEW' &&
-            Object.entries(sel).every(([k, v]) => a[k] === v)
-        );
-        active ? (setState('active'), setAppId(active.id)) : setState('none');
-      } catch {
+      const me = await getMe();
+      if (!me) {
+        // гость → кнопка "Записаться"
+        setGuest(true);
         setState('none');
+        return;
       }
+
+      /* ШАГ 2. я залогинен → смотрим заявки */
+      setGuest(false);
+      const { data: apps } = await apiPublic.get('/applications/my');
+      const sel = cfg.pickId(data);
+
+      const active = apps.find(
+        (a: any) =>
+          a.status === 'NEW' &&
+          Object.entries(sel).every(([k, v]) => a[k] === v)
+      );
+
+      active ? (setState('active'), setAppId(active.id)) : setState('none');
     })();
   }, [data]);
 
@@ -157,8 +167,10 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
           title={cfg.title(data)}
           onConfirm={create}
           onClose={() => setModal(null)}
+          needAuth={guest ?? true}
         />
       )}
+
       {modal === 'cancel' && (
         <CancelModal
           open

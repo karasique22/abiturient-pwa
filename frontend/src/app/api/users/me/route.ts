@@ -14,8 +14,7 @@ export async function GET() {
   }
 
   const user = await nestRes.json();
-  const role = user.roles?.[0]?.name ?? null; // <-- вытаскиваем строку
+  const role = user.roles?.[0]?.name ?? null;
 
-  // можно вернуть и весь профиль, если понадобится
   return NextResponse.json({ role, user });
 }
