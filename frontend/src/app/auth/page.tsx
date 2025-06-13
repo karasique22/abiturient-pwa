@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './auth.module.css';
+import styles from './AuthForm.module.css';
 
 export default function AuthLanding() {
   return (

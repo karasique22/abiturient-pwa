@@ -59,7 +59,7 @@ model User {
   email         String         @unique
   password      String
   fullName      String
-  phone         String
+  phone         String         @unique
   roles         Role[]         @relation("UserRoles")
   applications  Application[]
   notifications Notification[]

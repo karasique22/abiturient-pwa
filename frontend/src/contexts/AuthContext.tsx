@@ -10,7 +10,7 @@ interface AuthCtx {
   role: Role;
   login: (email: string, password: string) => Promise<void>;
   register: (
-    name: string,
+    fullName: string,
     phone: string,
     email: string,
     password: string
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const register = async (
-    name: string,
+    fullName: string,
     phone: string,
     email: string,
     password: string
@@ -70,16 +70,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, email, password }),
+      body: JSON.stringify({ fullName, phone, email, password }),
     });
 
-    if (!res.ok) throw new Error('Неверные данные');
-
-    const me = await fetch('/api/users/me', { credentials: 'include' });
-    if (me.ok) {
-      const { role } = await me.json();
-      setRole(role);
+    if (!res.ok) {
+      const { message } = await res.json().catch(() => ({}));
+      throw new Error(message ?? 'REGISTER_FAILED');
     }
+
+    await login(email, password);
   };
 
   /* 3. logout: бек удаляет куки, затем сбрасываем роль */

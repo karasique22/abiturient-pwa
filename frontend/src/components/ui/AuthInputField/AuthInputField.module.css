@@ -1,0 +1,9 @@
+.wrap {
+  position: relative;
+}
+
+.input {
+  background-color: var(--color-home-grey);
+  border-radius: var(--radius-small);
+  padding: 14px 20px;
+}

@@ -1,0 +1,74 @@
+.authContainer {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  display: flex;
+  gap: 32px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: auto;
+  align-items: center;
+}
+
+.passwordWrap {
+  position: relative;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  cursor: pointer;
+}
+
+.smallNote {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.switchLine {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.authWelcome {
+  width: 200px;
+}
+
+.authTitle {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.authButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.authButton {
+  width: 180px;
+  text-align: center;
+}
