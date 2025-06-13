@@ -24,6 +24,7 @@ export class AuthService {
         email: dto.email,
         password: hash,
         fullName: dto.fullName,
+        phone: dto.phone,
         roles: { connect: { name: 'student' } },
       },
       include: { roles: true },

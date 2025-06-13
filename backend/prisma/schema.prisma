@@ -58,7 +58,8 @@ model User {
   id            String         @id @default(uuid())
   email         String         @unique
   password      String
-  fullName      String?
+  fullName      String
+  phone         String
   roles         Role[]         @relation("UserRoles")
   applications  Application[]
   notifications Notification[]

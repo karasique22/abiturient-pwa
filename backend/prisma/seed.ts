@@ -47,6 +47,7 @@ async function main() {
       password: adminPassword,
       fullName: 'Администратор Администраторович',
       roles: { connect: { id: admin.id } },
+      phone: faker.phone.number({ style: 'international' }),
     },
   });
 
@@ -58,6 +59,7 @@ async function main() {
       password: moderatorPassword,
       fullName: 'Модератор Модераторович',
       roles: { connect: { id: moderator.id } },
+      phone: faker.phone.number({ style: 'international' }),
     },
   });
 
@@ -69,6 +71,7 @@ async function main() {
       password: studentPassword,
       fullName: 'Студент Студентович',
       roles: { connect: { id: student.id } },
+      phone: faker.phone.number({ style: 'international' }),
     },
   });
   /* ── 10 программ ────────────────────────────────────────── */

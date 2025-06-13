@@ -9,7 +9,12 @@ type Role = 'student' | 'moderator' | 'admin' | null;
 interface AuthCtx {
   role: Role;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -55,12 +60,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const register = async (email: string, password: string) => {
+  const register = async (
+    name: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name, phone, email, password }),
     });
 
     if (!res.ok) throw new Error('Неверные данные');
