@@ -35,7 +35,7 @@ export default function SignUpModal({
           </>
         }
         labels={{
-          idle: 'Перейти к входу',
+          idle: 'Перейти ко входу',
           pending: 'Подождите…',
           success: 'Готово!',
         }}
