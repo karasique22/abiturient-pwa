@@ -1,17 +1,12 @@
-/* components/ui/Modals/Modal.module.css
-   объединённые базовые стили + плавные анимации */
-
-/* ───────── overlay (фон) ───────── */
 .overlay {
   position: fixed;
   inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0 0 0 / 0.5); /* затемнение */
+  background: rgba(0 0 0 / 0.5);
   z-index: 1000;
 
-  /* анимации появления / скрытия */
   animation: fade-in 250ms ease forwards;
 }
 
@@ -36,17 +31,15 @@
   }
 }
 
-/* ───────── окно модалки ───────── */
 .modal {
   max-width: 90%;
-  background: var(--color-home-white); /* ваш токен цвета */
+  background: var(--color-home-white);
   padding: 24px;
   border-radius: var(--radius-medium);
   display: flex;
   flex-direction: column;
   gap: 16px;
 
-  /* лёгкий «pop-in» при появлении */
   animation: pop-in 250ms ease forwards;
 }
 
@@ -61,7 +54,6 @@
   }
 }
 
-/* ───────── текст внутри ───────── */
 .text {
   text-align: center;
   line-height: 1.45;
