@@ -40,8 +40,8 @@ export default function EyeIcon({ open }: Props) {
       <path
         d='M17 6C17 6 13.8 10.5 9 10.5C4.2 10.5 1 6 1 6M11.4 10.125L12.6 12M15.4 8.25L17 9.75M1 9.75L2.6 8.25M6.6 10.125L5.4 12'
         stroke='#25242C'
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   );

@@ -1,8 +1,10 @@
 'use client';
 
-import { IMaskInput } from 'react-imask';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { IMaskInput } from 'react-imask';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { isFullName, isPhone, isStrongPassword } from '@/lib/validators';
 import EyeIcon from '@/components/icons/EyeIcon';
@@ -11,11 +13,13 @@ import styles from './auth.module.css';
 
 type Mode = 'login' | 'register';
 
+/* ─────────────────────────────────────────────────────────────── */
+
 export default function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
   const { login, register } = useAuth();
 
-  /* -------------------- state -------------------- */
+  /* ---------- state ---------- */
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -23,40 +27,133 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     password: '',
     confirm: '',
   });
-  const [showPassword, setshowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [subm, setSubm] = useState(false);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const timers = useRef<Record<string, number>>({});
+
+  const [serverErr, setServerErr] = useState<string | null>(null);
+  const [showPw, setShowPw] = useState(false);
+  const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  /* ───── submit ───── */
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const disabled = sending || success;
+  const dismissAfter = 3_000; // 3 сек
 
-    /* ===== КЛИЕНТСКАЯ ПРОВЕРКА ===== */
+  /* ---------- вспомогалки ---------- */
+  const pushError = (field: string, msg: string) => {
+    setErrors((p) => ({ ...p, [field]: msg }));
+
+    /* перезаписываем старый таймер, если был */
+    clearTimeout(timers.current[field]);
+
+    timers.current[field] = window.setTimeout(() => {
+      setErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[field];
+        return copy;
+      });
+    }, dismissAfter);
+  };
+
+  const validate = () => {
+    let ok = true;
     if (mode === 'register') {
       if (!isFullName(form.name)) {
-        setError('Введите Фамилию Имя (и отчество при наличии)');
-        return;
+        pushError('name', 'Введите Фамилию и Имя');
+        ok = false;
       }
       if (!isPhone(form.phone)) {
-        setError('Телефон должен быть вида +7 (XXX) XXX-XX-XX');
-        return;
+        pushError('phone', 'Формат: +7 (XXX) XXX-XX-XX');
+        ok = false;
       }
       if (!isStrongPassword(form.password)) {
-        setError(
-          'Пароль не меньше 8 симв., строчные/прописные буквы и цифра/символ'
-        );
-        return;
+        pushError('password', '≥8 симв., Aa1!');
+        ok = false;
       }
       if (form.password !== form.confirm) {
-        setError('Пароли не совпадают');
-        return;
+        pushError('confirm', 'Пароли не совпадают');
+        ok = false;
       }
     }
+    return ok;
+  };
+
+  /* универсальный input/IMask + всплывашка */
+  const field = (
+    key: keyof typeof form,
+    placeholder: string,
+    opts: { type?: string; mask?: string } = {}
+  ) => {
+    const { type = 'text', mask } = opts;
+    const onChange = (val: string) => {
+      setForm({ ...form, [key]: val });
+      if (errors[key]) setErrors((p) => ({ ...p, [key]: '' }));
+    };
+
+    const common = {
+      className: styles.input,
+      placeholder,
+      required: true,
+      disabled,
+      value: form[key],
+    };
+
+    return (
+      <div style={{ position: 'relative' }}>
+        {mask ? (
+          <IMaskInput
+            {...common}
+            mask={mask}
+            overwrite
+            type={type}
+            onAccept={(v: any) => onChange(String(v))}
+          />
+        ) : (
+          <input
+            {...common}
+            type={type}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        )}
+
+        {/* всплывашка */}
+        <AnimatePresence>
+          {errors[key] && (
+            <motion.span
+              key={key}
+              className={styles.errorToast}
+              role='alert'
+              aria-live='polite'
+              onClick={() => {
+                clearTimeout(timers.current[key]);
+                setErrors((p) => {
+                  const copy = { ...p };
+                  delete copy[key];
+                  return copy;
+                });
+              }}
+              initial={{ opacity: 0, y: -2 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -2 }}
+              transition={{ duration: 0.25 }}
+            >
+              {errors[key]}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
+  /* ---------- submit ---------- */
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerErr(null);
+
+    if (!validate()) return;
 
     try {
-      setSubm(true);
+      setSending(true);
       if (mode === 'login') {
         await login(form.email, form.password);
       } else {
@@ -70,120 +167,60 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       setSuccess(true);
       setTimeout(() => router.push('/'), 1000);
     } catch {
-      setError(
+      setServerErr(
         mode === 'login'
           ? 'Неверный логин или пароль'
           : 'Не удалось зарегистрироваться'
       );
     } finally {
-      setSubm(false);
+      setSending(false);
     }
   };
 
-  /* ----------------- helpers --------------------- */
-  // FIXME: убрать автокомплит из регистрации
-  const disabled = subm || success;
-  const input = (
-    key: keyof typeof form,
-    placeholder: string,
-    opts: { type?: string; mask?: string } = {}
-  ) => {
-    const { type = 'text', mask } = opts;
-    const onChange = (val: string) => setForm({ ...form, [key]: val });
-
-    /* ---------- masked поле ---------- */
-    if (mask) {
-      return (
-        <IMaskInput
-          mask={mask}
-          overwrite
-          type={type}
-          placeholder={placeholder}
-          className={styles.input}
-          required
-          disabled={disabled}
-          value={form[key]}
-          onAccept={(val: any) => onChange(String(val))}
-        />
-      );
-    }
-
-    /* ---------- обычный input ---------- */
-    return (
-      <input
-        required
-        className={styles.input}
-        type={type}
-        placeholder={placeholder}
-        value={form[key]}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-      />
-    );
-  };
-
-  /* ------------------ render --------------------- */
+  /* ---------- JSX ---------- */
   return (
     <div className={styles.authContainer}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form} autoComplete='off'>
         <h2 className={`${styles.authTitle} font-header-large`}>
           {mode === 'login' ? 'Вход в аккаунт' : 'Регистрация'}
         </h2>
 
-        {/* -------- register-fields -------- */}
         {mode === 'register' && (
           <>
-            {input('name', 'ФИО')}
-            {input('phone', 'Номер телефона', {
+            {field('name', 'ФИО')}
+            {field('phone', 'Номер телефона', {
               mask: '+{7} (000) 000-00-00',
               type: 'tel',
             })}
           </>
         )}
 
-        {/* -------- общие поля -------- */}
-        {input('email', 'Электронная почта')}
+        {field('email', 'Электронная почта', { type: 'email' })}
 
         <div className={styles.passwordWrap}>
-          <input
-            required
-            className={styles.input}
-            type={showPassword ? 'text' : 'password'}
-            placeholder='Пароль'
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            disabled={disabled}
-          />
+          {field('password', 'Пароль', { type: showPw ? 'text' : 'password' })}
           <button
             type='button'
             className={styles.eyeBtn}
-            onClick={() => setshowPassword(!showPassword)}
+            onClick={() => setShowPw((v) => !v)}
             tabIndex={-1}
           >
-            <EyeIcon open={showPassword} />
+            <EyeIcon open={showPw} />
           </button>
         </div>
 
-        {mode === 'register' && (
-          <input
-            required
-            className={styles.input}
-            type={showPassword ? 'text' : 'password'}
-            placeholder='Подтвердите пароль'
-            value={form.confirm}
-            onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-            disabled={disabled}
-          />
-        )}
+        {mode === 'register' &&
+          field('confirm', 'Подтвердите пароль', {
+            type: showPw ? 'text' : 'password',
+          })}
 
         {mode === 'register' && (
           <p className={styles.smallNote}>
-            Регистрируясь, вы подтверждаете согласие на обработку персональных
-            данных
+            Регистрируясь, вы подтверждаете согласие на&nbsp;обработку
+            персональных данных
           </p>
         )}
 
-        {/* -------- button -------- */}
         <button
           type='submit'
           className={`${styles.authButton} button-large ${
@@ -193,7 +230,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         >
           {success
             ? 'Успешно!'
-            : subm
+            : sending
             ? mode === 'login'
               ? 'Входим…'
               : 'Регистрируем…'
@@ -202,18 +239,21 @@ export default function AuthForm({ mode }: { mode: Mode }) {
             : 'Зарегистрироваться'}
         </button>
 
-        {error && <p className={styles.error}>{error}</p>}
+        {serverErr && (
+          <p className={styles.serverError} role='alert'>
+            {serverErr}
+          </p>
+        )}
 
-        {/* --- switch link --- */}
         <div className={styles.switchLine}>
           {mode === 'login' ? 'Еще нет аккаунта?' : 'Уже есть аккаунт?'}{' '}
           <button
             type='button'
-            className={`${styles.authButton} button-large button-secondary`}
-            disabled={subm}
+            className='button-large button-secondary'
             onClick={() =>
               router.push(mode === 'login' ? '/auth/register' : '/auth/login')
             }
+            disabled={sending}
           >
             {mode === 'login' ? 'Зарегистрироваться' : 'Войти'}
           </button>
