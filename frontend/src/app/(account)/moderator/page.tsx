@@ -1,9 +1,13 @@
 import React from 'react';
 
-type Props = {};
+import { moderatorMenu } from '../moderatorMenu';
+import AccountHome from '../AccountHome';
 
-const Page = (props: Props) => {
-  return <div>я модератор</div>;
-};
-
-export default Page;
+export default function Page() {
+  return (
+    <AccountHome
+      fullName='Кашникова Полина Руслановна'
+      menu={moderatorMenu}
+    />
+  );
+}
