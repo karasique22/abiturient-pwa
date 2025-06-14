@@ -12,7 +12,8 @@ export async function proxy(req: Request, targetUrl: string) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     if (contentType?.includes('application/json')) {
       const json = await req.json();
-      (init.headers as Record<string, string>)['Content-Type'] = 'application/json';
+      (init.headers as Record<string, string>)['Content-Type'] =
+        'application/json';
       init.body = JSON.stringify(json);
     } else {
       const text = await req.text();
@@ -25,9 +26,12 @@ export async function proxy(req: Request, targetUrl: string) {
     }
   }
 
-  const access = cookies().get('accessToken')?.value;
+  const accessCookies = await cookies();
+  const access = accessCookies.get('accessToken')?.value;
   if (access) {
-    (init.headers as Record<string, string>)['Authorization'] = `Bearer ${access}`;
+    (init.headers as Record<string, string>)[
+      'Authorization'
+    ] = `Bearer ${access}`;
   }
 
   const nest = await fetch(targetUrl, init);
