@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import corsConfig from './config/cors.config';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -14,11 +15,11 @@ import { PrismaModule } from './database/prisma.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, load: [corsConfig] }),
     ThrottlerModule.forRoot([
       {
         ttl: 60,
-        limit: 10,
+        limit: 120,
       },
     ]),
     PrismaModule,
