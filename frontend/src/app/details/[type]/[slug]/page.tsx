@@ -3,8 +3,8 @@ import GenericDetails from '@/app/details/GenericDetails';
 
 type RouteParams = { type: 'event' | 'program'; slug: string };
 
-export default async function Page(props: { params: RouteParams }) {
-  const { type, slug } = await Promise.resolve(props.params);
+export default async function Page(props: { params: Promise<RouteParams> }) {
+  const { type, slug } = await Promise.resolve((await props.params));
 
   if (type !== 'event' && type !== 'program') return notFound();
 
