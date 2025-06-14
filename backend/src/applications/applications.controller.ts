@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateApplicationDto } from './dto/create-application.dto';
 
 @Controller('applications')
 @UseGuards(JwtAuthGuard)
@@ -17,7 +18,7 @@ export class ApplicationsController {
   constructor(private service: ApplicationsService) {}
 
   @Post()
-  create(@Body() dto: any, @Req() req) {
+  create(@Body() dto: CreateApplicationDto, @Req() req) {
     return this.service.create({
       ...dto,
       userId: req.user.userId,
