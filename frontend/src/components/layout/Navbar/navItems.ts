@@ -11,13 +11,6 @@ export const getNavItems = (role: UserRole) => [
     id: 'account',
     label: 'Аккаунт',
     Icon: AccountIcon,
-    href:
-      role === 'student'
-        ? '/student'
-        : role === 'moderator'
-        ? '/moderator'
-        : role === 'admin'
-        ? '/admin'
-        : '/auth',
+    href: role === undefined ? '/auth' : '/account',
   },
 ];
