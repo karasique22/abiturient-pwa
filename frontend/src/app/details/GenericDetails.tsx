@@ -100,7 +100,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
 
   return (
     <>
-      <div className={`container-header container`}>
+      <div className='container-header container'>
         <button
           className='backlink'
           onClick={() => router.back()}

@@ -1,4 +1,4 @@
 export const moderatorMenu = [
-  { href: 'applications', label: 'Заявки на программы' },
-  { href: 'events', label: 'Мои записи на мероприятия' },
+  { href: 'moderator/applications', label: 'Заявки на программы' },
+  { href: 'moderator/events', label: 'Мои записи на мероприятия' },
 ];

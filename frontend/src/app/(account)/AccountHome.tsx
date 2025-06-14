@@ -1,6 +1,8 @@
+// FIXME:
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import styles from './account.module.css';
 
@@ -13,10 +15,21 @@ export default function AccountHome({
   fullName: string;
   menu: MenuItem[];
 }) {
+  const router = useRouter();
+
   return (
     <div className='container'>
-      <div className={`${styles.fullname} font-header-medium`}>{fullName}</div>
-      <div className={styles.buttonContainer}>
+      <div className={`${styles.fullname} container-header`}>
+        <button
+          className='backlink'
+          onClick={() => router.back()}
+          aria-label='Назад'
+        >
+          <LinkIcon direction='back' />
+        </button>
+        <div className='font-header-medium'>{fullName}</div>
+      </div>
+      <div className={styles.buttonsContainer}>
         {menu.map((link) => (
           <Link
             className={`${styles.button} font-body-normal-medium`}
