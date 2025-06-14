@@ -1,4 +1,3 @@
-// src/app/account/[role]/page.tsx
 import { headers } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
 import AccountHome from '../AccountHome';
