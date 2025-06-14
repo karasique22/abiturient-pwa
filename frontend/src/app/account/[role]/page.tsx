@@ -4,8 +4,12 @@ import { roleMenu } from '../roleMenu';
 
 type Role = keyof typeof roleMenu;
 
-export default async function RolePage(props: { params: { role: string } }) {
-  const { role } = props.params;
+export default async function RolePage({
+  params,
+}: {
+  params: { role: string };
+}) {
+  const role = params.role as Role;
   if (!(role in roleMenu)) notFound();
 
   const meRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/api/users/me`, {
