@@ -1,22 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { Prisma } from '@prisma/client';
+import { slugify } from 'src/shared/slugify';
 
 @Injectable()
 export class EventsService {
   constructor(private prisma: PrismaService) {}
 
   create(data: Prisma.EventCreateInput) {
-    const slug = data.title
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]/g, '');
-    return this.prisma.event.create({
-      data: {
-        ...data,
-        slug,
-      },
-    });
+    const slug = slugify(data.title);
+    return this.prisma.event.create({ data: { ...data, slug } });
   }
 
   findAll() {
