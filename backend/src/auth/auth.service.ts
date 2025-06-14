@@ -92,7 +92,7 @@ export class AuthService {
       { sub: user.id, role: user.roles[0].name },
       {
         expiresIn: '15m',
-        secret: this.config.get<string>('JWT_ACCESS_SECRET'),
+        secret: this.config.get<string>('JWT_SECRET'),
       },
     );
   }

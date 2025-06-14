@@ -6,7 +6,6 @@ import { registerAs } from '@nestjs/config';
 export default registerAs('cors', () => {
   // из ENV получаем список доменов
   const origins = process.env.CORS_ORIGINS?.split(',').map((o) => o.trim());
-  console.log(origins);
 
   return {
     credentials: true,

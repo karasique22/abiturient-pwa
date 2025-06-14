@@ -7,7 +7,7 @@ import {
   ProgramImage,
   ProgramLevel,
 } from '@prisma/client';
-import { JsonValue } from '@prisma/client/runtime/library';
+import { JsonValue, Decimal } from '@prisma/client/runtime/library';
 
 export class ProgramDto implements Program {
   id!: string;
@@ -24,7 +24,7 @@ export class ProgramDto implements Program {
   curatorName: string;
   curatorInfo: string;
   startDate!: Date | null;
-  priceRub!: any;
+  priceRub!: Decimal;
   isActive!: boolean;
   createdAt!: Date;
   updatedAt!: Date;

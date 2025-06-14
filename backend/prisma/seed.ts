@@ -10,6 +10,7 @@ import {
 } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
+import { slugify } from 'src/shared/slugify';
 
 const prisma = new PrismaClient();
 const D = Prisma.Decimal;
@@ -20,14 +21,6 @@ async function main() {
   const adminPassword = hashSync('admin123', salt);
   const moderatorPassword = hashSync('moderator', salt);
   const studentPassword = hashSync('student123', salt);
-
-  function slugify(input: string) {
-    return input
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]/g, '');
-  }
 
   const [student, moderator, admin] = await Promise.all(
     ['student', 'moderator', 'admin'].map((name) =>

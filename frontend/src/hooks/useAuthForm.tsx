@@ -1,6 +1,6 @@
 'use client';
 
-import axios, { isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -70,15 +70,12 @@ export const useAuthForm = (mode: 'login' | 'register') => {
       setState('success');
       setTimeout(() => router.push('/'), 1000);
     } catch (err) {
-      /* ----- axios (не используется сейчас) ----- */
       if (isAxiosError(err) && err.response?.status === 400) {
         const code = err.response.data?.message;
         handleCode(code);
       } else if (err instanceof Error) {
-        /* ----- обычный Error из fetch ----- */
         handleCode(err.message);
       } else {
-        /* ----- всё остальное ----- */
         setServerErr('Не удалось выполнить запрос');
       }
       setState('idle');

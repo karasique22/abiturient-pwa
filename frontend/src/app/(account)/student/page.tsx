@@ -5,7 +5,7 @@ import { studentMenu } from './studentMenu';
 import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import styles from '../account.module.css';
 
-const page = () => {
+export default function Page() {
   return (
     <div className='container'>
       <div className={styles.menuButtonContainer}>
@@ -22,6 +22,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

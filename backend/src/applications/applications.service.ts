@@ -46,7 +46,7 @@ export class ApplicationsService {
       throw new NotFoundException();
     }
 
-    if (!app.isActive) return app; // уже отменена
+    if (!app.isActive) return app;
 
     return this.prisma.application.update({
       where: { id },
