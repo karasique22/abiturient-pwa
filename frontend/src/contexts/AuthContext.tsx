@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // FIXME: какой-то странный контекст на все, наверное декомпозировать
-// и почему не используется useAuth
 
 type Role = 'student' | 'moderator' | 'admin' | null;
 interface AuthCtx {
