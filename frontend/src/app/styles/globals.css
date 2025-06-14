@@ -203,3 +203,17 @@ button:disabled {
     box-shadow: 0 0 5px #3bb54a;
   }
 }
+
+.container-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 65px;
+}
+
+.backlink {
+  position: absolute;
+  left: 0;
+  padding-left: 16px;
+}

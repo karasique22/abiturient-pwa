@@ -11,38 +11,16 @@ import { Providers } from './providers';
 import Link from 'next/link';
 
 const acrom = localfont({
-  src: '../fonts/Acrom.ttf',
+  src: [
+    { path: '../fonts/Acrom-Thin.ttf', weight: '100' },
+    { path: '../fonts/Acrom-Light.ttf', weight: '300' },
+    { path: '../fonts/Acrom.ttf', weight: '400' },
+    { path: '../fonts/Acrom-Medium.ttf', weight: '500' },
+    { path: '../fonts/Acrom-Bold.ttf', weight: '700' },
+    { path: '../fonts/Acrom-ExtraBold.ttf', weight: '800' },
+  ],
   variable: '--font-acrom',
-});
-
-const acromMedium = localfont({
-  src: '../fonts/Acrom-Medium.ttf',
-  variable: '--font-acrom-medium',
-});
-
-const acromBold = localfont({
-  src: '../fonts/Acrom-Bold.ttf',
-  variable: '--font-acrom-bold',
-});
-
-const acromRegular = localfont({
-  src: '../fonts/Acrom-Regular.ttf',
-  variable: '--font-acrom-regular',
-});
-
-const acromExtraBold = localfont({
-  src: '../fonts/Acrom-ExtraBold.ttf',
-  variable: '--font-acrom-extra-bold',
-});
-
-const acromLight = localfont({
-  src: '../fonts/Acrom-Light.ttf',
-  variable: '--font-acrom-light',
-});
-
-const acromThin = localfont({
-  src: '../fonts/Acrom-Thin.ttf',
-  variable: '--font-acrom-thin',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -56,10 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang='ru'
-      className={`${acrom.variable} ${acromMedium.variable} ${acromBold.variable} ${acromMedium.variable} ${acromExtraBold.variable} ${acromLight.variable} ${acromThin.variable} ${acromRegular.variable} antialised`}
-    >
+    <html lang='ru' className={`${acrom.variable} antialised`}>
       <body>
         <Providers>
           <header className={`${styles.header} container`}>

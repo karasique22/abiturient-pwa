@@ -1,10 +1,17 @@
-.menuButtonContainer {
+.fullname {
+  text-align: center;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-home-grey);
+}
+
+.buttonContainer {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.menuButton {
+.button {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -13,9 +20,4 @@
   padding: 16px 10px;
   border-radius: var(--radius-small);
   background-color: var(--color-home-grey);
-}
-
-.menuButton:first-child {
-  background-color: var(--color-content-accent);
-  color: var(--color-home-white);
 }
