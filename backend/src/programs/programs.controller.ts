@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { ProgramDto } from './dto/program.dto';
+import { CreateProgramDto } from './dto/create-program.dto';
 
 @Controller('programs')
 export class ProgramsController {
@@ -19,8 +20,8 @@ export class ProgramsController {
   }
 
   @Post()
-  async create(@Body() data: any): Promise<ProgramDto> {
-    const program = await this.service.create(data);
+  async create(@Body() dto: CreateProgramDto): Promise<ProgramDto> {
+    const program = await this.service.create(dto);
     return new ProgramDto(program);
   }
 }
