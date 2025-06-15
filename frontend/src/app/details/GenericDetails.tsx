@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import SignUpModal from '@/components/ui/Modals/SignUpModal/SignUpModal';
 import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
-import LinkIcon from '@/components/icons/LinkIcon/LinkIcon';
 import api from '@/lib/api';
 
 import styles from './Details.module.css';
@@ -16,6 +14,7 @@ import { eventConfig } from './event-details.config';
 import { programConfig } from './program-details.config';
 import { apiPublic } from '@/lib/apiPublic';
 import { getMe } from '@/lib/getMe';
+import PageBackHeader from '@/components/ui/PageBackHeader/PageBackHeader';
 
 type DetailsConfig<T> = {
   cover: (d: T) => string | null | undefined;
@@ -40,7 +39,6 @@ interface Props<T = unknown> {
 export default function GenericDetails<T>({ type, data }: Props<T>) {
   const cfg: DetailsConfig<T> =
     type === 'event' ? (eventConfig as any) : (programConfig as any);
-  const router = useRouter();
 
   const [guest, setGuest] = useState<boolean | null>(null);
   const [state, setState] = useState<
@@ -100,16 +98,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
 
   return (
     <>
-      <div className='container-header container'>
-        <button
-          className='backlink'
-          onClick={() => router.back()}
-          aria-label='Назад'
-        >
-          <LinkIcon direction='back' />
-        </button>
-        <h2 className={styles.headerTitle}>{cfg.title(data)}</h2>
-      </div>
+      <PageBackHeader headerTitle={cfg.title(data)} />
 
       <div
         className={`${styles.detailsContainer} ${
