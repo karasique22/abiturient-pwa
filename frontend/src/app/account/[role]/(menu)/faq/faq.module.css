@@ -1,5 +1,4 @@
-.wrap {
-  padding: 16px;
+.faq {
   display: flex;
   flex-direction: column;
   gap: 14px;

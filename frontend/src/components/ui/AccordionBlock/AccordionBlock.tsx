@@ -20,11 +20,7 @@ export default function AccordionBlock({
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      className={`${styles.block} ${styles[variant]} ${
-        open ? styles.open : ''
-      }`}
-    >
+    <div className={`${styles.block} ${styles[variant]}`}>
       <button
         type='button'
         aria-expanded={open}

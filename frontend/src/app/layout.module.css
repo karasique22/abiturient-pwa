@@ -8,8 +8,13 @@
   left: 0;
   width: 100%;
   background-color: transparent;
+  height: var(--footer-h);
 }
 
 .appContainer {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 28px;
+  min-height: calc(100vh - var(--footer-h));
+  position: relative;
 }

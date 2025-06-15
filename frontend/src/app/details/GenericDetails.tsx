@@ -101,9 +101,9 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       <PageBackHeader headerTitle={cfg.title(data)} />
 
       <div
-        className={`${styles.detailsContainer} ${
-          type === 'program' ? 'font-body-normal' : ''
-        }`}
+        className={` container background-container ${
+          styles.detailsContainer
+        } ${type === 'program' ? 'font-body-normal' : ''}`}
       >
         <Image
           className={styles.coverImage}

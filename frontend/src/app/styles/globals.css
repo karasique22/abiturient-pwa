@@ -12,6 +12,8 @@
   --radius-small: 8px;
   --radius-medium: 12px;
   --radius-large: 20px;
+
+  --footer-h: 60px;
 }
 
 @theme inline {
@@ -42,7 +44,14 @@ body {
 }
 
 .container {
-  padding: 0 16px;
+  padding: 0px 16px;
+}
+
+.background-container {
+  background-color: var(--color-home-grey);
+  padding-top: 18px;
+  padding-bottom: 18px;
+  flex: 1;
 }
 
 a {
