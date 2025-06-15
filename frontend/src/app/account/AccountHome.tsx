@@ -25,7 +25,7 @@ export default function AccountHome({ role, fullName, menu }: Props) {
           <Link
             key={href}
             href={`${role}/${href}`}
-            className={`${styles.button} font-body-regular`}
+            className={`${styles.button} font-body-medium`}
           >
             <span>{label}</span>
             <LinkIcon direction='forward' />
