@@ -19,7 +19,7 @@ export default function PageBackHeader({ headerTitle }: Props) {
       >
         <LinkIcon direction='back' />
       </button>
-      <h2>{headerTitle}</h2>
+      <h2 className='font-header-medium'>{headerTitle}</h2>
     </div>
   );
 }
