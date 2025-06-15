@@ -33,5 +33,7 @@ export default async function RolePage(props: { params: Promise<Props> }) {
     if (user?.fullName) fullName = user.fullName;
   }
 
-  return <AccountHome fullName={fullName} menu={[...roleMenu[role]]} />;
+  return (
+    <AccountHome role={role} fullName={fullName} menu={[...roleMenu[role]]} />
+  );
 }

@@ -8,11 +8,12 @@ import styles from './Account.module.css';
 export type MenuItem = { href: string; label: string };
 
 interface Props {
+  role: string;
   fullName: string;
   menu: MenuItem[];
 }
 
-export default function AccountHome({ fullName, menu }: Props) {
+export default function AccountHome({ role, fullName, menu }: Props) {
   return (
     <div className='container'>
       <div className={`${styles.fullname} container-header`}>
@@ -23,7 +24,7 @@ export default function AccountHome({ fullName, menu }: Props) {
         {menu.map(({ href, label }) => (
           <Link
             key={href}
-            href={href}
+            href={`${role}/${href}`}
             className={`${styles.button} font-body-normal-medium`}
           >
             <span>{label}</span>
