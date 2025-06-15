@@ -41,7 +41,7 @@ export default function ClientEvents() {
 
       <div className={styles.eventsContainer}>
         <header className={styles.eventsHeader}>
-          <h2>Список событий</h2>
+          <h2 className='font-header-medium'>Список событий</h2>
           <ViewSwitcher viewMode={view} onViewChange={setView} />
         </header>
 

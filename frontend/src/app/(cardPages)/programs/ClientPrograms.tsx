@@ -37,7 +37,7 @@ export default function ClientPrograms() {
 
       <div className={styles.eventsContainer}>
         <header className={styles.eventsHeader}>
-          <h2>Список программ</h2>
+          <h2 className='font-header-medium'>Список программ</h2>
         </header>
 
         {loading && <Loader />}
