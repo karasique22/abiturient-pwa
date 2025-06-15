@@ -32,7 +32,7 @@
 }
 
 .modal {
-  max-width: 90%;
+  max-width: 70%;
   background: var(--color-home-white);
   padding: 24px;
   border-radius: var(--radius-medium);
