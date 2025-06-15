@@ -7,7 +7,9 @@ export default function LinkIcon({
 }) {
   return (
     <div
-      className={direction === 'forward' ? styles.forwardLink : styles.backLink}
+      className={`${styles.linkContainer} ${
+        direction === 'forward' ? styles.forwardLink : styles.backLink
+      }`}
     >
       <svg
         width='16'

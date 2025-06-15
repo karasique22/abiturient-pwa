@@ -112,7 +112,7 @@ p {
   letter-spacing: 0%;
 }
 
-.font-body-normal {
+.font-body-regular {
   font-family: Acrom;
   font-weight: 400;
   font-size: 14px;
@@ -120,7 +120,7 @@ p {
   letter-spacing: 0%;
 }
 
-.font-body-normal-bold {
+.font-body-regular-bold {
   font-family: Acrom;
   font-weight: bold;
   font-size: 14px;
