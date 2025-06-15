@@ -1,0 +1,20 @@
+.block {
+  border-radius: var(--radius-small);
+  overflow: hidden;
+  transition: box-shadow 0.25s;
+}
+
+.faq {
+  background: #ffffff;
+  box-shadow: 0px 0px 10px 0px #0000001f;
+  padding: 10px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font: var(--font-body-medium-bold);
+  color: var(--color-text-primary);
+}

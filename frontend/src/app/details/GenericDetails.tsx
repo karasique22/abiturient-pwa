@@ -131,7 +131,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
               </AccordionBlock>
             ) : s.value ? (
               <div key={s.label} className={styles.infoBlock}>
-                <span className={`${styles.infoSpan} font-body-medium-bold`}>
+                <span className={`${styles.infoSpan} font-body-medium`}>
                   {s.label}
                 </span>
                 <div className='font-body-normal'>{s.value}</div>

@@ -2,44 +2,53 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import styles from '@/app/details/Details.module.css';
+import styles from './AccordionBlock.module.css';
 import ToggleListIcon from '@/components/icons/ToggleListIcon';
+
+interface Props {
+  title: string;
+  children: React.ReactNode;
+
+  variant?: 'default' | 'faq';
+}
 
 export default function AccordionBlock({
   title,
   children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+  variant = 'default',
+}: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={styles.listBlock}>
+    <div
+      className={`${styles.block} ${styles[variant]} ${
+        open ? styles.open : ''
+      }`}
+    >
       <button
-        className={`${styles.listSpan} font-body-normal-bold`}
-        onClick={() => setOpen((prev) => !prev)}
-        aria-expanded={open}
         type='button'
+        aria-expanded={open}
+        className={styles.head}
+        onClick={() => setOpen((v) => !v)}
       >
-        <p>{title}</p>
-        <motion.div
-          className={styles.toggleIcon}
+        <p className='font-body-medium'>{title}</p>
+        <motion.span
+          className={styles.icon}
           animate={{ rotate: open ? -180 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
         >
           <ToggleListIcon />
-        </motion.div>
+        </motion.span>
       </button>
 
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
-            className={styles.content}
+            className={styles.body}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.25 }}
           >
             {children}
           </motion.div>
