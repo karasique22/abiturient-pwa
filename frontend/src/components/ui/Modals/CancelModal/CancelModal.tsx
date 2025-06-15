@@ -17,7 +17,7 @@ export default function CancelModal(props: Props) {
         <>
           Вы действительно хотите отменить запись?
           <br />
-          <span className='font-body-normal-bold'>{props.title}</span>
+          <span className='font-header-medium'>{props.title}</span>
         </>
       }
       labels={{

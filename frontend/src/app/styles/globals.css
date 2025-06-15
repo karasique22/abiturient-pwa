@@ -120,14 +120,6 @@ p {
   letter-spacing: 0%;
 }
 
-.font-body-regular-bold {
-  font-family: Acrom;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
-
 .font-header-medium {
   font-family: Acrom;
   font-weight: 500;

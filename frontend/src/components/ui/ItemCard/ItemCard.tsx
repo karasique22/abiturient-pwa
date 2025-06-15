@@ -27,11 +27,9 @@ export default function ItemCard({ item, viewMode }: Props) {
       />
       <div className={styles.content}>
         <div className={styles.contentMain}>
-          <h3 className={`${styles.title} font-body-normal-bold`}>
-            {item.title}
-          </h3>
+          <h3 className={`${styles.title} font-header-medium`}>{item.title}</h3>
           {item.startDate && (
-            <p className='font-body-normal'>
+            <p className='font-body-regular'>
               Старт: {new Date(item.startDate).toLocaleDateString('ru-RU')}
             </p>
           )}

@@ -103,7 +103,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       <div
         className={` container background-container ${
           styles.detailsContainer
-        } ${type === 'program' ? 'font-body-normal' : ''}`}
+        } ${type === 'program' ? 'font-body-regular' : ''}`}
       >
         <Image
           className={styles.coverImage}
@@ -134,8 +134,8 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
                 <span className={`${styles.infoSpan} font-body-medium`}>
                   {s.label}
                 </span>
-                <div className='font-body-normal'>{s.value}</div>
-                {s.extra && <div className='font-body-normal'>{s.extra}</div>}
+                <div className='font-body-regular'>{s.value}</div>
+                {s.extra && <div className='font-body-regular'>{s.extra}</div>}
               </div>
             ) : null
           )}

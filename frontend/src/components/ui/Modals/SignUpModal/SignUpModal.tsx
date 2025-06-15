@@ -31,7 +31,7 @@ export default function SignUpModal({
           <>
             Чтобы подтвердить запись, войдите или зарегистрируйтесь
             <br />
-            <span className='font-body-normal-bold'>{title}</span>
+            <span className='font-header-medium'>{title}</span>
           </>
         }
         labels={{
@@ -54,7 +54,7 @@ export default function SignUpModal({
         <>
           Вы хотите записаться:
           <br />
-          <span className='font-body-normal-bold'>{title}</span>
+          <span className='font-header-medium'>{title}</span>
         </>
       }
       labels={{
