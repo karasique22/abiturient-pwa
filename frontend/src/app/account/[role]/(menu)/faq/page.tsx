@@ -1,6 +1,8 @@
 'use client';
 
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
+
+// FIXME: вынести в отдельный файл кхуям
 import detailsStyles from '@/app/details/Details.module.css';
 import styles from './faq.module.css';
 
