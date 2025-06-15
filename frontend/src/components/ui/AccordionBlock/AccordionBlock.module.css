@@ -15,6 +15,6 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font: var(--font-body-medium-bold);
+  font: var(--font-body-medium);
   color: var(--color-text-primary);
 }

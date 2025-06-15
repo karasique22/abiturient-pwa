@@ -97,16 +97,8 @@ p {
 
 .font-body-medium {
   font-family: Acrom;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
-
-.font-body-medium-bold {
-  font-family: Acrom;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
 }
