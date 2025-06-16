@@ -3,6 +3,7 @@
 import { useFetch } from '@/hooks/useFetch';
 import ApplicationCard from '@/components/ui/ApplicationCard/ApplicationCard';
 import { ApplicationApi } from '@/types';
+import Loader from '@/components/Loader/Loader';
 
 export default function ApplicationsClient({
   type,
@@ -13,7 +14,7 @@ export default function ApplicationsClient({
     `/applications/my-${type}s`
   );
 
-  if (loading) return <div>Загрузка…</div>;
+  if (loading) return <Loader />;
   if (error) return <div>Ошибка</div>;
   if (!data?.length) return <div>Нет заявок</div>;
 

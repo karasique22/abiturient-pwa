@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { ApplicationApi } from '@/types';
+import { eventLabels, programCategoryLabel } from '@/shared/enumLabels';
+import { EventCategory, ProgramCategory } from '@/shared/prismaEnums';
 import styles from './ApplicationCard.module.css';
 
 interface Props {
@@ -23,11 +25,15 @@ export default function ApplicationCard({ application }: Props) {
         {type === 'program' && (
           <div className={styles.status}>{application.status}</div>
         )}
-        <div>{item.category}</div>
+        <div>
+          {type === 'event'
+            ? eventLabels[item.category as EventCategory]
+            : programCategoryLabel[item.category as ProgramCategory]}
+        </div>
         <div>{item.title}</div>
       </div>
       <div className={styles.buttons}>
-        <Link href={`details/${type}/${item.slug}`}>Подробнее</Link>
+        <Link href={`/details/${type}/${item.slug}`}>Подробнее</Link>
       </div>
     </div>
   );
