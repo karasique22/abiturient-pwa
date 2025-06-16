@@ -14,7 +14,7 @@
 .appContainer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 28px;
-  min-height: calc(100vh - var(--footer-h));
+  margin-bottom: var(--footer-h);
   position: relative;
+  flex: 1;
 }

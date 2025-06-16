@@ -37,10 +37,13 @@ body {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-acrom);
-  padding: 32px 0;
+  padding-top: 32px;
+  min-height: 100vh;
 }
 
 .container {
@@ -52,6 +55,7 @@ body {
   padding-top: 18px;
   padding-bottom: 18px;
   flex: 1;
+  /* min-height: calc(100vh - var(--footer-h)); */
 }
 
 a {
