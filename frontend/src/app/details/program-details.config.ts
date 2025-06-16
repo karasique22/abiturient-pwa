@@ -1,20 +1,9 @@
 import { ProgramApi } from '@/types';
-import { ProgramLevel, ProgramFormat, ProgramDocument } from '@prisma/client';
-
-const level: Record<ProgramLevel, string> = {
-  BEGINNER: 'Начальный',
-  INTERMEDIATE: 'Средний',
-  ADVANCED: 'Продвинутый',
-};
-const format: Record<ProgramFormat, string> = {
-  OFFLINE: 'очный',
-  ONLINE: 'онлайн',
-};
-const doc: Record<ProgramDocument, string> = {
-  DIPLOMA_PROFESSIONAL_RETRAINING: 'Диплом о проф. переподготовке',
-  DIPLOMA_PROFESSIONAL_DEVELOPMENT: 'Диплом о повышении квалификации',
-  CERTIFICATE_OF_COMPLETION: 'Сертификат об обучении',
-};
+import {
+  programLevelLabel as level,
+  programFormatLabel as format,
+  programDocumentLabel as doc,
+} from '@/shared/enumLabels';
 
 export const programConfig = {
   cover: (d: ProgramApi) => d.coverUrl,

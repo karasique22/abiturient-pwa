@@ -1,14 +1,14 @@
 export const roleMenu = {
   student: [
     { href: 'settings', label: 'Настройки профиля' },
-    { href: 'applications', label: 'Мои заявки' },
-    { href: 'events', label: 'Мои записи' },
+    { href: 'programs', label: 'Мои заявки на программы' },
+    { href: 'events', label: 'Мои записи на мероприятия' },
     { href: 'faq', label: 'Вопросы-ответы' },
     { href: 'contacts', label: 'Контакты' },
     { href: 'license', label: 'Лицензия' },
   ],
   moderator: [
-    { href: 'applications', label: 'Заявки студентов' },
+    { href: 'programs', label: 'Заявки студентов на программы' },
     { href: 'events', label: 'Записи на мероприятия' },
   ],
   admin: [

@@ -11,7 +11,7 @@ import ItemsGrid from '@/components/ui/ItemsGrid/ItemsGrid';
 import Loader from '@/components/Loader/Loader';
 
 import type { EventApi, ItemApi } from '@/types';
-import { EventCategory } from '@/shared/event-categories';
+import { EventCategory } from '@/shared/prismaEnums';
 
 import styles from '../cardPages.module.css';
 

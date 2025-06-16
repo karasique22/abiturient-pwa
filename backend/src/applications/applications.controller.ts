@@ -30,6 +30,16 @@ export class ApplicationsController {
     return this.service.findMy(req.user.userId);
   }
 
+  @Get('my-events')
+  myEvents(@Req() req) {
+    return this.service.findMyEvents(req.user.userId);
+  }
+
+  @Get('my-programs')
+  myPrograms(@Req() req) {
+    return this.service.findMyPrograms(req.user.userId);
+  }
+
   @Patch(':id/cancel')
   cancel(@Param('id') id: string, @Req() req) {
     return this.service.cancel(id, req.user.userId);

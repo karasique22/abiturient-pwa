@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { EventApi } from '@/types';
-import { EventCategory } from '@/shared/event-categories';
+import { EventCategory } from '@/shared/prismaEnums';
 
 export function useFilter(
   events: EventApi[],

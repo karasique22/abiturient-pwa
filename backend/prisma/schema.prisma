@@ -42,6 +42,7 @@ enum ProgramFormat {
 enum ApplicationStatus {
   NEW
   CANCELLED
+  APPROVED
 }
 
 /**

@@ -16,9 +16,23 @@ export interface ItemApi {
   type: 'event' | 'program';
 }
 
-export type ApplicationApi = {
+interface BaseApplicationApi {
   id: string;
-  programId: string | null;
-  eventId: string | null;
-  status: 'NEW' | 'CANCELLED';
-};
+  status: 'NEW' | 'CANCELLED' | 'APPROVED';
+}
+
+export interface EventApplicationApi extends BaseApplicationApi {
+  eventId: string;
+  programId: null;
+  event: Pick<EventApi, 'id' | 'slug' | 'title' | 'address' | 'category'>;
+  program?: undefined;
+}
+
+export interface ProgramApplicationApi extends BaseApplicationApi {
+  programId: string;
+  eventId: null;
+  program: Pick<ProgramApi, 'id' | 'slug' | 'title' | 'category'>;
+  event?: undefined;
+}
+
+export type ApplicationApi = EventApplicationApi | ProgramApplicationApi;

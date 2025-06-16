@@ -40,6 +40,44 @@ export class ApplicationsService {
     return this.prisma.application.findMany({ where: { userId } });
   }
 
+  findMyEvents(userId: string) {
+    return this.prisma.application.findMany({
+      where: {
+        userId,
+        status: 'NEW',
+        eventId: { not: null },
+      },
+      include: {
+        event: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            dateTime: true,
+            address: true,
+            category: true,
+          },
+        },
+      },
+    });
+  }
+
+  findMyPrograms(userId: string) {
+    return this.prisma.application.findMany({
+      where: { userId, programId: { not: null } },
+      include: {
+        program: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            category: true,
+          },
+        },
+      },
+    });
+  }
+
   async cancel(id: string, userId: string) {
     const app = await this.prisma.application.findUnique({ where: { id } });
     if (!app || app.userId !== userId) {

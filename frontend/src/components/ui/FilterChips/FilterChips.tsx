@@ -1,15 +1,10 @@
 'use client';
 
-import { EventCategory } from '@/shared/event-categories';
+import { EventCategory } from '@/shared/prismaEnums';
+import { eventLabels as labels } from '@/shared/enumLabels';
 import styles from './FilterChips.module.css';
 
 // TODO: декомпозировать
-
-const labels: Record<EventCategory, string> = {
-  [EventCategory.MASTER_CLASS]: 'Мастер-класс',
-  [EventCategory.TRIAL]: 'Пробное занятие',
-  [EventCategory.LESSON]: 'Онлайн-урок',
-};
 
 interface Props {
   selected: EventCategory[];

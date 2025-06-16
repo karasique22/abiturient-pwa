@@ -10,7 +10,7 @@ import {
 } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
-import { slugify } from 'src/shared/slugify';
+import { slugify } from '../src/shared/slugify';
 
 const prisma = new PrismaClient();
 const D = Prisma.Decimal;
