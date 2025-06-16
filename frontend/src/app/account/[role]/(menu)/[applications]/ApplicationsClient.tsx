@@ -4,6 +4,7 @@ import { useFetch } from '@/hooks/useFetch';
 import ApplicationCard from '@/components/ui/ApplicationCard/ApplicationCard';
 import { ApplicationApi } from '@/types';
 import Loader from '@/components/Loader/Loader';
+import styles from './ApplicationsClient.module.css';
 
 export default function ApplicationsClient({
   type,
@@ -19,7 +20,9 @@ export default function ApplicationsClient({
   if (!data?.length) return <div>Нет заявок</div>;
 
   return (
-    <div>
+    <div
+      className={`${styles.applicationsContainer} container background-container`}
+    >
       {data.map((application) => (
         <ApplicationCard key={application.id} application={application} />
       ))}

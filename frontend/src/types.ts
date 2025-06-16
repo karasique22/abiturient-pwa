@@ -24,7 +24,10 @@ interface BaseApplicationApi {
 export interface EventApplicationApi extends BaseApplicationApi {
   eventId: string;
   programId: null;
-  event: Pick<EventApi, 'id' | 'slug' | 'title' | 'address' | 'category'>;
+  event: Pick<
+    EventApi,
+    'id' | 'slug' | 'title' | 'address' | 'category' | 'dateTime'
+  >;
   program?: undefined;
 }
 

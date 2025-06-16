@@ -18,22 +18,33 @@ export default function ApplicationCard({ application }: Props) {
 
   return (
     <div className={styles.card}>
-      <div className={styles.content}>
+      <div className={`${styles.content} font-body-regular-small`}>
         {type === 'event' && 'address' in item && (
-          <div className={styles.address}>{item.address}</div>
+          <>
+            <div className={styles.address}>{item.address}</div>
+            <div>{new Date(item.dateTime).toLocaleDateString('ru-RU')}</div>
+          </>
         )}
         {type === 'program' && (
           <div className={styles.status}>{application.status}</div>
         )}
-        <div>
+        <div className='font-body-regular'>
           {type === 'event'
             ? eventLabels[item.category as EventCategory]
             : programCategoryLabel[item.category as ProgramCategory]}
+          <div>{item.title}</div>
         </div>
-        <div>{item.title}</div>
       </div>
       <div className={styles.buttons}>
-        <Link href={`/details/${type}/${item.slug}`}>Подробнее</Link>
+        <button className={`${styles.button} button-small button-secondary`}>
+          Отменить заявку
+        </button>
+        <Link
+          className={`${styles.button} button-small`}
+          href={`/details/${type}/${item.slug}`}
+        >
+          Подробнее
+        </Link>
       </div>
     </div>
   );
