@@ -8,7 +8,7 @@ const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export function useApplications(type: 'events' | 'programs') {
   const { data, error, mutate, isLoading } = useSWR<ApplicationApi[]>(
-    `/applications/my-${type}s`,
+    `/applications/my-${type}`,
     fetcher
   );
 
