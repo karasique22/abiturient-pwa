@@ -6,27 +6,25 @@ import Image from 'next/image';
 import SignUpModal from '@/components/ui/Modals/SignUpModal/SignUpModal';
 import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
+import PageBackHeader from '@/components/ui/PageBackHeader/PageBackHeader';
+
+import { useApplications } from '@/hooks/useApplications';
+import { useCancelApplication } from '@/hooks/useCancelApplication';
 import api from '@/lib/api';
 
 import styles from './Details.module.css';
-
 import { eventConfig } from './event-details.config';
 import { programConfig } from './program-details.config';
-import { apiPublic } from '@/lib/apiPublic';
 import { getMe } from '@/lib/getMe';
-import PageBackHeader from '@/components/ui/PageBackHeader/PageBackHeader';
 
 type DetailsConfig<T> = {
   cover: (d: T) => string | null | undefined;
   title: (d: T) => string;
-
-  sections: (d: T) => (
+  sections: (
+    d: T
+  ) => (
     | { label: string; value?: string; extra?: string }
-    | {
-        accordion: true;
-        title: string;
-        items: (string | undefined | null)[];
-      }
+    | { accordion: true; title: string; items: (string | undefined | null)[] }
   )[];
   pickId: (d: T) => Record<string, string>;
 };
@@ -40,10 +38,15 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
   const cfg: DetailsConfig<T> =
     type === 'event' ? (eventConfig as any) : (programConfig as any);
 
+  const { applications, mutate } = useApplications(
+    type === 'event' ? 'events' : 'programs'
+  );
+  const { cancel, loading } = useCancelApplication();
+
   const [guest, setGuest] = useState<boolean | null>(null);
-  const [state, setState] = useState<
-    'unknown' | 'none' | 'active' | 'cancelling'
-  >('unknown');
+  const [state, setState] = useState<'unknown' | 'none' | 'active' | 'loading'>(
+    'unknown'
+  );
   const [modal, setModal] = useState<'signup' | 'cancel' | null>(null);
   const [appId, setAppId] = useState<string>();
 
@@ -51,18 +54,14 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
     (async () => {
       const me = await getMe();
       if (!me) {
-        // гость → кнопка "Записаться"
         setGuest(true);
         setState('none');
         return;
       }
 
-      /* ШАГ 2. я залогинен → смотрим заявки */
       setGuest(false);
-      const { data: apps } = await apiPublic.get('/applications/my');
       const sel = cfg.pickId(data);
-
-      const active = apps.find(
+      const active = applications.find(
         (a: any) =>
           a.status === 'NEW' &&
           Object.entries(sel).every(([k, v]) => a[k] === v)
@@ -70,21 +69,21 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
 
       active ? (setState('active'), setAppId(active.id)) : setState('none');
     })();
-  }, [data]);
+  }, [applications, data]);
 
-  // FIXME: использовать useApplication?
   const create = async () => {
     const { data: app } = await api.post('/applications', cfg.pickId(data));
     setAppId(app.id);
     setState('active');
+    await mutate();
   };
 
-  //FIXME: использовать useCancelApplication
-  const cancel = async () => {
+  const cancelApplication = async () => {
     if (!appId) return;
-    setState('cancelling');
-    await api.patch(`/applications/${appId}/cancel`);
+    setState('loading');
+    await cancel(appId);
     setState('none');
+    await mutate();
   };
 
   const btn =
@@ -94,7 +93,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       ? { txt: 'Записаться', dis: false, click: () => setModal('signup') }
       : {
           txt: 'Вы записаны',
-          dis: state === 'cancelling',
+          dis: loading,
           cls: 'button-secondary',
           click: state === 'active' ? () => setModal('cancel') : undefined,
         };
@@ -121,7 +120,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
             type === 'program' ? styles.programContainer : styles.eventContainer
           }
         >
-          {cfg.sections(data).map((s, idx) =>
+          {cfg.sections(data).map((s) =>
             'accordion' in s ? (
               <AccordionBlock title={s.title} key={s.title}>
                 <ul className={styles.list}>
@@ -167,7 +166,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
         <CancelModal
           open
           title={cfg.title(data)}
-          onConfirm={cancel}
+          onConfirm={cancelApplication}
           onClose={() => setModal(null)}
         />
       )}

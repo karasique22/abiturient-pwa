@@ -48,12 +48,14 @@ export default function ApplicationsClient({
         {isLoading && <Loader />}
       </div>
 
-      <CancelModal
-        open={modalOpen}
-        title={selectedApp?.title ?? ''}
-        onConfirm={handleConfirm}
-        onClose={() => setModalOpen(false)}
-      />
+      {modalOpen && (
+        <CancelModal
+          open={modalOpen}
+          title={selectedApp?.title ?? ''}
+          onConfirm={handleConfirm}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
     </>
   );
 }
