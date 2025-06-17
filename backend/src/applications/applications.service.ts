@@ -64,7 +64,7 @@ export class ApplicationsService {
 
   findMyPrograms(userId: string) {
     return this.prisma.application.findMany({
-      where: { userId, programId: { not: null } },
+      where: { userId, programId: { not: null }, status: { not: 'CANCELLED' } },
       include: {
         program: {
           select: {
