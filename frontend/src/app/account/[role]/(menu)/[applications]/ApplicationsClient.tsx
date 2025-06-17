@@ -45,6 +45,9 @@ export default function ApplicationsClient({
             onCancel={handleCancel}
           />
         ))}
+        {applications.length === 0 && !isLoading && (
+          <div>Пока здесь пусто =(</div>
+        )}
         {isLoading && <Loader />}
       </div>
 
