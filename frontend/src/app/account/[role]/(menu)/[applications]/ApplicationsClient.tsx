@@ -13,7 +13,6 @@ export default function ApplicationsClient({
 }) {
   const { applications, mutate, isLoading } = useApplications(type);
   const { cancel, loading, error } = useCancelApplication();
-  console.log(isLoading);
 
   const handleCancel = async (id: string) => {
     await cancel(id);
