@@ -15,7 +15,7 @@ export default function CancelModal(props: Props) {
       open={props.open}
       message={
         <>
-          Вы действительно хотите отменить запись?
+          <span>Вы действительно хотите отменить запись?</span>
           <br />
           <span className='font-header-medium'>{props.title}</span>
         </>

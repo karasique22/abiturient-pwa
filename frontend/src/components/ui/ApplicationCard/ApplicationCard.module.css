@@ -8,7 +8,8 @@
   padding: 10px;
 }
 
-.content {
+.content,
+.titleBlock {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -22,4 +23,20 @@
 
 .button {
   flex: 1;
+}
+
+.statusBar {
+  padding: 6px 10px;
+  width: max-content;
+  border-radius: var(--radius-small);
+}
+
+.statusApproved {
+  background-color: #404840;
+  color: #74e27d;
+}
+
+.statusNew {
+  background-color: #363636;
+  color: var(--color-home-white);
 }

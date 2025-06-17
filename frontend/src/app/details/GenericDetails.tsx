@@ -72,11 +72,14 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
     })();
   }, [data]);
 
+  // FIXME: использовать useApplication?
   const create = async () => {
     const { data: app } = await api.post('/applications', cfg.pickId(data));
     setAppId(app.id);
     setState('active');
   };
+
+  //FIXME: использовать useCancelApplication
   const cancel = async () => {
     if (!appId) return;
     setState('cancelling');

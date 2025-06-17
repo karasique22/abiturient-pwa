@@ -29,7 +29,7 @@ export default function SignUpModal({
         variant='secondary'
         message={
           <>
-            Чтобы подтвердить запись, войдите или зарегистрируйтесь
+            <span>Чтобы подтвердить запись, войдите или зарегистрируйтесь</span>
             <br />
             <span className='font-header-medium'>{title}</span>
           </>

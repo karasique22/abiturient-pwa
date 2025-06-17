@@ -1,30 +1,33 @@
 'use client';
 
-import { useFetch } from '@/hooks/useFetch';
+import { useApplications } from '@/hooks/useApplications';
+import { useCancelApplication } from '@/hooks/useCancelApplication';
 import ApplicationCard from '@/components/ui/ApplicationCard/ApplicationCard';
-import { ApplicationApi } from '@/types';
-import Loader from '@/components/Loader/Loader';
 import styles from './ApplicationsClient.module.css';
 
 export default function ApplicationsClient({
   type,
 }: {
-  type: 'event' | 'program';
+  type: 'events' | 'programs';
 }) {
-  const { data, loading, error } = useFetch<ApplicationApi[]>(
-    `/applications/my-${type}s`
-  );
+  const { applications, mutate } = useApplications(type);
+  const { cancel, loading, error } = useCancelApplication();
 
-  if (loading) return <Loader />;
-  if (error) return <div>Ошибка</div>;
-  if (!data?.length) return <div>Нет заявок</div>;
+  const handleCancel = async (id: string) => {
+    await cancel(id);
+    await mutate();
+  };
 
   return (
     <div
       className={`${styles.applicationsContainer} container background-container`}
     >
-      {data.map((application) => (
-        <ApplicationCard key={application.id} application={application} />
+      {applications.map((app) => (
+        <ApplicationCard
+          key={app.id}
+          application={app}
+          onCancel={handleCancel}
+        />
       ))}
     </div>
   );
