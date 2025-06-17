@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { ApplicationApi } from '@/types';
 import {
@@ -9,28 +8,18 @@ import {
   applicationStatusLabel,
 } from '@/shared/enumLabels';
 import { EventCategory, ProgramCategory } from '@/shared/prismaEnums';
-import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
-
 import styles from './ApplicationCard.module.css';
 
 interface Props {
   application: ApplicationApi;
-  onCancel?: (id: string) => Promise<void>;
+  onCancel: (id: string, title: string) => void;
 }
 
 export default function ApplicationCard({ application, onCancel }: Props) {
-  const [modalOpen, setModalOpen] = useState(false);
-
   const type = application.event ? 'event' : 'program';
   const item = application.event ?? application.program;
 
   if (!item) return null;
-
-  const handleConfirm = async () => {
-    if (!onCancel) return;
-    await onCancel(application.id);
-    setModalOpen(false);
-  };
 
   return (
     <div className={styles.card}>
@@ -64,7 +53,7 @@ export default function ApplicationCard({ application, onCancel }: Props) {
       <div className={styles.buttons}>
         <button
           className={`${styles.button} button-small button-secondary`}
-          onClick={() => setModalOpen(true)}
+          onClick={() => onCancel(application.id, item.title)}
         >
           Отменить заявку
         </button>
@@ -75,15 +64,6 @@ export default function ApplicationCard({ application, onCancel }: Props) {
           Подробнее
         </Link>
       </div>
-
-      {modalOpen && (
-        <CancelModal
-          open={modalOpen}
-          title={item.title}
-          onConfirm={handleConfirm}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
     </div>
   );
 }
