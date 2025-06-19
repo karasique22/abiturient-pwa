@@ -1,4 +1,8 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+
+export interface ApiRequestConfig extends AxiosRequestConfig {
+  skipAuthRefresh?: boolean;
+}
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND,
@@ -10,7 +14,8 @@ api.interceptors.request.use((cfg) => cfg);
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    if (error.response?.status !== 401) {
+    const cfg = error.config as ApiRequestConfig | undefined;
+    if (error.response?.status !== 401 || cfg?.skipAuthRefresh) {
       throw error;
     }
 
@@ -25,7 +30,9 @@ api.interceptors.response.use(
         return api.request(error.config);
       }
     } catch (refreshErr) {
-      window.location.href = '/auth/login';
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth/login';
+      }
     }
 
     throw error;
