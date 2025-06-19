@@ -1,15 +1,13 @@
-export async function getMe() {
+import api, { ApiRequestConfig } from './api';
+import { AxiosError } from 'axios';
+
+export async function getMe(cfg?: ApiRequestConfig) {
   try {
-    const res = await fetch('/api/users/me', {
-      credentials: 'include',
-      cache: 'no-store',
-    });
-
-    if (res.status === 401) return null; // гость
-    if (!res.ok) throw new Error('failed');
-
-    return (await res.json()) as { role: string | null; user: any };
-  } catch {
+    const config: ApiRequestConfig = { skipAuthRefresh: true, ...(cfg ?? {}) };
+    const { data } = await api.get('/users/me', config);
+    return data as { role: string | null; user: any };
+  } catch (err) {
+    if ((err as AxiosError).response?.status === 401) return null;
     return null; // сеть упала -> считаем гостем
   }
 }

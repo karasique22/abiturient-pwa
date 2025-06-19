@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
+import { getMe } from '@/lib/getMe';
 import AccountHome from '../AccountHome';
 import { roleMenu } from '../roleMenu';
 
@@ -16,22 +17,10 @@ export default async function RolePage(props: { params: Promise<Props> }) {
 
   const cookieHeader = (await headers()).get('cookie') ?? '';
 
-  const meRes = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_ORIGIN}/api/users/me`,
-    {
-      cache: 'no-store',
-      credentials: 'include',
-      headers: { cookie: cookieHeader },
-    }
-  );
+  const me = await getMe({ headers: { cookie: cookieHeader } });
+  if (!me) redirect('/auth/login');
 
-  if (meRes.status === 401) redirect('/auth/login');
-
-  let fullName = 'Пользователь';
-  if (meRes.ok) {
-    const { user } = (await meRes.json()) as { user?: { fullName?: string } };
-    if (user?.fullName) fullName = user.fullName;
-  }
+  let fullName = me.user?.fullName ?? 'Пользователь';
 
   return (
     <AccountHome role={role} fullName={fullName} menu={[...roleMenu[role]]} />

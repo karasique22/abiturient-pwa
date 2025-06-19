@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
-import GenericDetails from '@/app/details/GenericDetails';
+import EventDetails from '@/app/details/EventDetails';
+import ProgramDetails from '@/app/details/ProgramDetails';
+import api, { ApiRequestConfig } from '@/lib/api';
 
 type RouteParams = { type: 'event' | 'program'; slug: string };
 
@@ -8,13 +10,13 @@ export default async function Page(props: { params: Promise<RouteParams> }) {
 
   if (type !== 'event' && type !== 'program') return notFound();
 
-  // FIXME: использовать useFetch
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND}/${type}s/${slug}`,
-    { cache: 'no-store' }
-  );
-  if (!res.ok) return notFound();
-  const data = await res.json();
+  const cfg: ApiRequestConfig = { skipAuthRefresh: true };
+  const { data, status } = await api.get(`/${type}s/${slug}`, cfg);
+  if (status !== 200) return notFound();
 
-  return <GenericDetails type={type} data={data} />;
+  return type === 'event' ? (
+    <EventDetails data={data} />
+  ) : (
+    <ProgramDetails data={data} />
+  );
 }

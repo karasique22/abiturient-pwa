@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useApplications } from '@/hooks/useApplications';
-import { useCancelApplication } from '@/hooks/useCancelApplication';
 import ApplicationCard from '@/components/ui/ApplicationCard/ApplicationCard';
 import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
 import Loader from '@/components/Loader/Loader';
@@ -13,8 +12,7 @@ export default function ApplicationsClient({
 }: {
   type: 'events' | 'programs';
 }) {
-  const { applications, mutate, isLoading } = useApplications(type);
-  const { cancel } = useCancelApplication();
+  const { applications, cancelApplication, isLoading } = useApplications(type);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<{
@@ -29,8 +27,7 @@ export default function ApplicationsClient({
 
   const handleConfirm = async () => {
     if (!selectedApp) return;
-    await cancel(selectedApp.id);
-    await mutate();
+    await cancelApplication(selectedApp.id);
   };
 
   return (

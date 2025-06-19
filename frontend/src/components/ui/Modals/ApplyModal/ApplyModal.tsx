@@ -1,4 +1,4 @@
-// components/ui/Modals/SignUpModal/SignUpModal.tsx
+// components/ui/Modals/ApplyModal/ApplyModal.tsx
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,7 @@ interface Props {
   needAuth: boolean;
 }
 
-export default function SignUpModal({
+export default function ApplyModal({
   open,
   title,
   onConfirm,

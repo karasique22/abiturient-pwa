@@ -3,19 +3,15 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import SignUpModal from '@/components/ui/Modals/SignUpModal/SignUpModal';
+import ApplyModal from '@/components/ui/Modals/ApplyModal/ApplyModal';
 import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
 import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
 import PageBackHeader from '@/components/ui/PageBackHeader/PageBackHeader';
 
 import { useApplications } from '@/hooks/useApplications';
-import { useCancelApplication } from '@/hooks/useCancelApplication';
-import api from '@/lib/api';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 import styles from './Details.module.css';
-import { eventConfig } from './event-details.config';
-import { programConfig } from './program-details.config';
-import { getMe } from '@/lib/getMe';
 
 type DetailsConfig<T> = {
   cover: (d: T) => string | null | undefined;
@@ -30,18 +26,22 @@ type DetailsConfig<T> = {
 };
 
 interface Props<T = unknown> {
-  type: 'event' | 'program';
   data: T;
+  config: DetailsConfig<T>;
+  type: 'event' | 'program';
 }
 
-export default function GenericDetails<T>({ type, data }: Props<T>) {
-  const cfg: DetailsConfig<T> =
-    type === 'event' ? (eventConfig as any) : (programConfig as any);
+export default function GenericDetails<T>({ data, config, type }: Props<T>) {
+  const cfg: DetailsConfig<T> = config;
 
-  const { applications, mutate } = useApplications(
-    type === 'event' ? 'events' : 'programs'
-  );
-  const { cancel, loading } = useCancelApplication();
+  const {
+    applications,
+    mutate,
+    createApplication,
+    cancelApplication: cancelApplicationHook,
+    mutating,
+  } = useApplications(type === 'event' ? 'events' : 'programs');
+  const { role, loading: userLoading } = useCurrentUser();
 
   const [guest, setGuest] = useState<boolean | null>(null);
   const [state, setState] = useState<'unknown' | 'none' | 'active' | 'loading'>(
@@ -51,39 +51,38 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
   const [appId, setAppId] = useState<string>();
 
   useEffect(() => {
-    (async () => {
-      const me = await getMe();
-      if (!me) {
-        setGuest(true);
-        setState('none');
-        return;
-      }
+    if (userLoading) return;
 
-      setGuest(false);
-      const sel = cfg.pickId(data);
-      const active = applications.find(
-        (a: any) =>
-          a.status === 'NEW' &&
-          Object.entries(sel).every(([k, v]) => a[k] === v)
-      );
+    if (!role) {
+      setGuest(true);
+      setState('none');
+      return;
+    }
 
-      active ? (setState('active'), setAppId(active.id)) : setState('none');
-    })();
-  }, [applications, data]);
+    setGuest(false);
+    const sel = cfg.pickId(data);
+    const active = applications.find(
+      (a: any) =>
+        a.status === 'NEW' &&
+        Object.entries(sel).every(([k, v]) => a[k] === v)
+    );
+
+    active ? (setState('active'), setAppId(active.id)) : setState('none');
+  }, [applications, data, role, userLoading]);
 
   const create = async () => {
-    const { data: app } = await api.post('/applications', cfg.pickId(data));
-    setAppId(app.id);
-    setState('active');
-    await mutate();
+    const app = await createApplication(cfg.pickId(data));
+    if (app) {
+      setAppId(app.id);
+      setState('active');
+    }
   };
 
   const cancelApplication = async () => {
     if (!appId) return;
     setState('loading');
-    await cancel(appId);
+    await cancelApplicationHook(appId);
     setState('none');
-    await mutate();
   };
 
   const btn =
@@ -93,7 +92,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       ? { txt: 'Записаться', dis: false, click: () => setModal('signup') }
       : {
           txt: 'Вы записаны',
-          dis: loading,
+          dis: mutating,
           cls: 'button-secondary',
           click: state === 'active' ? () => setModal('cancel') : undefined,
         };
@@ -153,7 +152,7 @@ export default function GenericDetails<T>({ type, data }: Props<T>) {
       </div>
 
       {modal === 'signup' && (
-        <SignUpModal
+        <ApplyModal
           open
           title={cfg.title(data)}
           onConfirm={create}
