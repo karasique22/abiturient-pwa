@@ -1,32 +1,24 @@
 import { useMemo } from 'react';
-import type { EventApi } from '@/types';
-import { EventCategory } from '@/shared/prismaEnums';
 
-export function useFilter(
-  events: EventApi[],
-  categories: EventCategory[],
-  search: string
-): EventApi[] {
+export function useFilter<
+  T extends { category: string; title: string; description?: string }
+>(items: T[], categories: string[], search: string): T[] {
   return useMemo(() => {
-    let list = events;
+    let list = [...items];
 
-    // Фильтрация по категориям
     if (categories.length) {
-      list = list.filter((e) =>
-        categories.includes(e.category as EventCategory)
-      );
+      list = list.filter((item) => categories.includes(item.category));
     }
 
-    // Фильтрация по строке поиска
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
-        (e) =>
-          e.title.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q)
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.description?.toLowerCase().includes(q)
       );
     }
 
     return list;
-  }, [events, categories, search]);
+  }, [items, categories, search]);
 }

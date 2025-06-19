@@ -12,6 +12,7 @@ import Loader from '@/components/Loader/Loader';
 
 import type { EventApi, ItemApi } from '@/types';
 import { EventCategory } from '@/shared/prismaEnums';
+import { eventLabels } from '@/shared/enumLabels';
 
 import styles from '../cardPages.module.css';
 
@@ -45,7 +46,12 @@ export default function ClientEvents() {
           <ViewSwitcher viewMode={view} onViewChange={setView} />
         </header>
 
-        <FilterChips selected={categories} onChange={setCategories} />
+        <FilterChips<EventCategory>
+          selected={categories}
+          onChange={setCategories}
+          options={Object.values(EventCategory)}
+          labels={eventLabels}
+        />
 
         {loading && <Loader />}
         {!loading && !error && <ItemsGrid items={items} viewMode={view} />}

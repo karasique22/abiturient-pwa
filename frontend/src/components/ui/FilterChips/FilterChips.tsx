@@ -1,18 +1,21 @@
 'use client';
 
-import { EventCategory } from '@/shared/prismaEnums';
-import { eventLabels as labels } from '@/shared/enumLabels';
 import styles from './FilterChips.module.css';
 
-// TODO: декомпозировать
-
-interface Props {
-  selected: EventCategory[];
-  onChange: (next: EventCategory[]) => void;
+interface Props<T extends string> {
+  selected: T[];
+  onChange: (next: T[]) => void;
+  options: T[];
+  labels: Record<T, string>;
 }
 
-export default function FilterChips({ selected, onChange }: Props) {
-  const handleClick = (cat: EventCategory) => {
+export default function FilterChips<T extends string>({
+  selected,
+  onChange,
+  options,
+  labels,
+}: Props<T>) {
+  const handleClick = (cat: T) => {
     onChange(
       selected.includes(cat)
         ? selected.filter((c) => c !== cat)
@@ -22,7 +25,7 @@ export default function FilterChips({ selected, onChange }: Props) {
 
   return (
     <div className={styles.filterChips}>
-      {Object.values(EventCategory).map((cat) => (
+      {options.map((cat) => (
         <button
           key={cat}
           className={`${styles.filterChip} ${
