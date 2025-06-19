@@ -33,6 +33,9 @@ interface Props<T = unknown> {
 
 export default function GenericDetails<T>({ data, config, type }: Props<T>) {
   const cfg: DetailsConfig<T> = config;
+  const { role, loading: userLoading } = useCurrentUser();
+
+  const guest = !role && !userLoading;
 
   const {
     applications,
@@ -40,10 +43,10 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
     createApplication,
     cancelApplication: cancelApplicationHook,
     mutating,
-  } = useApplications(type === 'event' ? 'events' : 'programs');
-  const { role, loading: userLoading } = useCurrentUser();
+  } = useApplications(type === 'event' ? 'events' : 'programs', {
+    skipAuthRefresh: guest,
+  });
 
-  const [guest, setGuest] = useState<boolean | null>(null);
   const [state, setState] = useState<'unknown' | 'none' | 'active' | 'loading'>(
     'unknown'
   );
@@ -53,13 +56,11 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
   useEffect(() => {
     if (userLoading) return;
 
-    if (!role) {
-      setGuest(true);
+    if (guest) {
       setState('none');
       return;
     }
 
-    setGuest(false);
     const sel = cfg.pickId(data);
     const active = applications.find(
       (a: any) =>
@@ -67,7 +68,7 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
     );
 
     active ? (setState('active'), setAppId(active.id)) : setState('none');
-  }, [applications, data, role, userLoading]);
+  }, [applications, data, guest, userLoading]);
 
   const create = async () => {
     const app = await createApplication(cfg.pickId(data));
@@ -156,7 +157,7 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
           title={cfg.title(data)}
           onConfirm={create}
           onClose={() => setModal(null)}
-          needAuth={guest ?? true}
+          needAuth={guest}
         />
       )}
 

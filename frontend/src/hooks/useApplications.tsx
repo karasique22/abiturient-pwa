@@ -3,17 +3,29 @@
 import { useState } from 'react';
 import useSWR from 'swr';
 import api from '@/lib/api';
-import { ApplicationApi } from '@/types';
+import { ApplicationApi, ApiRequestConfig } from '@/types';
 
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
+interface UseApplicationsOptions {
+  skipAuthRefresh?: boolean;
+}
 
-export function useApplications(type: 'events' | 'programs') {
+export function useApplications(
+  type: 'events' | 'programs',
+  options?: UseApplicationsOptions
+) {
+  const [mutating, setMutating] = useState(false);
+
+  const fetcher = (url: string) =>
+    api
+      .get(url, {
+        skipAuthRefresh: options?.skipAuthRefresh,
+      } as ApiRequestConfig)
+      .then((res) => res.data);
+
   const { data, error, mutate, isLoading } = useSWR<ApplicationApi[]>(
     `/applications/my-${type}`,
     fetcher
   );
-
-  const [mutating, setMutating] = useState(false);
 
   const createApplication = async (payload: Record<string, string>) => {
     setMutating(true);

@@ -1,8 +1,5 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-
-export interface ApiRequestConfig extends AxiosRequestConfig {
-  skipAuthRefresh?: boolean;
-}
+import axios, { AxiosError } from 'axios';
+import { ApiRequestConfig } from '@/types';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND,

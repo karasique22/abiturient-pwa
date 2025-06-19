@@ -1,4 +1,6 @@
 import type { Event as EventDB, Program as ProgramDB } from '@prisma/client';
+import { AxiosRequestConfig } from 'axios';
+
 export interface EventApi extends Omit<EventDB, 'images'> {
   coverUrl: string | null;
 }
@@ -39,3 +41,7 @@ export interface ProgramApplicationApi extends BaseApplicationApi {
 }
 
 export type ApplicationApi = EventApplicationApi | ProgramApplicationApi;
+
+export interface ApiRequestConfig extends AxiosRequestConfig {
+  skipAuthRefresh?: boolean;
+}
