@@ -63,8 +63,7 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
     const sel = cfg.pickId(data);
     const active = applications.find(
       (a: any) =>
-        a.status === 'NEW' &&
-        Object.entries(sel).every(([k, v]) => a[k] === v)
+        a.status === 'NEW' && Object.entries(sel).every(([k, v]) => a[k] === v)
     );
 
     active ? (setState('active'), setAppId(active.id)) : setState('none');

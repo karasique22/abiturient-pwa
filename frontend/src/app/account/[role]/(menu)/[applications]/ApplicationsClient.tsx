@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useApplications } from '@/hooks/useApplications';
 import ApplicationCard from '@/components/ui/ApplicationCard/ApplicationCard';
 import CancelModal from '@/components/ui/Modals/CancelModal/CancelModal';
-import Loader from '@/components/Loader/Loader';
 import styles from './ApplicationsClient.module.css';
 
 export default function ApplicationsClient({
@@ -45,7 +44,6 @@ export default function ApplicationsClient({
         {applications.length === 0 && !isLoading && (
           <div>Пока здесь пусто =(</div>
         )}
-        {isLoading && <Loader />}
       </div>
 
       {modalOpen && (
