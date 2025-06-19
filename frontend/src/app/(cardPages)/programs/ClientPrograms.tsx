@@ -52,7 +52,7 @@ export default function ClientPrograms({ programs }: Props) {
           labels={programCategoryLabel}
         />
 
-        <ItemsGrid items={items} viewMode={'list'} />
+        <ItemsGrid items={items} type='program' />
       </div>
     </>
   );

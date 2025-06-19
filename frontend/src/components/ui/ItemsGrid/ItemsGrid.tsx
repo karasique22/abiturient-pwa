@@ -6,10 +6,11 @@ import type { ItemApi } from '@/types';
 
 interface Props {
   items: ItemApi[];
-  viewMode: 'grid' | 'list';
+  viewMode?: 'grid' | 'list';
+  type: 'event' | 'program';
 }
 
-export default function ItemsGrid({ items, viewMode }: Props) {
+export default function ItemsGrid({ items, viewMode = 'list', type }: Props) {
   if (!items.length)
     return <p className={styles.nothingFound}>Ничего не найдено :(</p>;
 
@@ -24,6 +25,7 @@ export default function ItemsGrid({ items, viewMode }: Props) {
           key={`${item.type}-${item.id}`}
           item={item}
           viewMode={viewMode}
+          type={type}
         />
       ))}
     </div>

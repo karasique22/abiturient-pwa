@@ -54,7 +54,7 @@ export default function ClientEvents({ events }: Props) {
           labels={eventLabels}
         />
 
-        <ItemsGrid items={items} viewMode={view} />
+        <ItemsGrid items={items} viewMode={view} type='event' />
       </div>
     </>
   );
