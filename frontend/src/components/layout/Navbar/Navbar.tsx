@@ -7,9 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import { getNavItems } from './navItems';
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
   const { role } = useAuth();
   const navItems = getNavItems(role);
 

@@ -9,12 +9,7 @@ export default async function AccountRoot() {
   const me = await getMe({ headers: { Authorization: `Bearer ${access}` } });
   if (!me) redirect('/auth/login');
 
-  const { roles } = me;
-  const role = roles?.[0]?.name as
-    | 'student'
-    | 'moderator'
-    | 'admin'
-    | undefined;
+  const role = me.role as 'student' | 'moderator' | 'admin' | undefined;
 
   if (role) redirect(`/account/${role}`);
   redirect('/auth/login');
