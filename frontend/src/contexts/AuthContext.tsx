@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     (async () => {
       const me = await getMe();
-      setRole(me?.role ?? null);
+      setRole((me?.role as Role) ?? null);
     })();
   }, []);
 
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (email: string, password: string) => {
     try {
       const me = await apiLogin(email, password);
-      setRole(me?.role ?? null);
+      setRole((me?.role as Role) ?? null);
     } catch {
       throw new Error('Неверные данные');
     }
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   ) => {
     try {
       const me = await apiRegister(fullName, phone, email, password);
-      setRole(me?.role ?? null);
+      setRole((me?.role as Role) ?? null);
     } catch (err: any) {
       throw new Error(err?.response?.data?.message ?? 'REGISTER_FAILED');
     }

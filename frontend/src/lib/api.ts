@@ -10,9 +10,7 @@ api.interceptors.request.use((cfg) => cfg);
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    if (error.response?.status !== 401) {
-      throw error;
-    }
+    if (error.response?.status !== 401) throw error;
 
     try {
       await axios.post(
@@ -20,12 +18,9 @@ api.interceptors.response.use(
         {},
         { withCredentials: true }
       );
-
-      if (error.config) {
-        return api.request(error.config);
-      }
+      if (error.config) return api.request(error.config);
     } catch (refreshErr) {
-      window.location.href = '/auth/login';
+      throw refreshErr;
     }
 
     throw error;

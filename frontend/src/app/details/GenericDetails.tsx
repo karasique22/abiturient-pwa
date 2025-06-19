@@ -15,7 +15,7 @@ import api from '@/lib/api';
 import styles from './Details.module.css';
 import { eventConfig } from './event-details.config';
 import { programConfig } from './program-details.config';
-import { getMe } from '@/lib/getMe';
+import { getMe } from '@/services/authService';
 
 type DetailsConfig<T> = {
   cover: (d: T) => string | null | undefined;
