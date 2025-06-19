@@ -28,6 +28,9 @@ export default function ClientPrograms({ programs }: Props) {
     startDate: p.startDate,
     coverUrl: p.coverUrl,
     type: 'program',
+    format: p.format,
+    durationHours: p.durationHours,
+    category: p.category,
   }));
 
   return (

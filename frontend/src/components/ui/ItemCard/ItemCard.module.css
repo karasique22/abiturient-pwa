@@ -35,3 +35,15 @@
 .title {
   word-wrap: break-word;
 }
+
+.badges {
+  display: flex;
+  gap: 12px;
+}
+
+.badge {
+  background-color: var(--color-content-accent);
+  padding: 8px;
+  padding-right: 40px;
+  clip-path: polygon(0 0, 90% 0, 80% 50%, 90% 100%, 0 100%);
+}

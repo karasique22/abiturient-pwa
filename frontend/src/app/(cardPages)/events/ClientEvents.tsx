@@ -32,6 +32,7 @@ export default function ClientEvents({ events }: Props) {
     startDate: e.dateTime,
     coverUrl: (e as any).coverUrl || null,
     type: 'event',
+    category: e.category,
   }));
 
   return (

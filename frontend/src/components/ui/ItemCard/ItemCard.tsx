@@ -4,10 +4,16 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ItemCard.module.css';
-import type { ItemApi } from '@/types';
+import type { ItemApi, ProgramApi } from '@/types';
+import { ProgramFormat } from '@/shared/prismaEnums';
+import { programFormatLabel, programCategoryLabel } from '@/shared/enumLabels';
 
 interface Props {
-  item: ItemApi;
+  item: ItemApi & {
+    format?: ProgramFormat;
+    durationHours?: number | null;
+    category?: keyof typeof programCategoryLabel;
+  };
   viewMode: 'grid' | 'list';
 }
 
@@ -26,8 +32,24 @@ export default function ItemCard({ item, viewMode }: Props) {
         alt='placeholder'
       />
       <div className={styles.content}>
+        <div className={`${styles.badges} font-body-bold-small`}>
+          {item.durationHours && (
+            <span className={styles.badge}>{item.durationHours} ак. ч.</span>
+          )}
+          {item.format && (
+            <span className={styles.badge}>
+              {programFormatLabel[item.format]}
+            </span>
+          )}
+        </div>
+
         <div className={styles.contentMain}>
-          <h3 className={`${styles.title} font-header-medium`}>{item.title}</h3>
+          {item.category && (
+            <p className='font-body-regular'>
+              {programCategoryLabel[item.category]}
+            </p>
+          )}
+          <h3 className={`${styles.title} font-body-medium`}>{item.title}</h3>
           {item.startDate && (
             <p className='font-body-regular'>
               Старт: {new Date(item.startDate).toLocaleDateString('ru-RU')}
@@ -40,7 +62,7 @@ export default function ItemCard({ item, viewMode }: Props) {
           href={`/details/${item.type}/${item.slug}`}
           scroll={false}
         >
-          Записаться
+          Подробнее
         </Link>
       </div>
     </article>
