@@ -5,8 +5,6 @@ import { AxiosError } from 'axios';
 import api from '@/lib/api';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 
-// FIXME: какой-то странный контекст на все, наверное декомпозировать
-
 type Role = 'student' | 'moderator' | 'admin' | null;
 interface AuthCtx {
   role: Role | undefined;

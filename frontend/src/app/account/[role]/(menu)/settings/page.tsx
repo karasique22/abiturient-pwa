@@ -1,3 +1,5 @@
+import SettingsClient from './SettingsClients';
+
 export default function Page() {
-  return <div>settings</div>;
+  return <SettingsClient />;
 }

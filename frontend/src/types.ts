@@ -1,5 +1,11 @@
-import type { Event as EventDB, Program as ProgramDB } from '@prisma/client';
+import type {
+  Event as EventDB,
+  Program as ProgramDB,
+  User,
+} from '@prisma/client';
 import { AxiosRequestConfig } from 'axios';
+
+export type UserApi = User;
 
 export interface EventApi extends Omit<EventDB, 'images'> {
   coverUrl: string | null;

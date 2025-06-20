@@ -1,0 +1,24 @@
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.block {
+  display: flex;
+  background-color: var(--color-home-grey);
+  padding: 13px 10px;
+  border-radius: var(--radius-small);
+}
+
+.verticalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.horizontalBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
