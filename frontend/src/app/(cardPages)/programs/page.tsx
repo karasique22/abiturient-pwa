@@ -1,5 +1,6 @@
 import ClientPrograms from './ClientPrograms';
-import api, { ApiRequestConfig } from '@/lib/api';
+import api from '@/lib/api';
+import { ApiRequestConfig } from '@/types';
 import type { ProgramApi } from '@/types';
 
 export default async function ProgramsPage() {

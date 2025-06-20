@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import EventDetails from '@/app/details/EventDetails';
 import ProgramDetails from '@/app/details/ProgramDetails';
-import api, { ApiRequestConfig } from '@/lib/api';
+import api from '@/lib/api';
+import { ApiRequestConfig } from '@/types';
 
 type RouteParams = { type: 'event' | 'program'; slug: string };
 

@@ -7,7 +7,7 @@ export const eventConfig = {
 
   sections: (d: EventApi) =>
     [
-      { label: 'Описание', value: d.description },
+      d.description && { label: 'Описание', value: d.description },
       d.dateTime && {
         label: 'Дата и время проведения',
         value: new Date(d.dateTime).toLocaleString('ru-RU'),
@@ -16,7 +16,11 @@ export const eventConfig = {
       d.curatorName && {
         label: 'Куратор',
         value: d.curatorName,
-        extra: d.curatorInfo,
+        extra: d.curatorInfo ?? undefined,
       },
-    ].filter(Boolean),
+    ].filter(Boolean) as {
+      label: string;
+      value?: string;
+      extra?: string;
+    }[],
 } as const;

@@ -56,8 +56,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
       });
     } catch (err) {
-      const message = (err as AxiosError).response?.data?.message;
-      throw new Error((message as string) ?? 'REGISTER_FAILED');
+      const errorResponse = (err as AxiosError<{ message?: string }>).response;
+      const message = errorResponse?.data?.message;
+      throw new Error(message ?? 'REGISTER_FAILED');
     }
 
     await login(email, password);

@@ -1,5 +1,6 @@
 import ClientEvents from './ClientEvents';
-import api, { ApiRequestConfig } from '@/lib/api';
+import api from '@/lib/api';
+import { ApiRequestConfig } from '@/types';
 import type { EventApi } from '@/types';
 
 export default async function EventsPage() {
