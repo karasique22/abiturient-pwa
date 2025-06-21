@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// FIXME: починить
 export function middleware(req: NextRequest) {
   const hasToken = req.cookies.get('accessToken');
   if (!hasToken) {
