@@ -8,11 +8,14 @@ import {
   ProgramDocument,
   ProgramFormat,
 } from '@prisma/client';
+import { withOptimize } from '@prisma/extension-optimize';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { faker } from '@faker-js/faker/locale/ru';
 import { slugify } from '../src/shared/slugify';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient().$extends(
+  withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY }),
+);
 const D = Prisma.Decimal;
 
 async function main() {
