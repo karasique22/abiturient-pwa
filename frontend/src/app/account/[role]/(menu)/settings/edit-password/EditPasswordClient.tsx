@@ -118,6 +118,7 @@ export default function EditPasswordClient() {
 
         {serverError && <div className={styles.error}>{serverError}</div>}
         {message && <div className={styles.success}>{message}</div>}
+        {/* TODO: вынести кнопку в отдельный компонент, чтобы она принимала статусы */}
         <button type='submit' className='button-large'>
           Сохранить изменения
         </button>
