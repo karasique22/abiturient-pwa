@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
 import PasswordEditIcon from '@/components/icons/PasswordEditIcon';
 import styles from './SettingsClient.module.css';
+import Link from 'next/link';
 
 export default function SettingsClient() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -40,10 +41,13 @@ export default function SettingsClient() {
               className={`${styles.block} ${styles.verticalBlock} ${styles.blockButton}`}
             >
               <span className='font-body-medium'>Пароль</span>
-              <div className={styles.horizontalBlock}>
+              <Link
+                className={styles.horizontalBlock}
+                href={'settings/edit-password'}
+              >
                 <div>•••••••••••</div>
                 <PasswordEditIcon />
-              </div>
+              </Link>
             </div>
             <div className={`${styles.block} ${styles.blockButton}`}>
               <span className='font-body-medium'>Уведомления</span>

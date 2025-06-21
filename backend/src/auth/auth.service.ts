@@ -89,11 +89,8 @@ export class AuthService {
 
   private signAccess(user: { id: string; roles: { name: string }[] }) {
     return this.jwt.sign(
-      { sub: user.id, role: user.roles[0].name },
-      {
-        expiresIn: '15m',
-        secret: this.config.get<string>('JWT_SECRET'),
-      },
+      { sub: user.id, roles: user.roles.map((r) => r.name) },
+      { expiresIn: '15m', secret: this.config.get('JWT_SECRET') },
     );
   }
 
