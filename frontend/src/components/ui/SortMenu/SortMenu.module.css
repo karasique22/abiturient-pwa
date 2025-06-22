@@ -1,0 +1,40 @@
+.menu {
+  position: absolute;
+  top: 100px;
+  right: 16px;
+  width: 230px;
+  border-radius: var(--radius-small);
+  background-color: var(--color-home-white);
+  box-shadow: 0px 0px 10px 0px #0000001f;
+  z-index: 1000;
+  padding: 14px 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.menu li::marker {
+  display: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  flex: 0;
+
+  color: #1d1d1f;
+  text-align: left;
+}
+
+.itemText {
+  flex: 1;
+}
+
+.checked {
+  font-weight: 500;
+}
