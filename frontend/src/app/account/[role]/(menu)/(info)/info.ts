@@ -1,12 +1,47 @@
-'use client';
+type ContactInfo = {
+  title: string;
+  content: string;
+  link?: string;
+};
 
-import AccordionBlock from '@/components/ui/AccordionBlock/AccordionBlock';
+export const contacts: ContactInfo[] = [
+  {
+    title: 'Телефон горячей линии',
+    content: '+7 (985) 991-00-07',
+    link: '+79859910007',
+  },
+  {
+    title: 'Телеграм',
+    content: '@dokosygin',
+    link: 'https://t.me/dokosygin',
+  },
+  {
+    title: 'Электронная почта',
+    content: 'do@rguk.ru',
+    link: 'do@rguk.ru',
+  },
+  {
+    title: 'Адрес',
+    content: 'ул. Малая Калужская, д. 1',
+  },
+] as const;
 
-// FIXME: вынести в отдельный файл кхуям
-import detailsStyles from '@/app/details/Details.module.css';
-import styles from './faq.module.css';
+export const license = [
+  {
+    title: 'Лицензия',
+    content:
+      'Лицензии № 2501 от 19 декабря 2016 года Федеральной службы по надзору в сфере образования и науки',
+    link: 'https://do-kosygin.ru/docs/license.pdf',
+  },
+  {
+    title: 'Аккредитация',
+    content:
+      'Свидетельство о государственной аккредитации № 3223 от 7 августа 2019 года Федеральной службы по надзору в сфере образования и науки',
+    link: 'https://do-kosygin.ru/docs/accreditation.pdf',
+  },
+];
 
-const qa = [
+export const qa = [
   {
     q: 'Как оформить налоговый вычет?',
     a: `Чтобы оформить справку об оплате образовательных услуг, необходимо перейти по ссылке
@@ -23,25 +58,4 @@ const qa = [
     q: 'Виды договоров',
     a: 'Чтобы оформить договор на юридическое лицо, необходимо подписать Дополнительное соглашение к договору на юридическое лицо в кабинете 1445 Университета',
   },
-];
-
-export default function Page() {
-  return (
-    <div className={`${styles.faq} container background-container`}>
-      {qa.map(({ q, a }) => (
-        <AccordionBlock key={q} title={q} variant='faq'>
-          <ul className={detailsStyles.list}>
-            {a
-              .split('\n')
-              .filter((line) => line.trim())
-              .map((line, i) => (
-                <li key={i} className={detailsStyles.listItem}>
-                  {line}
-                </li>
-              ))}
-          </ul>
-        </AccordionBlock>
-      ))}
-    </div>
-  );
-}
+] as const;
