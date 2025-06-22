@@ -4,8 +4,8 @@ import AccountIcon from '../../icons/footer/AccountIcon';
 
 export type UserRole = 'student' | 'moderator' | 'admin' | null;
 export const getNavItems = (role: UserRole | undefined) => [
-  { id: 'home', label: 'Объявления', Icon: HomeIcon, href: '/' },
-  { id: 'programs', label: 'Программы', Icon: ProgramsIcon, href: '/programs' },
+  { id: 'home', label: 'Мероприятия', Icon: HomeIcon, href: '/' },
+  { id: 'programs', label: 'Обучение', Icon: ProgramsIcon, href: '/programs' },
   {
     id: 'account',
     label: 'Аккаунт',
