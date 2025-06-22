@@ -55,7 +55,6 @@ body {
   padding-top: 18px;
   padding-bottom: 18px;
   flex: 1;
-  /* min-height: calc(100vh - var(--footer-h)); */
 }
 
 a {
