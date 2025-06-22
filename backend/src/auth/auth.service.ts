@@ -81,9 +81,9 @@ export class AuthService {
       where: { email: dto.email },
       include: { roles: true },
     });
-    if (!user) throw new UnauthorizedException('email');
+    if (!user) throw new BadRequestException('EMAIL_WRONG');
     const ok = await bcrypt.compare(dto.password, user.password);
-    if (!ok) throw new UnauthorizedException('pwd');
+    if (!ok) throw new BadRequestException('PASSWORD_WRONG');
     return user;
   }
 

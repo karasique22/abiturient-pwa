@@ -90,6 +90,12 @@ export const useAuthForm = (mode: 'login' | 'register') => {
       case 'PHONE_TAKEN':
         pushErr('phone', 'Телефон уже занят');
         break;
+      case 'EMAIL_WRONG':
+        pushErr('email', 'Неверный e-mail');
+        break;
+      case 'PASSWORD_WRONG':
+        pushErr('password', 'Неверный пароль');
+        break;
       default:
         setServerErr('Ошибка валидации');
     }
