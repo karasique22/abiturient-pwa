@@ -41,7 +41,7 @@ export default function ClientPrograms({ programs }: Props) {
 
       <div className={styles.eventsContainer}>
         <header className={styles.eventsHeader}>
-          <h2 className='font-header-medium'>Список программ</h2>
+          <h2 className='font-header-medium'>Образовательные программы</h2>
           <SortIcon></SortIcon>
         </header>
 
