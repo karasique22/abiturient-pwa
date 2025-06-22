@@ -1,16 +1,17 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { useSelectedLayoutSegment, useParams } from 'next/navigation';
+import { useSelectedLayoutSegments, useParams } from 'next/navigation';
 import PageBackHeader from '@/components/ui/PageBackHeader/PageBackHeader';
 import { roleMenu } from '../../roleMenu';
 
 export default function SectionLayout({ children }: { children: ReactNode }) {
-  const segment = useSelectedLayoutSegment();
+  const segments = useSelectedLayoutSegments();
+  const lastSegment = segments.at(-1);
   const { role } = useParams();
 
   const title =
-    roleMenu[role as keyof typeof roleMenu]?.find((m) => m.href === segment)
+    roleMenu[role as keyof typeof roleMenu]?.find((m) => m.href === lastSegment)
       ?.label ?? '';
 
   return (
