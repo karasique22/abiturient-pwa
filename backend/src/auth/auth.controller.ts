@@ -2,28 +2,26 @@ import {
   Controller,
   Post,
   Body,
-  UseGuards,
   Req,
   Res,
-  Get,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import dayjs from 'dayjs';
 import * as bcrypt from 'bcrypt-ts';
+import dayjs from 'dayjs';
 import { randomUUID } from 'crypto';
 
 @Controller('auth')
 export class AuthController {
+  private readonly isProd: boolean = process.env.NODE_ENV === 'production';
   constructor(
     private readonly auth: AuthService,
     private readonly jwt: JwtService,
-    private readonly config: ConfigService,
+    private readonly cfg: ConfigService,
   ) {}
 
   /* ---------- регистрация ---------- */
@@ -37,7 +35,7 @@ export class AuthController {
   async login(
     @Body() dto: LoginDto,
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response, // ← passthrough
+    @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken, refreshToken } = await this.auth.login(
       dto,
@@ -45,8 +43,8 @@ export class AuthController {
       req.ip,
     );
 
-    this.setCookies(res, accessToken, refreshToken); // ставим куки
-    return { role: 'student' }; // обычный объект!
+    this.setCookies(res, accessToken, refreshToken);
+    return { role: 'student' };
   }
 
   /* ---------- refresh ---------- */
@@ -56,31 +54,28 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const raw = req.cookies.refreshToken;
-    if (!raw) {
-      res.status(401).send();
-      return;
-    }
+    if (!raw) return res.status(401).send();
 
     try {
       const { sid } = this.jwt.verify(raw, {
-        secret: this.config.get('JWT_REFRESH_SECRET'),
+        secret: this.cfg.get<string>('JWT_REFRESH_SECRET'),
       }) as { sid: string };
 
-      const session = await req.app.get('PrismaService').session.findUnique({
+      const prisma = req.app.get('PrismaService');
+      const session = await prisma.session.findUnique({
         where: { refreshHash: sid },
         include: { user: { include: { roles: true } } },
       });
-      if (!session || session.expiresAt < new Date())
-        throw new Error('session');
+      if (!session || session.expiresAt < new Date()) throw new Error();
 
       await this.auth.invalidateSession(sid);
 
       const user = session.user;
-      const accessToken = this.auth['signAccess'](user); // приватный метод
+      const accessToken = this.auth['signAccess'](user);
       const newRaw = randomUUID();
       const newHash = await bcrypt.hash(newRaw, 10);
 
-      await req.app.get('PrismaService').session.create({
+      await prisma.session.create({
         data: {
           userId: user.id,
           refreshHash: newHash,
@@ -92,51 +87,55 @@ export class AuthController {
 
       const refreshToken = this.auth['signRefresh']({ sid: newHash });
       this.setCookies(res, accessToken, refreshToken);
-      res.json({ role: user.roles[0].name });
-      return;
+
+      return { role: user.roles[0].name };
     } catch {
-      res.status(401).send();
-      return;
+      return res.status(401).send();
     }
   }
 
   /* ---------- logout ---------- */
   @Post('logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const raw = req.cookies?.refreshToken;
+  async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const raw = req.cookies.refreshToken;
 
     if (raw) {
       try {
         const { sid } = this.jwt.verify(raw, {
-          secret: this.config.get<string>('JWT_REFRESH_SECRET'),
+          secret: this.cfg.get<string>('JWT_REFRESH_SECRET'),
         }) as { sid: string };
-
-        /*  удаляем запись через сервис  */
         await this.auth.invalidateSession(sid);
       } catch {
-        /* токен испорчен / истёк — просто игнорируем */
+        /* игнорируем повреждённый / просроченный токен */
       }
     }
 
     res.clearCookie('accessToken', { path: '/' });
     res.clearCookie('refreshToken', { path: '/' });
-    return { success: true }; // 200 OK
+    return { success: true };
   }
 
   /* ---------- helper ---------- */
   private setCookies(res: Response, access: string, refresh: string) {
+    const common = {
+      httpOnly: true,
+      secure: this.isProd,      // обязателен https в продакшене
+      sameSite: 'lax' as const, // кука остаётся first-party
+      path: '/',
+    };
+
     res
       .cookie('accessToken', access, {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 1000 * 60 * 15,
+        ...common,
+        maxAge: 15 * 60 * 1000,            // 15 мин
       })
       .cookie('refreshToken', refresh, {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7,
+        ...common,
+        maxAge: 7 * 24 * 60 * 60 * 1000,   // 7 дней
       });
   }
 }
+

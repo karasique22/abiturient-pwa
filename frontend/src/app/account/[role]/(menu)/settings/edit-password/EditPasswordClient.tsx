@@ -5,6 +5,7 @@ import styles from './EditPassword.module.css';
 import Toast from '@/components/ui/Toast/Toast';
 import { useToastManager } from '@/hooks/useToastManager';
 import { isStrongPassword } from '@/lib/validators';
+import api from '@/lib/api';
 
 export default function EditPasswordClient() {
   const [oldPassword, setOldPassword] = useState('');
@@ -12,7 +13,6 @@ export default function EditPasswordClient() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [serverError, setServerError] = useState('');
-
   const { toasts, push: pushErr, remove: removeErr } = useToastManager();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +21,6 @@ export default function EditPasswordClient() {
     setMessage('');
 
     let hasError = false;
-
     if (!isStrongPassword(newPassword)) {
       pushErr('newPassword', 'Пароль ≥ 8 симв. + цифра/симв.');
       hasError = true;
@@ -34,27 +33,20 @@ export default function EditPasswordClient() {
       pushErr('oldPassword', 'Введите старый пароль');
       hasError = true;
     }
-
     if (hasError) return;
 
-    const res = await fetch('/api/users/change-password', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
+    try {
+      await api.patch('/users/change-password', {
         oldPassword,
         newPassword,
-      }),
-    });
+      });
 
-    if (res.ok) {
       setMessage('Пароль успешно изменён');
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } else {
-      const data = await res.json();
-      setServerError(data.message || 'Ошибка при смене пароля');
+    } catch (err: any) {
+      setServerError(err?.response?.data?.message ?? 'Ошибка при смене пароля');
     }
   };
 

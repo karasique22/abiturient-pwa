@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
@@ -52,6 +48,8 @@ export class AuthService {
     const user = await this.validateUser(dto);
 
     const accessToken = this.signAccess(user);
+
+    /** сырой UUID уйдёт в JWT и в куку; в БД — только хеш */
     const rawRefresh = randomUUID();
     const refreshHash = await bcrypt.hash(rawRefresh, 10);
 
@@ -65,7 +63,7 @@ export class AuthService {
       },
     });
 
-    const refreshToken = this.signRefresh({ sid: refreshHash });
+    const refreshToken = this.signRefresh({ sid: rawRefresh });
 
     return { accessToken, refreshToken };
   }
@@ -82,8 +80,10 @@ export class AuthService {
       include: { roles: true },
     });
     if (!user) throw new BadRequestException('EMAIL_WRONG');
+
     const ok = await bcrypt.compare(dto.password, user.password);
     if (!ok) throw new BadRequestException('PASSWORD_WRONG');
+
     return user;
   }
 
@@ -101,3 +101,4 @@ export class AuthService {
     });
   }
 }
+

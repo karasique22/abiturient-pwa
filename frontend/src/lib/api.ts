@@ -1,8 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import { ApiRequestConfig } from '@/types';
 
+const isServer = typeof window === 'undefined';
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND,
+  baseURL: isServer ? process.env.NEXT_PUBLIC_BACKEND : '/api',
   withCredentials: true,
 });
 
@@ -17,11 +19,7 @@ api.interceptors.response.use(
     }
 
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND}/auth/refresh`,
-        {},
-        { withCredentials: true }
-      );
+      await axios.post(`/api/auth/refresh`, {}, { withCredentials: true });
 
       if (error.config) {
         return api.request(error.config);
