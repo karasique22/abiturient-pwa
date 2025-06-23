@@ -37,7 +37,7 @@ export default function EditPasswordClient() {
 
     if (hasError) return;
 
-    const res = await fetch('/api/users/change-password', {
+    const res = await fetch('/users/change-password', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

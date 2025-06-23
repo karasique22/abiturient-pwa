@@ -6,10 +6,12 @@ const withPWA = require('next-pwa')({
 module.exports = withPWA({
   async rewrites() {
     return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_BACKEND}/:path*`,
-      },
+      process.env.NODE_ENV === 'development'
+        ? { source: '/api/:path*', destination: 'http://localhost:3001/:path*' }
+        : {
+            source: '/api/:path*',
+            destination: 'https://api.94-159-98-144.nip.io/:path*',
+          },
     ];
   },
   reactStrictMode: true,
