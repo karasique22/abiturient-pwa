@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localfont from 'next/font/local';
 import Image from 'next/image';
+import Head from 'next/head';
 
 import './styles/normalize.css';
 import './styles/globals.css';
@@ -35,6 +36,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ru' className={`${acrom.variable} antialised`}>
+      <Head>
+        {/* manifest + PWA meta */}
+        <link rel='manifest' href='/manifest.json' />
+        <meta name='theme-color' content='#000000' />
+
+        {/* iOS / Safari */}
+        <meta name='apple-mobile-web-app-capable' content='yes' />
+        <meta name='apple-mobile-web-app-status-bar-style' content='black' />
+        <link rel='apple-touch-icon' href='/icons/icon-192x192.png' />
+      </Head>
+
       <body>
         <Providers>
           <header className={`${styles.header} container`}>
@@ -51,13 +63,9 @@ export default function RootLayout({
 
           <main className={styles.appContainer}>{children}</main>
 
-          {/* ФУТЕР — только на мобилке */}
           <footer className={styles.mobileFooter}>
             <Navbar />
           </footer>
-
-          {/* ДЕСКТОПНАЯ НАВИГАЦИЯ — только на ПК */}
-          <aside></aside>
         </Providers>
       </body>
     </html>
