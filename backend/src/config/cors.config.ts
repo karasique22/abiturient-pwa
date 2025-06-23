@@ -1,29 +1,27 @@
 import { registerAs } from '@nestjs/config';
 
-/**
- * Конфигурация CORS, читается через ConfigService
- */
 export default registerAs('cors', () => {
-  // из ENV получаем список доменов
-  const origins = process.env.CORS_ORIGINS?.split(',').map((o) => o.trim());
+  const allowlist = (process.env.CORS_ORIGINS ?? '')
+    .split(',')
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .map((v) =>
+      v.startsWith('/') && v.endsWith('/') ? new RegExp(v.slice(1, -1)) : v,
+    );
 
   return {
     credentials: true,
-
-    /**
-     * Если в .env указано несколько адресов, проверяем их динамически.
-     * При OPTIONS/GET запросах Nest вернёт ровно тот Origin, который пришёл.
-     */
     origin: (
-      origin: string,
-      cb: (err: Error | null, allow?: boolean) => void,
+      origin: string | undefined,
+      cb: (e: Error | null, ok?: boolean) => void,
     ) => {
       if (!origin) return cb(null, true);
-
-      if (!origins || origins.includes(origin)) {
-        return cb(null, true);
-      }
-      cb(new Error(`Origin ${origin} not allowed by CORS`));
+      const ok = allowlist.some((rule) =>
+        typeof rule === 'string' ? rule === origin : rule.test(origin),
+      );
+      ok
+        ? cb(null, true)
+        : cb(new Error(`Origin ${origin} not allowed by CORS`));
     },
   };
 });
