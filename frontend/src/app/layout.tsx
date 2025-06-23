@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localfont from 'next/font/local';
 import Image from 'next/image';
-import Head from 'next/head';
+import Link from 'next/link';
 
 import './styles/normalize.css';
 import './styles/globals.css';
@@ -9,7 +9,6 @@ import styles from './layout.module.css';
 
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { Providers } from './providers';
-import Link from 'next/link';
 
 const acrom = localfont({
   src: [
@@ -27,26 +26,43 @@ const acrom = localfont({
 export const metadata: Metadata = {
   title: 'Абитуриент',
   description: 'Портал для абитуриентов ДО Косыгина',
+  manifest: '/manifest.json',
+  themeColor: '#000000',
+  viewport: { width: 'device-width', initialScale: 1 },
+  icons: {
+    icon: '/icons/icon-192x192.png',
+    shortcut: '/icons/icon-192x192.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Абитуриент',
+    statusBarStyle: 'black-translucent',
+  },
+  openGraph: {
+    title: 'Абитуриент',
+    description: 'Портал для абитуриентов ДО Косыгина',
+    url: 'https://abiturient-do.vercel.app/',
+    siteName: 'Абитуриент',
+    type: 'website',
+    locale: 'ru_RU',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Абитуриент',
+    description: 'Портал для абитуриентов ДО Косыгина',
+    images: ['/og-image.png'],
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang='ru' className={`${acrom.variable} antialised`}>
-      <Head>
-        {/* manifest + PWA meta */}
-        <link rel='manifest' href='/manifest.json' />
-        <meta name='theme-color' content='#000000' />
-
-        {/* iOS / Safari */}
-        <meta name='apple-mobile-web-app-capable' content='yes' />
-        <meta name='apple-mobile-web-app-status-bar-style' content='black' />
-        <link rel='apple-touch-icon' href='/icons/icon-192x192.png' />
-      </Head>
-
       <body>
         <Providers>
           <header className={`${styles.header} container`}>
@@ -54,7 +70,7 @@ export default function RootLayout({
               <Image
                 className={styles.logo}
                 src='/logo.svg'
-                alt=''
+                alt='Логотип Абитуриент'
                 width={39}
                 height={24}
               />
