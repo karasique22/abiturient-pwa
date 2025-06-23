@@ -20,6 +20,9 @@ import { randomUUID } from 'crypto';
 
 @Controller('auth')
 export class AuthController {
+  private readonly isProd: boolean =
+    process.env.NODE_ENV === 'production';
+
   constructor(
     private readonly auth: AuthService,
     private readonly jwt: JwtService,
@@ -123,20 +126,19 @@ export class AuthController {
     return { success: true }; // 200 OK
   }
 
-  const isProd = process.env.NODE_ENV === 'production';
   /* ---------- helper ---------- */
   private setCookies(res: Response, access: string, refresh: string) {
     res
       .cookie('accessToken', access, {
         httpOnly: true,
-	secure: isProd,
+	secure: this.isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 15,
       })
       .cookie('refreshToken', refresh, {
         httpOnly: true,
-	secure: isProd,
+	secure: this.isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 7,
