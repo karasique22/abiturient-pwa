@@ -123,19 +123,20 @@ export class AuthController {
     return { success: true }; // 200 OK
   }
 
+  const isProd = process.env.NODE_ENV === 'production';
   /* ---------- helper ---------- */
   private setCookies(res: Response, access: string, refresh: string) {
     res
       .cookie('accessToken', access, {
         httpOnly: true,
-	secure: true,
+	secure: isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 15,
       })
       .cookie('refreshToken', refresh, {
         httpOnly: true,
-	secure: true,
+	secure: isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 7,
