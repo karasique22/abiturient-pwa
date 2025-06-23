@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localfont from 'next/font/local';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import './styles/normalize.css';
 import './styles/globals.css';
@@ -8,7 +9,6 @@ import styles from './layout.module.css';
 
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { Providers } from './providers';
-import Link from 'next/link';
 
 const acrom = localfont({
   src: [
@@ -26,13 +26,41 @@ const acrom = localfont({
 export const metadata: Metadata = {
   title: 'Абитуриент',
   description: 'Портал для абитуриентов ДО Косыгина',
+  manifest: '/manifest.json',
+  themeColor: '#000000',
+  viewport: { width: 'device-width', initialScale: 1 },
+  icons: {
+    icon: '/icons/icon-192x192.png',
+    shortcut: '/icons/icon-192x192.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Абитуриент',
+    statusBarStyle: 'black-translucent',
+  },
+  openGraph: {
+    title: 'Абитуриент',
+    description: 'Портал для абитуриентов ДО Косыгина',
+    url: 'https://abiturient-do.vercel.app/',
+    siteName: 'Абитуриент',
+    type: 'website',
+    locale: 'ru_RU',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Абитуриент',
+    description: 'Портал для абитуриентов ДО Косыгина',
+    images: ['/og-image.png'],
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang='ru' className={`${acrom.variable} antialised`}>
       <body>
@@ -42,7 +70,7 @@ export default function RootLayout({
               <Image
                 className={styles.logo}
                 src='/logo.svg'
-                alt=''
+                alt='Логотип Абитуриент'
                 width={39}
                 height={24}
               />
@@ -51,13 +79,9 @@ export default function RootLayout({
 
           <main className={styles.appContainer}>{children}</main>
 
-          {/* ФУТЕР — только на мобилке */}
           <footer className={styles.mobileFooter}>
             <Navbar />
           </footer>
-
-          {/* ДЕСКТОПНАЯ НАВИГАЦИЯ — только на ПК */}
-          <aside></aside>
         </Providers>
       </body>
     </html>
