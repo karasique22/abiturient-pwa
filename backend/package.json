@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Backend for abiturient PWA built with NestJS + Prisma",
   "scripts": {
+    "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:prod": "node dist/src/main.js",
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
