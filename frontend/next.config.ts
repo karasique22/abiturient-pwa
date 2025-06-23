@@ -4,6 +4,14 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_BACKEND}/:path*`,
+      },
+    ];
+  },
   reactStrictMode: true,
   // FIXME: placehholder
   images: {
