@@ -1,8 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import { ApiRequestConfig } from '@/types';
 
+const isServer = typeof window === 'undefined';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: isServer ? process.env.NEXT_PUBLIC_BACKEND : '/api',
   withCredentials: true,
 });
 
