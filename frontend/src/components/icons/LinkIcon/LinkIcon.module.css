@@ -1,0 +1,11 @@
+.linkContainer {
+  display: flex;
+}
+
+.forwardLink {
+  transform: rotate(180deg);
+}
+
+.backLink {
+  transform: rotate(0deg);
+}

@@ -1,0 +1,11 @@
+.eventsContainer {
+  padding: 18px 16px;
+  background-color: var(--color-home-grey);
+  min-height: 100vh;
+  margin-top: 14px;
+}
+
+.eventsHeader {
+  display: flex;
+  justify-content: space-between;
+}

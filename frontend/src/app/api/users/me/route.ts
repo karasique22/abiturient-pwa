@@ -1,21 +1,20 @@
-import { cookies } from 'next/headers';
+import { proxy } from '@/app/api/proxy';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
-  const access = (await cookies()).get('accessToken')?.value;
-  if (!access) return NextResponse.json({}, { status: 401 });
+export async function GET(req: Request) {
+  const res = await proxy(req, `${process.env.NEXT_PUBLIC_BACKEND}/users/me`);
 
-  const nestRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users/me`, {
-    headers: { Authorization: `Bearer ${access}` },
-  });
-
-  if (!nestRes.ok) {
-    return NextResponse.json(await nestRes.json(), { status: nestRes.status });
+  if (!res.ok) {
+    return res;
   }
 
-  const user = await nestRes.json();
-  const role = user.roles?.[0]?.name ?? null; // <-- вытаскиваем строку
+  const user = await res.json();
+  const role = user.roles?.[0]?.name ?? null;
 
-  // можно вернуть и весь профиль, если понадобится
-  return NextResponse.json({ role, user });
+  const next = NextResponse.json({ role, user }, { status: res.status });
+  res.headers.forEach((v, k) => {
+    if (k.toLowerCase() === 'set-cookie') next.headers.append('set-cookie', v);
+  });
+
+  return next;
 }

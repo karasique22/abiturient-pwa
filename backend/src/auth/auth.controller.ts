@@ -56,7 +56,10 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const raw = req.cookies.refreshToken;
-    if (!raw) return res.status(401).send();
+    if (!raw) {
+      res.status(401).send();
+      return;
+    }
 
     try {
       const { sid } = this.jwt.verify(raw, {
@@ -89,9 +92,11 @@ export class AuthController {
 
       const refreshToken = this.auth['signRefresh']({ sid: newHash });
       this.setCookies(res, accessToken, refreshToken);
-      return res.json({ role: user.roles[0].name });
+      res.json({ role: user.roles[0].name });
+      return;
     } catch {
-      return res.status(401).send();
+      res.status(401).send();
+      return;
     }
   }
 

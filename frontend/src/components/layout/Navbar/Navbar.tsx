@@ -7,9 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import { getNavItems } from './navItems';
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
   const { role } = useAuth();
   const navItems = getNavItems(role);
 
@@ -19,6 +17,7 @@ const Navbar = (props: Props) => {
         <Link
           key={id}
           href={href}
+          scroll={false}
           className={`${styles.navItem} font-body-small`}
         >
           <Icon />

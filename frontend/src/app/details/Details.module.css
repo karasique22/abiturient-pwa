@@ -2,23 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 18px 16px;
-  background-color: var(--color-home-grey);
-  margin-top: 14px;
-}
-
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 0 65px;
-}
-
-.backLink {
-  position: absolute;
-  left: 0;
-  padding-left: 16px;
 }
 
 .coverImage {
@@ -28,10 +11,16 @@
   border-radius: var(--radius-medium);
 }
 
-.infoContainer {
+.eventContainer {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.programContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .infoBlock {
@@ -42,4 +31,41 @@
 
 .infoSpan {
   color: var(--color-content-add);
+}
+
+.listBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.listBlock[open] .toggleIcon {
+  transform: rotate(-180deg);
+}
+
+.toggleIcon {
+  display: inline-block;
+  transition: transform 0.1s linear;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.listItem {
+  display: flex;
+}
+
+.listItem::marker {
+  display: none;
+}
+
+.listSpan {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

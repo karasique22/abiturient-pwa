@@ -1,32 +1,24 @@
 import { useMemo } from 'react';
-import type { Event } from '@prisma/client';
-import { EventCategory } from '@/shared/event-categories';
 
-export function useFilter(
-  events: Event[],
-  categories: EventCategory[],
-  search: string
-): Event[] {
+export function useFilter<
+  T extends { category: string; title: string; description?: string }
+>(items: T[], categories: string[], search: string): T[] {
   return useMemo(() => {
-    let list = events;
+    let list = [...items];
 
-    // Фильтрация по категориям
     if (categories.length) {
-      list = list.filter((e) =>
-        categories.includes(e.category as EventCategory)
-      );
+      list = list.filter((item) => categories.includes(item.category));
     }
 
-    // Фильтрация по строке поиска
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
-        (e) =>
-          e.title.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q)
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.description?.toLowerCase().includes(q)
       );
     }
 
     return list;
-  }, [events, categories, search]);
+  }, [items, categories, search]);
 }

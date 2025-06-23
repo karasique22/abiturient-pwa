@@ -1,10 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
 import * as bcrypt from 'bcrypt-ts';
 import dayjs from 'dayjs';
 import { PrismaService } from '../database/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -18,17 +23,28 @@ export class AuthService {
 
   /* ---------- регистрация ---------- */
   async register(dto: RegisterDto) {
-    const hash = await bcrypt.hash(dto.password, 10);
-    const user = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        password: hash,
-        fullName: dto.fullName,
-        roles: { connect: { name: 'student' } },
-      },
-      include: { roles: true },
-    });
-    return user;
+    try {
+      const hash = await bcrypt.hash(dto.password, 10);
+      return await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          phone: dto.phone,
+          password: hash,
+          fullName: dto.fullName,
+          roles: { connect: { name: 'student' } },
+        },
+        include: { roles: true },
+      });
+    } catch (e) {
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
+        const target = (e.meta?.target ?? []) as string[];
+        if (target.includes('email'))
+          throw new BadRequestException('EMAIL_TAKEN');
+        if (target.includes('phone'))
+          throw new BadRequestException('PHONE_TAKEN');
+      }
+      throw e;
+    }
   }
 
   /* ---------- логин ---------- */
@@ -65,19 +81,16 @@ export class AuthService {
       where: { email: dto.email },
       include: { roles: true },
     });
-    if (!user) throw new UnauthorizedException('email');
+    if (!user) throw new BadRequestException('EMAIL_WRONG');
     const ok = await bcrypt.compare(dto.password, user.password);
-    if (!ok) throw new UnauthorizedException('pwd');
+    if (!ok) throw new BadRequestException('PASSWORD_WRONG');
     return user;
   }
 
   private signAccess(user: { id: string; roles: { name: string }[] }) {
     return this.jwt.sign(
-      { sub: user.id, role: user.roles[0].name },
-      {
-        expiresIn: '15m',
-        secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-      },
+      { sub: user.id, roles: user.roles.map((r) => r.name) },
+      { expiresIn: '15m', secret: this.config.get('JWT_SECRET') },
     );
   }
 

@@ -1,0 +1,18 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--color-home-white);
+  border-radius: var(--radius-small);
+  padding: 10px;
+}
+
+.contentWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  width: 100%;
+}

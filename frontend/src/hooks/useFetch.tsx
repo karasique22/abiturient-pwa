@@ -1,29 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import api from '@/lib/api';
 
-export function useFetch<T, R = T[]>(url: string) {
-  const [data, setData] = useState<R | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
-
-  const load = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get<R>(url);
-      setData(response.data);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoading(false);
+export function useFetch<T>(url: string) {
+  const { data, error, isLoading, mutate } = useSWR<T>(
+    url,
+    () => api.get(url).then((res) => res.data),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
     }
+  );
+
+  return {
+    data: data ?? null,
+    error,
+    loading: isLoading,
+    refetch: () => mutate(),
   };
-
-  useEffect(() => {
-    load();
-  }, [url]);
-
-  return { data, loading, error, refetch: load };
 }

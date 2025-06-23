@@ -1,0 +1,16 @@
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  background-color: var(--color-home-grey);
+  border-radius: var(--radius-small);
+  padding: 14px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: 2px solid var(--color-home-grey);
+}

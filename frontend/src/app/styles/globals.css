@@ -12,6 +12,8 @@
   --radius-small: 8px;
   --radius-medium: 12px;
   --radius-large: 20px;
+
+  --footer-h: 60px;
 }
 
 @theme inline {
@@ -35,18 +37,29 @@ body {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-acrom);
-  padding: 32px 0;
+  padding-top: 32px;
+  min-height: 100vh;
 }
 
 .container {
-  padding: 0 16px;
+  padding: 0px 16px;
+}
+
+.background-container {
+  background-color: var(--color-home-grey);
+  padding-top: 18px;
+  padding-bottom: 18px;
+  flex: 1;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 h1 {
@@ -96,31 +109,31 @@ p {
 
 .font-body-medium {
   font-family: Acrom;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
-
-.font-body-medium-bold {
-  font-family: Acrom;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
-
-.font-body-normal {
-  font-family: Acrom;
-  font-weight: 400;
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
 }
 
-.font-body-normal-bold {
+.font-body-regular-small {
   font-family: Acrom;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-bold-small {
+  font-family: Acrom;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.font-body-regular {
+  font-family: Acrom;
+  font-weight: 400;
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
@@ -172,4 +185,48 @@ p {
   border-radius: var(--radius-large);
   cursor: pointer;
   padding: 13px 0;
+}
+
+.button-secondary {
+  background-color: var(--color-home-white);
+  color: black;
+  box-shadow: 0px 0px 10px 0px #0000001f;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.success-button {
+  background-color: #3bb54a;
+  color: white;
+  animation: successGlow 1.5s infinite;
+}
+
+@keyframes successGlow {
+  0% {
+    box-shadow: 0 0 5px #3bb54a;
+  }
+  50% {
+    box-shadow: 0 0 20px #3bb54a;
+  }
+  100% {
+    box-shadow: 0 0 5px #3bb54a;
+  }
+}
+
+.container-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 65px;
+  margin-bottom: 20px;
+}
+
+.backlink {
+  position: absolute;
+  left: 0;
+  padding-left: 16px;
 }

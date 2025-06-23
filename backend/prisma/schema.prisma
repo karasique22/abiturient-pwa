@@ -17,6 +17,34 @@ enum EventCategory {
   LESSON // онлайн-урок
 }
 
+enum ProgramCategory {
+  PROFESSIONAL_RETRAINING // профессиональная переподготовка
+  PROFESSIONAL_DEVELOPMENT // повышение квалификации
+}
+
+enum ProgramLevel {
+  BEGINNER // начальный
+  INTERMEDIATE // средний
+  ADVANCED // продвинутый
+}
+
+enum ProgramDocument {
+  DIPLOMA_PROFESSIONAL_RETRAINING // диплом о профессиональной переподготовке
+  DIPLOMA_PROFESSIONAL_DEVELOPMENT // диплом о повышении квалификации
+  CERTIFICATE_OF_COMPLETION // сертификат об обучении
+}
+
+enum ProgramFormat {
+  OFFLINE
+  ONLINE
+}
+
+enum ApplicationStatus {
+  NEW
+  CANCELLED
+  APPROVED
+}
+
 /**
  * ──────────── ОБЩИЕ МОДЕЛИ ───────────
  */
@@ -31,7 +59,8 @@ model User {
   id            String         @id @default(uuid())
   email         String         @unique
   password      String
-  fullName      String?
+  fullName      String
+  phone         String         @unique
   roles         Role[]         @relation("UserRoles")
   applications  Application[]
   notifications Notification[]
@@ -63,7 +92,15 @@ model Program {
   slug          String         @unique
   title         String         @unique
   description   String
-  durationWeeks Int?
+  durationHours Int?
+  durationYears Int?
+  category      ProgramCategory
+  level         ProgramLevel?
+  document      ProgramDocument?
+  format        ProgramFormat
+  content       Json?
+  curatorName  String
+  curatorInfo  String?
   startDate     DateTime?
   priceRub      Decimal?       @db.Decimal(10, 2)
   applications  Application[]
@@ -128,7 +165,7 @@ model Application {
   programId   String? // заявки могут относиться либо к программе,
   eventId     String? // либо к событию (одно из полей не-null)
   userId      String
-  status      String
+  status      ApplicationStatus @default(NEW)
   comment     String?
   program     Program? @relation(fields: [programId], references: [id])
   event       Event?   @relation(fields: [eventId], references: [id])

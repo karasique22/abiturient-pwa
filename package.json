@@ -6,11 +6,15 @@
     "frontend"
   ],
   "devDependencies": {
-    "prisma": "^6.8.2",
-    "@prisma/client": "^6.8.2",
+    "prisma": "^6.10.1",
     "typescript": "^5"
   },
   "scripts": {
     "postinstall": "prisma generate --schema backend/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "@prisma/extension-optimize": "^2.0.0",
+    "@prisma/instrumentation": "^6.10.1"
   }
 }

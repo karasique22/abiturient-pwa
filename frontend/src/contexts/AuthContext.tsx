@@ -1,15 +1,20 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// FIXME: какой-то странный контекст на все, наверное декомпозировать
-// и почему не используется useAuth
+import React, { createContext, useContext } from 'react';
+import { AxiosError } from 'axios';
+import api from '@/lib/api';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 type Role = 'student' | 'moderator' | 'admin' | null;
 interface AuthCtx {
-  role: Role;
+  role: Role | undefined;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (
+    fullName: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -22,60 +27,45 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [role, setRole] = useState<Role>(null);
-
-  /* 1. при монтировании пытаемся получить роль */
-  useEffect(() => {
-    (async () => {
-      const res = await fetch('/api/users/me', {
-        credentials: 'include', // важно, чтобы сервер мог прочитать куки
-      });
-      const { role } = await res.json();
-      setRole(role);
-    })();
-  }, []);
+  const { role, mutate } = useCurrentUser();
 
   /* 2. login: отправляем форму, куки ставятся сервером,
         затем ещё раз запрашиваем /me */
   const login = async (email: string, password: string) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      credentials: 'include', // важно, чтобы Set-Cookie сработал
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!res.ok) throw new Error('Неверные данные');
-
-    // куки уже в браузере, просто узнаём роль
-    const me = await fetch('/api/users/me', { credentials: 'include' });
-    if (me.ok) {
-      const { role } = await me.json();
-      setRole(role);
+    const res = await api.post('/auth/login', { email, password });
+    if (res.status !== 201 && res.status !== 200) {
+      throw new Error('Неверные данные');
     }
+
+    await mutate();
   };
 
-  const register = async (email: string, password: string) => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!res.ok) throw new Error('Неверные данные');
-
-    const me = await fetch('/api/users/me', { credentials: 'include' });
-    if (me.ok) {
-      const { role } = await me.json();
-      setRole(role);
+  const register = async (
+    fullName: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      await api.post('/auth/register', {
+        fullName,
+        phone,
+        email,
+        password,
+      });
+    } catch (err) {
+      const errorResponse = (err as AxiosError<{ message?: string }>).response;
+      const message = errorResponse?.data?.message;
+      throw new Error(message ?? 'REGISTER_FAILED');
     }
+
+    await login(email, password);
   };
 
   /* 3. logout: бек удаляет куки, затем сбрасываем роль */
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-    setRole(null);
+    await api.post('/auth/logout');
+    await mutate(null, { revalidate: false });
   };
 
   return (

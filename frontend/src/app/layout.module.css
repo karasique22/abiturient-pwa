@@ -1,5 +1,5 @@
 .header {
-  padding-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .mobileFooter {
@@ -8,8 +8,13 @@
   left: 0;
   width: 100%;
   background-color: transparent;
+  height: var(--footer-h);
 }
 
 .appContainer {
-  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--footer-h);
+  position: relative;
+  flex: 1;
 }
