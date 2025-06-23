@@ -20,8 +20,7 @@ import { randomUUID } from 'crypto';
 
 @Controller('auth')
 export class AuthController {
-  private readonly isProd: boolean =
-    process.env.NODE_ENV === 'production';
+  private readonly isProd: boolean = process.env.NODE_ENV === 'production';
 
   constructor(
     private readonly auth: AuthService,
@@ -131,14 +130,14 @@ export class AuthController {
     res
       .cookie('accessToken', access, {
         httpOnly: true,
-	secure: this.isProd,
+        secure: this.isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 15,
       })
       .cookie('refreshToken', refresh, {
         httpOnly: true,
-	secure: this.isProd,
+        secure: this.isProd,
         sameSite: 'none',
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 7,
