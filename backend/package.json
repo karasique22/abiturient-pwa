@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Backend for abiturient PWA built with NestJS + Prisma",
   "scripts": {
+    "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:prod": "node dist/main.js",
+    "postinstall": "prisma generate",
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
@@ -25,7 +28,9 @@
     "helmet": "^7.0.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "@prisma/client": "^6.10.1",
+    "prisma": "^6.10.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.8.0",
