@@ -11,6 +11,7 @@ interface UseApplicationsOptions {
 
 export function useApplications(
   type: 'events' | 'programs',
+  role: 'student' | 'moderator',
   options?: UseApplicationsOptions
 ) {
   const [mutating, setMutating] = useState(false);
@@ -23,7 +24,9 @@ export function useApplications(
       .then((res) => res.data);
 
   const { data, error, mutate, isLoading } = useSWR<ApplicationApi[]>(
-    `/applications/my-${type}`,
+    role === 'student'
+      ? `/applications/my-${type}`
+      : `/applications/all-${type}`,
     fetcher
   );
 
@@ -38,10 +41,23 @@ export function useApplications(
     }
   };
 
-  const cancelApplication = async (id: string) => {
+  const cancelApplication = async (id: string, role: string) => {
     setMutating(true);
     try {
-      await api.patch(`/applications/${id}/cancel`);
+      await api.patch(`/applications/${id}/cancel`, role);
+      await mutate();
+    } finally {
+      setMutating(false);
+    }
+  };
+
+  const changeApplicationStatus = async (
+    id: string,
+    status: 'NEW' | 'APPROVED' | 'CANCELLED'
+  ) => {
+    setMutating(true);
+    try {
+      await api.patch(`/applications/${id}/change-status`, { status });
       await mutate();
     } finally {
       setMutating(false);
@@ -56,5 +72,6 @@ export function useApplications(
     mutating,
     createApplication,
     cancelApplication,
+    changeApplicationStatus,
   };
 }

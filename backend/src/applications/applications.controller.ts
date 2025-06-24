@@ -11,6 +11,7 @@ import {
 import { ApplicationsService } from './applications.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateApplicationDto } from './dto/create-application.dto';
+import { equal } from 'assert';
 
 @Controller('applications')
 @UseGuards(JwtAuthGuard)
@@ -23,6 +24,16 @@ export class ApplicationsController {
       ...dto,
       userId: req.user.userId,
     });
+  }
+
+  @Get('all-events')
+  listEvents() {
+    return this.service.findAllEvents();
+  }
+
+  @Get('all-programs')
+  listPrograms() {
+    return this.service.findAllPrograms();
   }
 
   @Get('my')
@@ -42,6 +53,14 @@ export class ApplicationsController {
 
   @Patch(':id/cancel')
   cancel(@Param('id') id: string, @Req() req) {
-    return this.service.cancel(id, req.user.userId);
+    return this.service.cancel(id, req.user.userId, req.user.role);
+  }
+
+  @Patch(':id/change-status')
+  changeStatus(
+    @Param('id') id: string,
+    @Body() body: { status: 'NEW' | 'APPROVED' | 'CANCELLED' },
+  ) {
+    return this.service.changeStatus(id, body.status);
   }
 }

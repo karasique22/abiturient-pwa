@@ -12,10 +12,20 @@ import styles from './ApplicationCard.module.css';
 
 interface Props {
   application: ApplicationApi;
+  role: 'student' | 'moderator';
   onCancel: (id: string, title: string) => void;
+  onStatusChange: (
+    id: string,
+    status: 'NEW' | 'APPROVED' | 'CANCELLED'
+  ) => void;
 }
 
-export default function ApplicationCard({ application, onCancel }: Props) {
+export default function ApplicationCard({
+  application,
+  role,
+  onCancel,
+  onStatusChange,
+}: Props) {
   const type = application.event ? 'event' : 'program';
   const item = application.event ?? application.program;
 
@@ -42,6 +52,18 @@ export default function ApplicationCard({ application, onCancel }: Props) {
           </div>
         )}
         <div className={`${styles.titleBlock} font-body-regular`}>
+          {role === 'moderator' && (
+            <>
+              <div className='font-body-medium'>
+                ФИО: {application.user.fullName}
+              </div>
+              <div className='font-body-medium'>
+                Дата заявки:{' '}
+                {new Date(application.submittedAt).toLocaleDateString('ru-RU')}
+              </div>
+              <br />
+            </>
+          )}
           <div>
             {type === 'event'
               ? eventLabels[item.category as EventCategory]
@@ -55,14 +77,26 @@ export default function ApplicationCard({ application, onCancel }: Props) {
           className={`${styles.button} button-small button-secondary`}
           onClick={() => onCancel(application.id, item.title)}
         >
-          Отменить заявку
+          {role === 'student' ? 'Отменить заявку' : 'Отклонить заявку'}
         </button>
-        <Link
-          className={`${styles.button} button-small`}
-          href={`/details/${type}/${item.slug}`}
-        >
-          Подробнее
-        </Link>
+
+        {role === 'student' && (
+          <Link
+            className={`${styles.button} button-small`}
+            href={`/details/${type}/${item.slug}`}
+          >
+            Подробнее
+          </Link>
+        )}
+
+        {role !== 'student' && type === 'program' && (
+          <button
+            className={`${styles.button} button-small`}
+            onClick={() => onStatusChange(application.id, application.status)}
+          >
+            {application.status === 'NEW' ? 'Подтвердить' : 'На рассмотрение'}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -8,10 +8,17 @@ import styles from './ApplicationsClient.module.css';
 
 export default function ApplicationsClient({
   type,
+  role,
 }: {
   type: 'events' | 'programs';
+  role: 'student' | 'moderator';
 }) {
-  const { applications, cancelApplication, isLoading } = useApplications(type);
+  const {
+    applications,
+    cancelApplication,
+    changeApplicationStatus,
+    isLoading,
+  } = useApplications(type, role);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<{
@@ -26,7 +33,14 @@ export default function ApplicationsClient({
 
   const handleConfirm = async () => {
     if (!selectedApp) return;
-    await cancelApplication(selectedApp.id);
+    await cancelApplication(selectedApp.id, role);
+  };
+
+  const handleChangeStatus = async (
+    id: string,
+    status: 'NEW' | 'APPROVED' | 'CANCELLED'
+  ) => {
+    await changeApplicationStatus(id, status);
   };
 
   return (
@@ -38,7 +52,9 @@ export default function ApplicationsClient({
           <ApplicationCard
             key={app.id}
             application={app}
+            role={role}
             onCancel={handleCancel}
+            onStatusChange={handleChangeStatus}
           />
         ))}
         {applications.length === 0 && !isLoading && (
