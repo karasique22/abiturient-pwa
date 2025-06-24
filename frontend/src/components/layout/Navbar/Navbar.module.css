@@ -1,6 +1,7 @@
 .navBar {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
   align-items: center;
   padding: 9px 16px;
   background-color: var(--color-home-white);
@@ -16,5 +17,13 @@
   gap: 12px;
   align-items: center;
   justify-content: center;
+
   color: black;
+  text-decoration: none;
 }
+
+/*
+.navItemActive {
+  color: var(--color-primary);
+}
+*/
