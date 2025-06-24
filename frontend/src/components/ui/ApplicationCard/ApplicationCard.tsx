@@ -77,7 +77,7 @@ export default function ApplicationCard({
           className={`${styles.button} button-small button-secondary`}
           onClick={() => onCancel(application.id, item.title)}
         >
-          Отклонить заявку
+          {role === 'student' ? 'Отменить заявку' : 'Отклонить заявку'}
         </button>
 
         {role === 'student' && (
