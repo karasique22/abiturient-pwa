@@ -43,9 +43,13 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
     createApplication,
     cancelApplication: cancelApplicationHook,
     mutating,
-  } = useApplications(type === 'event' ? 'events' : 'programs', {
-    skipAuthRefresh: guest,
-  });
+  } = useApplications(
+    type === 'event' ? 'events' : 'programs',
+    role || 'student',
+    {
+      skipAuthRefresh: guest,
+    }
+  );
 
   const [state, setState] = useState<'unknown' | 'none' | 'active' | 'loading'>(
     'unknown'
@@ -81,7 +85,7 @@ export default function GenericDetails<T>({ data, config, type }: Props<T>) {
   const cancelApplication = async () => {
     if (!appId) return;
     setState('loading');
-    await cancelApplicationHook(appId);
+    await cancelApplicationHook(appId, role || 'student');
     setState('none');
   };
 
