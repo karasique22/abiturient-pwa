@@ -137,4 +137,23 @@ export class ApplicationsService {
       data: { status: 'CANCELLED', isActive: false },
     });
   }
+
+  async changeStatus(id: string, status: 'NEW' | 'APPROVED' | 'CANCELLED') {
+    const app = await this.prisma.application.findUnique({ where: { id } });
+    if (!app) {
+      throw new NotFoundException();
+    }
+
+    if (status === 'NEW') {
+      return this.prisma.application.update({
+        where: { id },
+        data: { status: 'APPROVED', isActive: true },
+      });
+    } else {
+      return this.prisma.application.update({
+        where: { id },
+        data: { status: 'NEW' },
+      });
+    }
+  }
 }

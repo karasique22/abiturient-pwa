@@ -13,10 +13,12 @@ export default function ApplicationsClient({
   type: 'events' | 'programs';
   role: 'student' | 'moderator';
 }) {
-  const { applications, cancelApplication, isLoading } = useApplications(
-    type,
-    role
-  );
+  const {
+    applications,
+    cancelApplication,
+    changeApplicationStatus,
+    isLoading,
+  } = useApplications(type, role);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<{
@@ -34,6 +36,13 @@ export default function ApplicationsClient({
     await cancelApplication(selectedApp.id, role);
   };
 
+  const handleChangeStatus = async (
+    id: string,
+    status: 'NEW' | 'APPROVED' | 'CANCELLED'
+  ) => {
+    await changeApplicationStatus(id, status);
+  };
+
   return (
     <>
       <div
@@ -45,6 +54,7 @@ export default function ApplicationsClient({
             application={app}
             role={role}
             onCancel={handleCancel}
+            onStatusChange={handleChangeStatus}
           />
         ))}
         {applications.length === 0 && !isLoading && (

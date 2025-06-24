@@ -51,6 +51,19 @@ export function useApplications(
     }
   };
 
+  const changeApplicationStatus = async (
+    id: string,
+    status: 'NEW' | 'APPROVED' | 'CANCELLED'
+  ) => {
+    setMutating(true);
+    try {
+      await api.patch(`/applications/${id}/change-status`, { status });
+      await mutate();
+    } finally {
+      setMutating(false);
+    }
+  };
+
   return {
     applications: data ?? [],
     isLoading,
@@ -59,5 +72,6 @@ export function useApplications(
     mutating,
     createApplication,
     cancelApplication,
+    changeApplicationStatus,
   };
 }
