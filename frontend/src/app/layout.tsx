@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localfont from 'next/font/local';
 import Image from 'next/image';
 import Link from 'next/link';
+import PwaRegister from '@/components/PwaRegister';
 
 import './styles/normalize.css';
 import './styles/globals.css';
@@ -65,6 +66,7 @@ export default function RootLayout({
     <html lang='ru' className={`${acrom.variable} antialised`}>
       <body>
         <Providers>
+          <PwaRegister />
           <header className={`${styles.header} container`}>
             <Link href='/'>
               <Image
