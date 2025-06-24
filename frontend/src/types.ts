@@ -27,6 +27,8 @@ export interface ItemApi {
 interface BaseApplicationApi {
   id: string;
   status: 'NEW' | 'CANCELLED' | 'APPROVED';
+  user: UserApi;
+  submittedAt: Date;
 }
 
 export interface EventApplicationApi extends BaseApplicationApi {

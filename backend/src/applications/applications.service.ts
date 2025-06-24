@@ -36,6 +36,50 @@ export class ApplicationsService {
     return this.prisma.application.create({ data });
   }
 
+  findAllEvents() {
+    return this.prisma.application.findMany({
+      where: { eventId: { not: null }, status: { not: 'CANCELLED' } },
+      include: {
+        event: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            dateTime: true,
+            address: true,
+            category: true,
+          },
+        },
+        user: {
+          select: {
+            fullName: true,
+          },
+        },
+      },
+    });
+  }
+
+  findAllPrograms() {
+    return this.prisma.application.findMany({
+      where: { programId: { not: null }, status: { not: 'CANCELLED' } },
+      include: {
+        program: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            category: true,
+          },
+        },
+        user: {
+          select: {
+            fullName: true,
+          },
+        },
+      },
+    });
+  }
+
   findMy(userId: string) {
     return this.prisma.application.findMany({ where: { userId } });
   }
@@ -78,10 +122,12 @@ export class ApplicationsService {
     });
   }
 
-  async cancel(id: string, userId: string) {
+  async cancel(id: string, userId: string, role: string) {
     const app = await this.prisma.application.findUnique({ where: { id } });
-    if (!app || app.userId !== userId) {
-      throw new NotFoundException();
+    if (!app) {
+      if (app.userId !== userId || role === 'student') {
+        throw new NotFoundException();
+      }
     }
 
     if (!app.isActive) return app;
