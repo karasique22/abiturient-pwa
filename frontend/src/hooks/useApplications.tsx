@@ -11,7 +11,7 @@ interface UseApplicationsOptions {
 
 export function useApplications(
   type: 'events' | 'programs',
-  role: 'student' | 'moderator',
+  role: 'student' | 'moderator' | 'admin',
   options?: UseApplicationsOptions
 ) {
   const [mutating, setMutating] = useState(false);
