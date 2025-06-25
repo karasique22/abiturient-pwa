@@ -1,7 +1,16 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getMe } from '@/lib/getMe';
 import styles from './AuthForm.module.css';
 
-export default function AuthLanding() {
+export default async function AuthLanding() {
+  const access = (await cookies()).get('accessToken')?.value;
+  if (access) redirect('/account');
+
+  const me = await getMe({ headers: { Authorization: `Bearer ${access}` } });
+  if (me) redirect('/account');
+
   return (
     <div className={styles.authContainer}>
       <h1 className={`${styles.authTitle} font-header-large`}>
