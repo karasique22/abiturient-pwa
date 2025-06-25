@@ -47,12 +47,14 @@ export default function ClientEvents({ events }: Props) {
           <ViewSwitcher viewMode={view} onViewChange={setView} />
         </header>
 
-        <FilterChips<EventCategory>
-          selected={categories}
-          onChange={setCategories}
-          options={Object.values(EventCategory)}
-          labels={eventLabels}
-        />
+        <div style={{ marginTop: '20px' }}>
+          <FilterChips<EventCategory>
+            selected={categories}
+            onChange={setCategories}
+            options={Object.values(EventCategory)}
+            labels={eventLabels}
+          />
+        </div>
 
         <ItemsGrid items={items} viewMode={view} type='event' />
       </div>
