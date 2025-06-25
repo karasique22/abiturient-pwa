@@ -1,13 +1,22 @@
 import { useMemo } from 'react';
 
 export function useFilter<
-  T extends { category: string; title: string; description?: string }
->(items: T[], categories: string[], search: string): T[] {
+  T extends {
+    category: string;
+    title: string;
+    format?: string;
+    description?: string;
+  }
+>(items: T[], categories: string[], search: string, formats?: string[]): T[] {
   return useMemo(() => {
     let list = [...items];
 
     if (categories.length) {
       list = list.filter((item) => categories.includes(item.category));
+    }
+
+    if (formats?.length) {
+      list = list.filter((item) => item.format && formats.includes(item.format));
     }
 
     if (search.trim()) {
@@ -20,5 +29,5 @@ export function useFilter<
     }
 
     return list;
-  }, [items, categories, search]);
+  }, [items, categories, formats, search]);
 }

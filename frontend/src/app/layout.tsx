@@ -10,6 +10,7 @@ import styles from './layout.module.css';
 
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { Providers } from './providers';
+import SplashLinks from '@/components/SplashLinks';
 
 const acrom = localfont({
   src: [
@@ -28,11 +29,9 @@ export const metadata: Metadata = {
   title: 'Абитуриент',
   description: 'Портал для абитуриентов ДО Косыгина',
   manifest: '/manifest.json',
-  themeColor: '#000000',
-  viewport: { width: 'device-width', initialScale: 1 },
   icons: {
-    icon: '/icons/icon-192x192.png',
-    shortcut: '/icons/icon-192x192.png',
+    icon: '/icons/icon-512x512.png',
+    shortcut: '/icons/icon-512x512.png',
     apple: '/icons/apple-touch-icon.png',
   },
   appleWebApp: {
@@ -64,6 +63,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ru' className={`${acrom.variable} antialised`}>
+      <head>
+        <SplashLinks />
+      </head>
       <body>
         <Providers>
           <PwaRegister />

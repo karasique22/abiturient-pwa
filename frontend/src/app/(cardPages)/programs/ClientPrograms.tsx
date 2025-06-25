@@ -11,8 +11,8 @@ import styles from '../cardPages.module.css';
 import type { ProgramApi, ItemApi } from '@/types';
 import SortIcon from '@/components/icons/SortIcon';
 import { useFilter } from '@/hooks/useFilter';
-import { ProgramCategory } from '@/shared/prismaEnums';
-import { programCategoryLabel } from '@/shared/enumLabels';
+import { ProgramCategory, ProgramFormat } from '@/shared/prismaEnums';
+import { programCategoryLabel, programFormatLabel } from '@/shared/enumLabels';
 
 interface Props {
   programs: ProgramApi[];
@@ -21,11 +21,12 @@ interface Props {
 export default function ClientPrograms({ programs }: Props) {
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState<ProgramCategory[]>([]);
+  const [formats, setFormats] = useState<ProgramFormat[]>([]);
   const [sort, setSort] = useState<DurationSort>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const iconRef = useRef<HTMLButtonElement>(null);
 
-  const filtered = useFilter(programs, categories, search);
+  const filtered = useFilter(programs, categories, search, formats);
   const sorted = useSort(filtered, sort);
 
   const items: ItemApi[] = sorted.map((p) => ({
@@ -66,12 +67,27 @@ export default function ClientPrograms({ programs }: Props) {
           />
         </header>
 
-        <FilterChips<ProgramCategory>
-          selected={categories}
-          onChange={setCategories}
-          options={Object.values(ProgramCategory)}
-          labels={programCategoryLabel}
-        />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            marginTop: '20px',
+          }}
+        >
+          <FilterChips<ProgramCategory>
+            selected={categories}
+            onChange={setCategories}
+            options={Object.values(ProgramCategory)}
+            labels={programCategoryLabel}
+          />
+          <FilterChips<ProgramFormat>
+            selected={formats}
+            onChange={setFormats}
+            options={Object.values(ProgramFormat)}
+            labels={programFormatLabel}
+          />
+        </div>
 
         <ItemsGrid items={items} type='program' />
       </div>
