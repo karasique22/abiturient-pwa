@@ -18,7 +18,6 @@ module.exports = withPWA({
     ];
   },
   reactStrictMode: true,
-  // FIXME: placehholder
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
@@ -45,6 +44,11 @@ module.exports = withPWA({
       {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
         port: '',
       },
     ],
